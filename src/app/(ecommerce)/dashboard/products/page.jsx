@@ -1,20 +1,16 @@
-import ProductList from "@/components/ProductList";
+import ProductsGrid from "@/components/ProductsGrid";
 import prisma from "@/utils/connection";
 import React from "react";
 
 const Products = async () => {
-  const query = {
-    take: 10,
-    skip: 0,
-  };
+  const products = await prisma.product.findMany({
+    orderBy: { name: "asc" },
+    include: { Category: true },
+  });
 
-  const prodList = await prisma.product.findMany(query);
+  const normalized = products.map((p) => ({ ...p, category: p.Category }));
 
-  return (
-    <div className="w-full flex flex-col min-h-screen mx-2 md:mx-12">
-      <ProductList prodList={prodList} />
-    </div>
-  );
+  return <ProductsGrid products={normalized} />;
 };
 
 export default Products;

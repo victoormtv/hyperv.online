@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import CartDrawer from "@/components/CartDrawer";
 import { Toaster } from "@/components/ui/toaster";
 import { getSession } from "@/utils/actions";
 import prisma from "@/utils/connection";
@@ -11,6 +12,7 @@ const EcommerceLayout = async ({ children }) => {
     <div>
       <Toaster />
       <Header categories={categories} session={session} />
+      <CartDrawer />
       {children}
     </div>
   );

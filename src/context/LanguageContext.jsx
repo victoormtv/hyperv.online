@@ -1,0 +1,459 @@
+"use client";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
+
+const translations = {
+  en: {
+    home: "Home",
+    products: "Products",
+    affiliate: "Affiliate",
+    terms: "Terms",
+    joinDiscord: "Join Discord",
+
+    badges: ["Undetected", "Instant Delivery", "24/7 Support", "Secure Payments"],
+
+    fashsalesTitle: "Our Products",
+    fashsalesHeading: "Explore Our Products",
+    fashsalesSubtitle: "Choose your game and get started.",
+    fashsalesFrom: "From",
+    fashsalesView: "View →",
+    fashsalesViewAll: "View all products →",
+    fashsalesMoreFeatures: (n) => `+${n} more features`,
+
+    feedbacksBadge: "COMMUNITY FEEDBACK",
+    feedbacksHeading: "What our players say",
+    feedbacksSubtitle: "Real feedback from our Discord community.",
+
+    footerRights: "All rights reserved.",
+    footerLegal: "Product names, logos, images, and trademarks mentioned or used on this site are the property of their respective owners. We are not affiliated with, associated with, or endorsed by any of these companies unless specifically stated. All copyrights, trademarks, and service marks belong to their respective owners.",
+    footerTerms: "Terms of Service",
+
+    cart: {
+      added: "Added to Cart!",
+      question: "What would you like to do now?",
+      proceedToCart: "Proceed to Cart",
+      continueShopping: "Continue Shopping",
+      yourCart: "Your Cart",
+      empty: "Your cart is empty",
+      couponPlaceholder: "Coupon code",
+      apply: "Apply",
+      subtotal: "Subtotal",
+      proceedToCheckout: "Proceed to Checkout",
+    },
+
+    profile: [
+      {
+        badge: "✦ Status: Undetected",
+        heading: "Dominate every lobby",
+        subheading: "HyperV",
+        text: "Discover premium products with fast delivery, constant updates and dedicated support. Quality you can trust.",
+        cta: "Buy Now",
+        ctaSecondary: "Join Discord",
+      },
+      {
+        badge: "✦ DEALS",
+        heading: "Exclusive Deals",
+        subheading: "Every Day",
+        text: "Your ultimate destination for premium products, anytime and anywhere. Unmatched quality at unbeatable prices.",
+        cta: "Explore Deals",
+        ctaSecondary: "View All Products",
+      },
+      {
+        badge: "✦ BEST SELLERS",
+        heading: "Top Picks",
+        subheading: "Just For You",
+        text: "Explore our curated selection of best-selling products delivering unmatched style and convenience.",
+        cta: "Buy Now",
+        ctaSecondary: "Learn More",
+      },
+    ],
+
+    communityReviews: [
+      { username: "Owen",               date: "March 15, 2026",  message: "Product: Bypass UID | Works perfectly, no ban at all" },
+      { username: "Mac_0214",           date: "March 14, 2026",  message: "Product: Panel only aimbot + Bypass | Ranked up super fast, fvbri has great support" },
+      { username: "Gersonorellana0220", date: "March 14, 2026",  message: "Product: Panel Full Weekly | Has everything and the service was super fast" },
+      { username: "xKairos",            date: "March 14, 2026",  message: "Product: Panel Full Annual | +rep panel full is insane, zero bans 🔥" },
+      { username: "Theninoig",          date: "March 14, 2026",  message: "Product: Valorant Aimbot | No ban in 3 months and already hit diamond." },
+      { username: "Diego",              date: "March 14, 2026",  message: "Product: Valorant Aimbot | +rep color aimbot undetectable 🚀 best on the market" },
+      { username: "NovaStar",           date: "March 14, 2026",  message: "Product: Panel Blood | Super fast support, fixed my issue in 5 min" },
+      { username: "Jxzxn",              date: "March 14, 2026",  message: "Product: Menu Chams | Now I can see all players with their HP and distance lmao 💯" },
+    ],
+
+    affiliatePage: {
+      badge: "Affiliate Program",
+      heading: "Make Money With Every Sale",
+      commission: "20% Commission",
+      subtext: "Promote ALL our products and earn 20% on every sale. Exclusive program for content creators.",
+      cta: "Become An Affiliate",
+      ctaFinal: "Become An Affiliate Now",
+      stats: [
+        { label: "Commission Earned", value: "$2,845", sub: "+32% this month", subColor: "text-green-400" },
+        { label: "Sales Made",        value: "47",     sub: "total sales",     subColor: "text-white/30" },
+        { label: "Conversion Rate",   value: "8.2%",   sub: "average",        subColor: "text-white/30" },
+      ],
+      steps: [
+        { n: "01", title: "Sign Up",       desc: "Create your affiliate account in less than 10 seconds. 100% free." },
+        { n: "02", title: "Get Your Link", desc: "Get your unique link that tracks all your sales automatically." },
+        { n: "03", title: "Promote",       desc: "Share your link on social media, videos, streams or wherever you prefer." },
+        { n: "04", title: "Track",         desc: "Monitor clicks, conversions and earnings in real-time on your dashboard." },
+        { n: "05", title: "Get Paid",      desc: "Receive your payments via cryptocurrency quickly and securely." },
+      ],
+      benefits: [
+        { title: "20% Commission", desc: "Earn 20% on every sale of ANY product. No earning limits." },
+        { title: "Fast Payments",  desc: "Payments in less than 12h via Pix or cryptocurrency." },
+        { title: "24/7 Support",   desc: "Dedicated team to help you maximize your sales." },
+      ],
+      faqs: [
+        { q: "How does the 20% commission work?",  a: "You earn 20% of every sale made through your unique affiliate link. There is no cap — the more you promote, the more you earn." },
+        { q: "How and when do I get paid?",         a: "Payments are processed within 12 hours via cryptocurrency or Pix. You can request a withdrawal at any time once you reach the minimum threshold." },
+        { q: "Do I need previous experience?",      a: "No experience needed. Sign up, get your link, and start sharing. Our dashboard tracks everything automatically." },
+        { q: "What products can I promote?",        a: "You can promote ALL of our products — Free Fire, Valorant, CS2, COD, Bloodstrike, Discord tools and more." },
+        { q: "Is there any cost to participate?",   a: "100% free. There are no fees, no subscriptions and no hidden costs to join our affiliate program." },
+      ],
+      howItWorksTitle: "How It Works",
+      howItWorksSub: "5 simple steps to start earning",
+      whyTitle: "Why Promote Our Products?",
+      whySub: "Premium products with high conversion and the best benefits for affiliates",
+      faqTitle: "Frequently Asked Questions",
+      ctaTitle: "Ready to Get Started?",
+      ctaSub: "Sign up now and start earning 20% on every sale",
+    },
+
+    termsPage: {
+      title: "Terms of Service",
+      lastUpdated: "Last Updated: March 17, 2026",
+      finalDisclaimer: "BY PURCHASING OR USING OUR PRODUCTS, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS OF SERVICE.",
+      sections: [
+        {
+          n: "1", title: "Acceptance of Terms",
+          intro: "By purchasing, accessing, or using any products or services provided by HyperV (\"we\", \"us\", \"our\"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not purchase or use our products.",
+          items: [],
+        },
+        {
+          n: "2", title: "Product Nature & Delivery",
+          intro: "All products sold are digital licenses delivered as pre-activated keys, similar to gift cards. Once purchased:",
+          items: ["Keys are generated and delivered instantly to your email or account","Products are immediately activated and ready for use","No physical goods or downloads are provided unless specified","Access credentials are non-transferable and for single-user use only"],
+        },
+        {
+          n: "3", title: "Payment & Pricing",
+          intro: "All payments are processed securely through our payment providers. By making a purchase, you acknowledge that:",
+          items: ["Prices are listed in USD or BRL and may change without notice","Payment must be completed before product activation","Disputing or reversing payments will result in immediate account suspension","We reserve the right to refuse service to anyone for any reason"],
+        },
+        {
+          n: "4", title: "Product Guarantee & Refund Policy",
+          highlight: "We guarantee that all products will function as advertised at the time of purchase. If a product fails to work properly due to issues on our end, you are eligible for a refund after proper verification by our support team.",
+          validTitle: "Valid Refund Cases (After Support Analysis)",
+          validItems: ["Product activation failure caused by our systems or infrastructure","Product completely non-functional despite following all setup instructions","Incorrect product or subscription tier delivered due to our error"],
+          process: "REFUND PROCESS: All refund requests must go through our support team via Discord. You must provide proof of the issue, follow troubleshooting steps, and allow our team to verify the problem. Refunds are processed within 5-10 business days after approval.",
+          noRefundTitle: "Refunds Will NOT Be Provided For",
+          noRefundItems: ["Game account bans, suspensions, or penalties","Anti-cheat detection, updates, or game patches","User error or improper usage","System incompatibility or minimum requirements not met","Change of mind or buyer's remorse","Third-party issues (internet, PC, game servers)","Refusal to cooperate with support team","Inability to provide proof of issue"],
+          chargebackTitle: "Protection Against Fraudulent Chargebacks",
+          chargebackText: "Filing a payment dispute, chargeback, or reversal without going through our official support process is considered fraud and will result in: permanent ban from all services, license revocation without refund, legal action for fraud, and reporting to payment processors and fraud prevention databases.",
+        },
+        {
+          n: "5", title: "License Terms & Restrictions",
+          intro: "When you purchase a product, you receive a limited, non-exclusive, non-transferable license. You agree NOT to:",
+          items: ["Share, resell, or redistribute your license key","Reverse engineer, decompile, or modify our products","Use products on multiple accounts simultaneously (unless specified)","Allow unauthorized users to access your account or products","Use products for commercial purposes without authorization"],
+        },
+        {
+          n: "6", title: "Account Management",
+          intro: "We reserve the right to:",
+          items: ["Deactivate your license at our discretion without prior notice","Terminate accounts for violation of these terms","Suspend service for suspicious activity or payment disputes","Modify or discontinue products at any time"],
+          note: "\"Lifetime\" licenses refer only to the product's availability period, not indefinite access.",
+        },
+        {
+          n: "7", title: "Prohibited Users & Activities",
+          intro: "The following individuals and activities are strictly prohibited:",
+          items: ["Employees or affiliates of game developers or anti-cheat companies","Individuals attempting to attack, exploit, or compromise our systems","Sharing internal community information publicly","Creating content featuring our products without proper branding","Using unauthorized payment methods or fraudulent transactions"],
+          danger: true,
+        },
+        {
+          n: "8", title: "Warranties & Liability",
+          intro: "Our products and services are provided \"AS IS\" without warranties of any kind. We explicitly disclaim:",
+          items: ["Any warranty of merchantability or fitness for a particular purpose","Any guarantee of undetectability or continued functionality","Responsibility for game bans, account suspensions, or data loss","Liability for indirect, incidental, or consequential damages"],
+          note: "You use our products at your own risk and accept full responsibility for any consequences.",
+        },
+        {
+          n: "9", title: "Product Updates & Availability",
+          intro: "",
+          items: ["We do not guarantee continuous availability or updates","Products may become unavailable due to game updates or anti-cheat changes","No compensation is provided if a product stops working","Update timelines are estimates and not guarantees"],
+        },
+        {
+          n: "10", title: "Content Creation & Branding",
+          intro: "",
+          items: ["You must include proper HyperV branding and attribution","You must protect your account information and personal details","You may not make false claims about product capabilities","We reserve the right to request removal of content violating these terms"],
+        },
+        {
+          n: "11", title: "Support & Communication",
+          intro: "",
+          items: ["Response times are not guaranteed","Support is limited to product-related technical issues","Abusive or harassing behavior will result in permanent ban","We reserve the right to refuse support at our discretion"],
+        },
+        {
+          n: "12", title: "Privacy & Data",
+          intro: "",
+          items: ["We collect minimal data necessary for product delivery and support","Payment information is processed by third-party providers","We do not sell or share your personal information","Discord IDs and emails may be stored for account management","Hardware identifiers (HWID) are collected to prevent license sharing"],
+          note: "Hardware Binding: Licenses are bound to your PC's hardware configuration. Sharing your license key or using it on multiple devices will result in automatic deactivation and permanent ban without refund.",
+        },
+        {
+          n: "13", title: "Modifications to Terms",
+          intro: "We reserve the right to modify these Terms of Service at any time. Continued use of our products after changes constitutes acceptance of the updated terms. Material changes will be announced via Discord.",
+          items: [],
+        },
+        {
+          n: "14", title: "Governing Law & Disputes",
+          intro: "These terms are governed by applicable laws. Any disputes must be resolved individually, and you waive any right to participate in class action lawsuits. By purchasing, you agree to resolve disputes through binding arbitration.",
+          items: [],
+        },
+        {
+          n: "15", title: "Contact Information",
+          intro: "For questions about these Terms of Service, contact us via:",
+          contact: { label: "Discord:", link: "discord.gg/hypervgg", href: "https://discord.gg/hypervgg" },
+        },
+      ],
+    },
+  },
+
+  es: {
+    home: "Inicio",
+    products: "Productos",
+    affiliate: "Afiliados",
+    terms: "Términos",
+    joinDiscord: "Únete al Discord",
+
+    badges: ["Indetectable", "Entrega Inmediata", "Soporte 24/7", "Pagos seguros"],
+
+    fashsalesTitle: "Nuestros Productos",
+    fashsalesHeading: "Explora Nuestros Productos",
+    fashsalesSubtitle: "Elige tu juego y empieza.",
+    fashsalesFrom: "Desde",
+    fashsalesView: "Ver →",
+    fashsalesViewAll: "Ver todos los productos →",
+    fashsalesMoreFeatures: (n) => `+${n} características más`,
+
+    feedbacksBadge: "OPINIONES DE LA COMUNIDAD",
+    feedbacksHeading: "Lo que dicen nuestros jugadores",
+    feedbacksSubtitle: "Opiniones reales de nuestra comunidad de Discord.",
+
+    footerRights: "Todos los derechos reservados.",
+    footerLegal: "Los nombres de productos, logotipos, imágenes y marcas comerciales mencionados o utilizados en este sitio son propiedad de sus respectivos dueños. No estamos afiliados, asociados ni respaldados por ninguna de estas empresas, a menos que se indique específicamente. Todos los derechos de autor, marcas comerciales y marcas de servicio pertenecen a sus respectivos propietarios.",
+    footerTerms: "Términos de Servicio",
+
+    cart: {
+      added: "¡Agregado al Carrito!",
+      question: "¿Qué deseas hacer ahora?",
+      proceedToCart: "Ir al Carrito",
+      continueShopping: "Seguir Comprando",
+      yourCart: "Tu Carrito",
+      empty: "Tu carrito está vacío",
+      couponPlaceholder: "Código de cupón",
+      apply: "Aplicar",
+      subtotal: "Subtotal",
+      proceedToCheckout: "Proceder al Pago",
+    },
+
+    profile: [
+      {
+        badge: "✦ Status: Indetectable",
+        heading: "Domina todo el lobby",
+        subheading: "HyperV",
+        text: "Descubre productos premium con entrega rápida, actualizaciones constantes y soporte dedicado. Calidad en la que puedes confiar.",
+        cta: "Compra Ahora",
+        ctaSecondary: "Únete en Discord",
+      },
+      {
+        badge: "✦ OFERTAS",
+        heading: "Ofertas Exclusivas",
+        subheading: "Todos los Días",
+        text: "Tu destino final para productos premium, en cualquier momento y en cualquier lugar. Calidad inigualable a precios inmejorables.",
+        cta: "Explorar Ofertas",
+        ctaSecondary: "Ver Todos los Productos",
+      },
+      {
+        badge: "✦ BEST SELLERS",
+        heading: "Top Picks",
+        subheading: "Just For You",
+        text: "Explora nuestra selección de productos más vendidos con estilo y comodidad inigualables.",
+        cta: "Comprar Ahora",
+        ctaSecondary: "Saber Más",
+      },
+    ],
+
+    communityReviews: [
+      { username: "Owen",               date: "15 de Marzo, 2026", message: "Producto: Bypass UID | Funciona perfecto, no me banearon" },
+      { username: "Mac_0214",           date: "14 de Marzo, 2026", message: "Producto: Panel only aimbot + Bypass | Subi mjy rapido al rango aparte fvbri es buen soporte" },
+      { username: "Gersonorellana0220", date: "14 de Marzo, 2026", message: "Producto: Panel Full Semanal | tiene de todo y lo mejor es que fue rapida la atenciom" },
+      { username: "xKairos",            date: "14 de Marzo, 2026", message: "Producto: Panel Full Anual | +rep panel full insano, nada de ban 🔥" },
+      { username: "Theninoig",          date: "14 de Marzo, 2026", message: "Producto: Aimbot de Valorant | sin ban hace 3 meses y subi a diamante ya." },
+      { username: "Diego",              date: "14 de Marzo, 2026", message: "Producto: Aimbot de Valorant | +rep aimbot color indetectable 🚀 mejor del mercado" },
+      { username: "NovaStar",           date: "14 de Marzo, 2026", message: "Producto: Panel Blood | soporte rapidísimo, resolvieron mi problema en 5 min" },
+      { username: "Jxzxn",              date: "14 de Marzo, 2026", message: "Producto: Menu Chams | ahora se ven todos los jugadores hasta con su HP y distancia jajsja 💯" },
+    ],
+
+    affiliatePage: {
+      badge: "Programa de Afiliados",
+      heading: "Gana Dinero Con Cada Venta",
+      commission: "20% de Comisión",
+      subtext: "Promociona TODOS nuestros productos y gana el 20% por cada venta. Programa exclusivo para creadores de contenido.",
+      cta: "Conviértete en Afiliado",
+      ctaFinal: "Conviértete en Afiliado Ahora",
+      stats: [
+        { label: "Comisiones Ganadas", value: "$2,845", sub: "+32% este mes",   subColor: "text-green-400" },
+        { label: "Ventas Realizadas",  value: "47",     sub: "ventas totales",  subColor: "text-white/30" },
+        { label: "Tasa de Conversión", value: "8.2%",   sub: "promedio",       subColor: "text-white/30" },
+      ],
+      steps: [
+        { n: "01", title: "Regístrate",       desc: "Crea tu cuenta de afiliado en menos de 10 segundos. 100% gratis." },
+        { n: "02", title: "Obtén tu Link",    desc: "Recibe tu enlace único que rastrea todas tus ventas automáticamente." },
+        { n: "03", title: "Promociona",       desc: "Comparte tu enlace en redes sociales, videos, streams o donde prefieras." },
+        { n: "04", title: "Monitorea",        desc: "Sigue clics, conversiones y ganancias en tiempo real desde tu panel." },
+        { n: "05", title: "Cobra",            desc: "Recibe tus pagos via criptomoneda de forma rápida y segura." },
+      ],
+      benefits: [
+        { title: "20% de Comisión", desc: "Gana el 20% de cada venta de CUALQUIER producto. Sin límite de ganancias." },
+        { title: "Pagos Rápidos",   desc: "Pagos en menos de 12h via Pix o criptomoneda." },
+        { title: "Soporte 24/7",    desc: "Equipo dedicado para ayudarte a maximizar tus ventas." },
+      ],
+      faqs: [
+        { q: "¿Cómo funciona la comisión del 20%?",     a: "Ganas el 20% de cada venta realizada a través de tu enlace de afiliado. No hay límite — cuanto más promociones, más ganas." },
+        { q: "¿Cómo y cuándo me pagan?",                a: "Los pagos se procesan en menos de 12 horas via criptomoneda o Pix. Puedes solicitar el retiro en cualquier momento al alcanzar el mínimo." },
+        { q: "¿Necesito experiencia previa?",            a: "No se necesita experiencia. Regístrate, obtén tu enlace y empieza a compartir. Nuestro panel registra todo automáticamente." },
+        { q: "¿Qué productos puedo promocionar?",        a: "Puedes promocionar TODOS nuestros productos — Free Fire, Valorant, CS2, COD, Bloodstrike, Discord tools y más." },
+        { q: "¿Hay algún costo para participar?",        a: "100% gratis. Sin comisiones, sin suscripciones y sin costos ocultos para unirte al programa de afiliados." },
+      ],
+      howItWorksTitle: "Cómo Funciona",
+      howItWorksSub: "5 pasos simples para empezar a ganar",
+      whyTitle: "¿Por Qué Promocionar Nuestros Productos?",
+      whySub: "Productos premium con alta conversión y los mejores beneficios para afiliados",
+      faqTitle: "Preguntas Frecuentes",
+      ctaTitle: "¿Listo para Empezar?",
+      ctaSub: "Regístrate ahora y empieza a ganar el 20% en cada venta",
+    },
+
+    termsPage: {
+      title: "Términos de Servicio",
+      lastUpdated: "Última Actualización: 17 de Marzo, 2026",
+      finalDisclaimer: "AL COMPRAR O USAR NUESTROS PRODUCTOS, RECONOCES QUE HAS LEÍDO, ENTENDIDO Y ACEPTAS QUEDAR VINCULADO POR ESTOS TÉRMINOS DE SERVICIO.",
+      sections: [
+        {
+          n: "1", title: "Aceptación de Términos",
+          intro: "Al comprar, acceder o utilizar cualquier producto o servicio proporcionado por HyperV (\"nosotros\", \"nuestro\"), aceptas quedar vinculado por estos Términos de Servicio. Si no estás de acuerdo con estos términos, no compres ni uses nuestros productos.",
+          items: [],
+        },
+        {
+          n: "2", title: "Naturaleza del Producto y Entrega",
+          intro: "Todos los productos vendidos son licencias digitales entregadas como claves pre-activadas, similares a tarjetas de regalo. Una vez compradas:",
+          items: ["Las claves se generan y entregan instantáneamente a tu correo o cuenta","Los productos se activan de inmediato y están listos para usar","No se proporcionan bienes físicos ni descargas a menos que se especifique","Las credenciales de acceso no son transferibles y son solo para un usuario"],
+        },
+        {
+          n: "3", title: "Pago y Precios",
+          intro: "Todos los pagos se procesan de forma segura a través de nuestros proveedores de pago. Al realizar una compra, reconoces que:",
+          items: ["Los precios están en USD o BRL y pueden cambiar sin previo aviso","El pago debe completarse antes de la activación del producto","Disputar o revertir pagos resultará en la suspensión inmediata de la cuenta","Nos reservamos el derecho de rechazar el servicio a cualquier persona"],
+        },
+        {
+          n: "4", title: "Garantía del Producto y Política de Reembolso",
+          highlight: "Garantizamos que todos los productos funcionarán según lo anunciado en el momento de la compra. Si un producto no funciona correctamente por problemas de nuestra parte, eres elegible para un reembolso después de la verificación por nuestro equipo de soporte.",
+          validTitle: "Casos Válidos de Reembolso (Tras Análisis de Soporte)",
+          validItems: ["Fallo de activación del producto causado por nuestros sistemas o infraestructura","Producto completamente no funcional a pesar de seguir todas las instrucciones","Producto o nivel de suscripción incorrecto entregado por nuestro error"],
+          process: "PROCESO DE REEMBOLSO: Todas las solicitudes deben pasar por nuestro equipo de soporte vía Discord. Debes proporcionar prueba del problema, seguir los pasos de solución y permitir que nuestro equipo verifique el problema. Los reembolsos se procesan en 5-10 días hábiles tras la aprobación.",
+          noRefundTitle: "No Se Proporcionarán Reembolsos Por",
+          noRefundItems: ["Baneos, suspensiones o penalizaciones de cuenta de juego","Detección de anti-cheat, actualizaciones o parches del juego","Error del usuario o uso inadecuado del producto","Incompatibilidad del sistema o requisitos mínimos no cumplidos","Cambio de opinión o arrepentimiento del comprador","Problemas de terceros (internet, PC, servidores del juego)","Negarse a cooperar con el equipo de soporte","Imposibilidad de proporcionar prueba del problema"],
+          chargebackTitle: "Protección Contra Contracargos Fraudulentos",
+          chargebackText: "Presentar una disputa de pago, contracargo o reversión sin pasar por nuestro proceso de soporte oficial se considera fraude y resultará en: baneo permanente de todos los servicios, revocación de licencia sin reembolso, acción legal por fraude, y reporte a procesadores de pago y bases de datos antifraude.",
+        },
+        {
+          n: "5", title: "Términos y Restricciones de Licencia",
+          intro: "Al comprar un producto, recibes una licencia limitada, no exclusiva e intransferible. Aceptas NO:",
+          items: ["Compartir, revender o redistribuir tu clave de licencia","Realizar ingeniería inversa, descompilar o modificar nuestros productos","Usar productos en múltiples cuentas simultáneamente (salvo que se especifique)","Permitir el acceso no autorizado a tu cuenta o productos","Usar productos con fines comerciales sin autorización"],
+        },
+        {
+          n: "6", title: "Gestión de Cuenta",
+          intro: "Nos reservamos el derecho de:",
+          items: ["Desactivar tu licencia a nuestra discreción sin previo aviso","Terminar cuentas por violación de estos términos","Suspender el servicio por actividad sospechosa o disputas de pago","Modificar o descontinuar productos en cualquier momento"],
+          note: "Las licencias \"de por vida\" se refieren únicamente al período de disponibilidad del producto, no a un acceso indefinido.",
+        },
+        {
+          n: "7", title: "Usuarios y Actividades Prohibidas",
+          intro: "Las siguientes personas y actividades están estrictamente prohibidas:",
+          items: ["Empleados o afiliados de desarrolladores de juegos o empresas anti-cheat","Individuos que intenten atacar, explotar o comprometer nuestros sistemas","Compartir información interna de la comunidad públicamente","Crear contenido con nuestros productos sin la marca adecuada","Usar métodos de pago no autorizados o transacciones fraudulentas"],
+          danger: true,
+        },
+        {
+          n: "8", title: "Garantías y Responsabilidad",
+          intro: "Nuestros productos y servicios se proporcionan \"TAL CUAL\" sin garantías de ningún tipo. Renunciamos expresamente a:",
+          items: ["Cualquier garantía de comerciabilidad o idoneidad para un propósito particular","Cualquier garantía de indetectabilidad o funcionalidad continua","Responsabilidad por baneos de juegos, suspensiones de cuentas o pérdida de datos","Responsabilidad por daños indirectos, incidentales o consecuentes"],
+          note: "Usas nuestros productos bajo tu propio riesgo y aceptas plena responsabilidad por las consecuencias.",
+        },
+        {
+          n: "9", title: "Actualizaciones y Disponibilidad del Producto",
+          intro: "",
+          items: ["No garantizamos disponibilidad continua ni actualizaciones","Los productos pueden dejar de estar disponibles debido a actualizaciones del juego o cambios en el anti-cheat","No se proporciona compensación si un producto deja de funcionar","Los plazos de actualización son estimaciones y no garantías"],
+        },
+        {
+          n: "10", title: "Creación de Contenido y Marca",
+          intro: "",
+          items: ["Debes incluir la marca y atribución correcta de HyperV","Debes proteger tu información de cuenta y datos personales","No puedes hacer afirmaciones falsas sobre las capacidades del producto","Nos reservamos el derecho de solicitar la eliminación de contenido que viole estos términos"],
+        },
+        {
+          n: "11", title: "Soporte y Comunicación",
+          intro: "",
+          items: ["Los tiempos de respuesta no están garantizados","El soporte se limita a problemas técnicos relacionados con el producto","El comportamiento abusivo o acosador resultará en baneo permanente","Nos reservamos el derecho de rechazar soporte a nuestra discreción"],
+        },
+        {
+          n: "12", title: "Privacidad y Datos",
+          intro: "",
+          items: ["Recopilamos datos mínimos necesarios para la entrega del producto y soporte","La información de pago es procesada por proveedores de terceros","No vendemos ni compartimos tu información personal","Los IDs de Discord y correos pueden almacenarse para la gestión de cuentas","Los identificadores de hardware (HWID) se recopilan para prevenir el intercambio de licencias"],
+          note: "Vinculación de Hardware: Las licencias están vinculadas a la configuración de hardware de tu PC. Compartir tu clave de licencia o usarla en múltiples dispositivos resultará en desactivación automática y baneo permanente sin reembolso.",
+        },
+        {
+          n: "13", title: "Modificaciones a los Términos",
+          intro: "Nos reservamos el derecho de modificar estos Términos de Servicio en cualquier momento. El uso continuado de nuestros productos después de los cambios constituye la aceptación de los términos actualizados. Los cambios importantes se anunciarán vía Discord.",
+          items: [],
+        },
+        {
+          n: "14", title: "Ley Aplicable y Disputas",
+          intro: "Estos términos se rigen por las leyes aplicables. Cualquier disputa debe resolverse individualmente y renuncias a cualquier derecho de participar en demandas colectivas. Al comprar, aceptas resolver las disputas mediante arbitraje vinculante.",
+          items: [],
+        },
+        {
+          n: "15", title: "Información de Contacto",
+          intro: "Para preguntas sobre estos Términos de Servicio, contáctanos vía:",
+          contact: { label: "Discord:", link: "discord.gg/hypervgg", href: "https://discord.gg/hypervgg" },
+        },
+      ],
+    },
+  },
+};
+
+const LanguageContext = createContext(null);
+
+export const LanguageProvider = ({ children }) => {
+  const [locale, setLocale] = useState("es");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("locale");
+    if (saved && translations[saved]) setLocale(saved);
+  }, []);
+
+  const changeLocale = (code) => {
+    setLocale(code);
+    localStorage.setItem("locale", code);
+  };
+
+  const value = useMemo(
+    () => ({ locale, changeLocale, t: translations[locale] }),
+    [locale]
+  );
+
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (!context) throw new Error("useLanguage debe usarse dentro de LanguageProvider");
+  return context;
+};
+
+// NOTE: append this termsPage block inside BOTH en and es translation objects

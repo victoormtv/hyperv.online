@@ -1,37 +1,43 @@
 import Carousels from "@/components/Carousels";
-import CategoryList from "@/components/CategoryList";
-import Enhancement from "@/components/Enhancement";
+import Feedbacks from "@/components/Feedbacks";
 import Fashsales from "@/components/Fashsales";
-import Featured from "@/components/Featured";
+import Footer from "@/components/Footer";
 import { Separator } from "@/components/ui/separator";
 import prisma from "@/utils/connection";
 
 export default async function Home() {
-  const query = {
-    take: 6,
-    skip: 0,
-  };
+  const PRODUCT_NAMES = [
+    "Panel Secure",
+    "Bypass UID",
+    "Aimbot Color",
+    "Panel Full",
+    "Panel Android",
+    "Panel CSGO",
+  ];
+
   const [products, popularProducts, categories] = await prisma?.$transaction([
-    prisma.product.findMany(query),
-    prisma.product.findMany({ ...query, orderBy: { views: "desc" } }),
-    prisma.category.findMany(query),
+    prisma.product.findMany({ take: 12, skip: 0 }),
+    prisma.product.findMany({
+      where: { name: { in: PRODUCT_NAMES } },
+      take: 6,
+      orderBy: { name: "asc" },
+    }),
+    prisma.category.findMany({ take: 12, skip: 0 }),
   ]);
+
   return (
     <div className="">
       <Carousels />
       <div className="px-[10%]">
-        <Fashsales title="Today's" heading="Flash sales" products={products} />
-        <Separator className="my-4" />
-        <CategoryList categories={categories} />
-        <Enhancement />
-        <Separator className="my-4" />
         <Fashsales
-          title="Our Products"
-          heading="Explore Our Products"
+          title="Nuestros Productos"
+          heading="Explora Nuestros Productos"
           products={popularProducts}
         />
-        <Featured />
+        <Separator className="my-4" />
+        <Feedbacks />
       </div>
+      <Footer />
     </div>
   );
 }
