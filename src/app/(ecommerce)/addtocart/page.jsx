@@ -127,10 +127,11 @@ export default function CheckoutPage() {
 
   const handleMercadoPago = async () => {
     if (!validateCheckout()) return;
-
     setLoading(true);
     setError("");
     setMpPreferenceId(null);
+
+    const newWindow = window.open("", "_blank");
 
     try {
       const res = await fetch("/api/checkout/mercadopago", {
@@ -142,15 +143,22 @@ export default function CheckoutPage() {
       const data = await res.json();
 
       if (!res.ok) {
+        newWindow?.close();
         throw new Error(data?.error || "Error al crear preferencia de pago.");
       }
 
-      if (!data?.preferenceId) {
-        throw new Error("Mercado Pago no devolvió preferenceId.");
+      if (data?.init_point) {
+        if (newWindow) newWindow.location.href = data.init_point; // ← CAMBIA
+        else window.location.href = data.init_point;
+      } else if (data?.preferenceId) {
+        newWindow?.close();
+        setMpPreferenceId(data.preferenceId);
+      } else {
+        newWindow?.close();
+        throw new Error("Mercado Pago no devolvió URL de pago.");
       }
-
-      setMpPreferenceId(data.preferenceId);
     } catch (err) {
+      newWindow?.close();
       setError(err?.message || "Error de conexión con Mercado Pago.");
     } finally {
       setLoading(false);
@@ -249,9 +257,10 @@ export default function CheckoutPage() {
 
   const handleBinance = async () => {
     if (!validateCheckout()) return;
-
     setLoading(true);
     setError("");
+
+    const newWindow = window.open("", "_blank");
 
     try {
       const res = await fetch("/api/checkout/binance", {
@@ -259,19 +268,22 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: safeCart, email }),
       });
-
       const data = await res.json();
 
       if (!res.ok) {
+        newWindow?.close();
         throw new Error(data?.error || "Error al crear orden en Binance Pay.");
       }
 
       if (!data?.checkoutUrl) {
+        newWindow?.close();
         throw new Error("Binance no devolvió checkoutUrl.");
       }
 
-      window.location.href = data.checkoutUrl;
+      if (newWindow) newWindow.location.href = data.checkoutUrl;
+      else window.location.href = data.checkoutUrl;
     } catch (err) {
+      newWindow?.close();
       setError(err?.message || "Error de conexión con Binance Pay.");
     } finally {
       setLoading(false);
