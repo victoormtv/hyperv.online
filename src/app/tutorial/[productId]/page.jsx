@@ -9,7 +9,7 @@ import {
   Check, ExternalLink, MessageCircle, Package,
   Cpu, Gamepad2, Wrench, Home, BookOpen,
   Crosshair, Smartphone, Zap, Code2, Swords,
-  Eye, Lock, Wifi, ScanLine, Target, Layers, ChevronsUpDown
+  Eye, Lock, Wifi, ScanLine, Target, Layers, ChevronsUpDown, Menu, X
 } from "lucide-react";
 
 const PRODUCT_ICONS = {
@@ -60,14 +60,14 @@ const StepBadge = ({ n, color = ACCENT }) => (
 
 const DownloadBtn = ({ href, label, color = ACCENT }) => (
   <a href={href} target="_blank" rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-bold transition-all duration-200 hover:scale-105 hover:brightness-110"
+    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-white text-sm font-bold transition-all duration-200 hover:brightness-110"
     style={{ background: color }}>
     <Download size={15} /> {label} <ExternalLink size={13} />
   </a>
 );
 
 const WarningBox = ({ title, desc, color = "#b45309" }) => (
-  <div className="rounded-xl px-5 py-4 border flex gap-3" style={{ background: `${color}18`, borderColor: `${color}40` }}>
+  <div className="rounded-xl px-4 py-4 border flex gap-3" style={{ background: `${color}18`, borderColor: `${color}40` }}>
     <AlertTriangle size={18} style={{ color }} className="shrink-0 mt-0.5" />
     <div>
       <p className="font-bold text-sm" style={{ color }}>{title}</p>
@@ -77,14 +77,14 @@ const WarningBox = ({ title, desc, color = "#b45309" }) => (
 );
 
 const InfoBox = ({ text }) => (
-  <div className="rounded-xl px-5 py-3 border flex gap-3 items-start" style={{ background: `${ACCENT}15`, borderColor: `${ACCENT}35` }}>
+  <div className="rounded-xl px-4 py-3 border flex gap-3 items-start" style={{ background: `${ACCENT}15`, borderColor: `${ACCENT}35` }}>
     <Shield size={16} style={{ color: ACCENT }} className="shrink-0 mt-0.5" />
     <p className="text-sm" style={{ color: ACCENT }}>{text}</p>
   </div>
 );
 
 const Card = ({ children, className = "" }) => (
-  <div className={`bg-[#111318] border border-white/10 rounded-2xl p-6 ${className}`}>{children}</div>
+  <div className={`bg-[#111318] border border-white/10 rounded-2xl p-4 md:p-6 ${className}`}>{children}</div>
 );
 
 const CardTitle = ({ icon: Icon, title, color = "white" }) => (
@@ -98,10 +98,10 @@ const Accordion = ({ title, children }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="border border-white/10 rounded-xl overflow-hidden">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-5 py-3.5 text-white/80 hover:text-white hover:bg-white/5 transition-all text-sm font-semibold">
-        <div className="flex items-center gap-2"><ChevronRight size={14} className={`transition-transform ${open ? "rotate-90" : ""}`} />{title}</div>
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/5 transition-all text-sm font-semibold text-left">
+        <div className="flex items-center gap-2"><ChevronRight size={14} className={`transition-transform shrink-0 ${open ? "rotate-90" : ""}`} /><span>{title}</span></div>
       </button>
-      {open && <div className="px-5 pb-4 text-white/50 text-sm leading-relaxed">{children}</div>}
+      {open && <div className="px-4 pb-4 text-white/50 text-sm leading-relaxed">{children}</div>}
     </div>
   );
 };
@@ -113,12 +113,166 @@ const CopyUrl = ({ section }) => {
     setUrl(`${window.location.origin}${window.location.pathname}?section=${section}`);
   }, [section]);
   return (
-    <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 mb-6">
+    <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 mb-6">
       <span suppressHydrationWarning className="text-white/30 text-xs flex-1 truncate">{url}</span>
-      <button onClick={() => { navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="text-white/40 hover:text-white transition-colors">
+      <button onClick={() => { navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="text-white/40 hover:text-white transition-colors shrink-0">
         {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
       </button>
     </div>
+  );
+};
+
+// ── Sidebar inner content (shared between desktop & mobile drawer) ─────
+const SidebarContent = ({
+  tx, locale, productId, productName, CurrentIcon,
+  products, loadingProducts, productOpen, setProductOpen,
+  setupOpen, setSetupOpen, troubleOpen, setTroubleOpen,
+  langOpen, setLangOpen, activeSection, handleSectionChange,
+  handleChangeLang, onNavClick,
+}) => {
+  const LANGUAGES = [
+    { code: "es", label: "Español", flag: "🇪🇸" },
+    { code: "en", label: "English", flag: "🇺🇸" },
+  ];
+
+  return (
+    <>
+      <div className="px-4 pt-4 pb-3">
+        <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-white text-sm transition-colors font-medium">
+          <Home size={14} /> {tx.backToSite}
+        </Link>
+      </div>
+
+      {/* Product selector */}
+      <div className="px-3 pb-2 relative">
+        <button
+          onClick={() => setProductOpen(!productOpen)}
+          className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-white font-semibold text-sm transition-all"
+          style={{ background: `${ACCENT}35`, border: `1px solid ${ACCENT}60` }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: ACCENT }}>
+            <CurrentIcon size={14} />
+          </div>
+          <div className="flex-1 text-left overflow-hidden">
+            <p className="text-white font-bold text-sm truncate">{productName}</p>
+            <p className="text-white/50 text-xs">{tx.tutorial}</p>
+          </div>
+          <ChevronsUpDown size={14} className="text-white/60 shrink-0" />
+        </button>
+
+        {productOpen && (
+          <div className="absolute left-3 right-3 top-full mt-1 rounded-xl shadow-2xl border border-white/15 z-50 overflow-y-auto hide-scrollbar" style={{ background: "#1a1d24", maxHeight: "260px" }}>
+            {loadingProducts
+              ? <div className="px-4 py-3 text-white/40 text-xs">{tx.loading}</div>
+              : products.map(p => {
+                  const slug = p.name?.toLowerCase().replace(/\s+/g, "-");
+                  const PIcon = PRODUCT_ICONS[slug] || Package;
+                  const isActive = slug === productId;
+                  return (
+                    <Link key={p.id} href={`/tutorial/${slug}`} onClick={() => { setProductOpen(false); onNavClick?.(); }}
+                      className={`flex items-center gap-2.5 px-4 py-2.5 text-xs transition-colors hover:bg-white/8 ${isActive ? "text-white font-semibold" : "text-white/65"}`}>
+                      <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+                        style={{ background: isActive ? `${ACCENT}40` : "rgba(255,255,255,0.07)" }}>
+                        <PIcon size={11} style={{ color: isActive ? ACCENT : "rgba(255,255,255,0.5)" }} />
+                      </div>
+                      <span className="flex-1 truncate">{p.name}</span>
+                      {isActive && <Check size={11} className="text-green-400 shrink-0" />}
+                    </Link>
+                  );
+                })
+            }
+          </div>
+        )}
+      </div>
+
+      <div className="h-px bg-white/10 mx-3 mb-3" />
+
+      {/* Nav */}
+      <nav className="px-3 flex-1">
+        <button onClick={() => setSetupOpen(!setupOpen)}
+          className="w-full flex items-center justify-between px-1 py-2 mb-1 hover:text-white/80 transition-colors"
+          style={{ color: "rgba(255,255,255,0.8)" }}>
+          <div className="flex items-center gap-1.5">
+            <BookOpen size={11} style={{ color: ACCENT }} />
+            <span className="text-[10px] font-extrabold tracking-widest uppercase whitespace-nowrap">{tx.setupGuide}</span>
+          </div>
+          <ChevronDown size={10} className={`transition-transform shrink-0 ${setupOpen ? "rotate-180" : ""}`} />
+        </button>
+        {setupOpen && (
+          <div className="relative ml-2 pl-3 mb-3" style={{ borderLeft: `1.5px solid ${ACCENT}50` }}>
+            {SECTIONS.filter(s => s.group === "SETUP").map(s => {
+              const isActive = activeSection === s.id;
+              return (
+                <button key={s.id} onClick={() => { handleSectionChange(s.id); onNavClick?.(); }}
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all mb-0.5 text-left ${isActive ? "font-semibold" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+                  style={isActive ? { background: `${ACCENT}22`, color: ACCENT } : {}}>
+                  {tx.sections[s.id]}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <button onClick={() => setTroubleOpen(!troubleOpen)}
+          className="w-full flex items-center justify-between px-1 py-2 mb-1 hover:text-white/80 transition-colors"
+          style={{ color: "rgba(255,255,255,0.8)" }}>
+          <div className="flex items-center gap-1.5">
+            <AlertTriangle size={11} style={{ color: "#f59e0b" }} />
+            <span className="text-[10px] font-extrabold tracking-widest uppercase whitespace-nowrap">{tx.troubleshooting}</span>
+          </div>
+          <ChevronDown size={10} className={`transition-transform shrink-0 ${troubleOpen ? "rotate-180" : ""}`} />
+        </button>
+        {troubleOpen && (
+          <div className="relative ml-2 pl-3 mb-3" style={{ borderLeft: "1.5px solid rgba(245,158,11,0.4)" }}>
+            {SECTIONS.filter(s => s.group === "TROUBLE").map(s => {
+              const isActive = activeSection === s.id;
+              return (
+                <button key={s.id} onClick={() => { handleSectionChange(s.id); onNavClick?.(); }}
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all mb-0.5 text-left ${isActive ? "font-semibold" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+                  style={isActive ? { background: "rgba(245,158,11,0.15)", color: "#f59e0b" } : {}}>
+                  {tx.sections[s.id]}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </nav>
+
+      <div className="h-px bg-white/10 mx-3 mb-3" />
+
+      {/* Discord + Language */}
+      <div className="px-3 pb-5 flex flex-col gap-3">
+        <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110"
+          style={{ background: "rgba(88,101,242,0.15)", border: "1px solid rgba(88,101,242,0.3)", color: "#8b96f8" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+          </svg>
+          {tx.discordSupport}
+        </a>
+        <div>
+          <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-2 px-1">{tx.language}</p>
+          <div className="relative">
+            <button onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-sm hover:text-white transition-colors">
+              <span className="text-base">{LANGUAGES.find(l => l.code === locale)?.flag}</span>
+              <span>{LANGUAGES.find(l => l.code === locale)?.label}</span>
+              <ChevronDown size={11} className={`ml-1 transition-transform ${langOpen ? "rotate-180" : ""}`} />
+            </button>
+            {langOpen && (
+              <div className="absolute top-full mt-1 left-0 rounded-lg border border-white/10 overflow-hidden shadow-xl z-50" style={{ background: "#1a1d24", minWidth: "140px" }}>
+                {LANGUAGES.map(l => (
+                  <button key={l.code} onClick={() => handleChangeLang(l.code)}
+                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-white/5 transition-colors ${locale === l.code ? "text-white font-semibold" : "text-white/60"}`}>
+                    <span className="text-base">{l.flag}</span><span>{l.label}</span>
+                    {locale === l.code && <Check size={12} className="ml-auto text-green-400" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -129,14 +283,14 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   if (section === "general-dependencies") return (
     <>
       <CopyUrl section="general-dependencies" />
-      <div className="flex items-center gap-3 mb-2"><Package size={28} style={{ color: ACCENT }} /><h1 className="text-3xl font-extrabold text-white">{tx.deps.title}</h1></div>
+      <div className="flex items-center gap-3 mb-2"><Package size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.deps.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.deps.subtitle}</p>
       <WarningBox title={tx.deps.warning} desc={tx.deps.warningDesc} color="#b45309" />
       <div className="mt-6 flex flex-col gap-5">
         <Card>
           <CardTitle icon={ShieldOff} title={tx.deps.defender.title} color="#ef4444" />
           <p className="text-white/50 text-sm mb-4">{tx.deps.defender.desc}</p>
-          <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-4">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
             <div className="flex items-center gap-2 mb-4 text-white/70 text-sm font-semibold"><Settings size={15} /> {tx.deps.defender.manual}</div>
             <div className="flex flex-col gap-4">
               {tx.deps.defender.steps.map((s, i) => (
@@ -150,7 +304,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           <div className="flex items-center gap-2 my-4">
             <div className="flex-1 h-px bg-white/10" /><span className="text-sm font-bold" style={{ color: ACCENT }}>{tx.deps.defender.then}</span><div className="flex-1 h-px bg-white/10" />
           </div>
-          <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-4 text-white font-bold text-sm"><Check size={15} className="text-green-400" /> {tx.deps.defender.dcontrol}</div>
             <div className="flex gap-3 mb-4">
               <StepBadge n={1} color="#6366f1" />
@@ -189,7 +343,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   if (section === "requirements") return (
     <>
       <CopyUrl section="requirements" />
-      <div className="flex items-center gap-3 mb-2"><Shield size={28} style={{ color: ACCENT }} /><h1 className="text-3xl font-extrabold text-white">{tx.req.title}</h1></div>
+      <div className="flex items-center gap-3 mb-2"><Shield size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.req.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.req.subtitle}</p>
       <Card>
         <CardTitle icon={Monitor} title={tx.req.sysTitle} color={ACCENT} />
@@ -213,7 +367,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   if (section === "download") return (
     <>
       <CopyUrl section="download" />
-      <div className="flex items-center gap-3 mb-2"><Download size={28} style={{ color: ACCENT }} /><h1 className="text-3xl font-extrabold text-white">{tx.dl.title}</h1></div>
+      <div className="flex items-center gap-3 mb-2"><Download size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.dl.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.dl.subtitle}</p>
       <Card className="mb-4">
         <CardTitle icon={Download} title={`${tx.dl.loaderTitle} ${productName}`} color={ACCENT} />
@@ -223,7 +377,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       <Card className="mb-4">
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.mediafire.com/file/xehwqjz68lnrtvp/FreeFire-NormalV4.xapk/file" label="Free Fire Normal" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/17ctvd6v86q1iap/FreeFire-TelaV4.xapk/file" label="Free Fire Tela" color="#06b6d4" />
@@ -231,7 +385,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.14" color="#8b5cf6" />
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="MSI 5.12" color="#8b5cf6" />
@@ -240,7 +394,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4" label="UltraViewer" color="#f59e0b" />
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="AnyDesk" color="#f59e0b" />
         </div>
@@ -252,7 +406,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   if (section === "installation") return (
     <>
       <CopyUrl section="installation" />
-      <div className="flex items-center gap-3 mb-2"><Settings size={28} style={{ color: ACCENT }} /><h1 className="text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
+      <div className="flex items-center gap-3 mb-2"><Settings size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.install.subtitle}</p>
       <Card className="mb-5">
         <CardTitle icon={Monitor} title={tx.install.videoTitle} color={ACCENT} />
@@ -272,11 +426,11 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           ))}
         </div>
         <div className="mt-5 flex flex-col gap-3">
-          <div className="rounded-xl px-5 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
+          <div className="rounded-xl px-4 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
             <Check size={16} className="text-green-400 shrink-0 mt-0.5" />
             <div><p className="text-green-400 font-bold text-sm">{tx.install.works}</p><p className="text-green-300/70 text-sm">{tx.install.worksDesc}</p></div>
           </div>
-          <div className="rounded-xl px-5 py-4 border border-red-500/30 bg-red-500/10 flex gap-3">
+          <div className="rounded-xl px-4 py-4 border border-red-500/30 bg-red-500/10 flex gap-3">
             <AlertTriangle size={16} className="text-red-400 shrink-0 mt-0.5" />
             <div><p className="text-red-400 font-bold text-sm">{tx.install.fails}</p><p className="text-red-300/70 text-sm">{tx.install.failsDesc}</p></div>
           </div>
@@ -288,7 +442,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   return (
     <>
       <CopyUrl section="common-issues" />
-      <div className="flex items-center gap-3 mb-2"><AlertTriangle size={28} style={{ color: "#f59e0b" }} /><h1 className="text-3xl font-extrabold text-white">{tx.issues.title}</h1></div>
+      <div className="flex items-center gap-3 mb-2"><AlertTriangle size={24} style={{ color: "#f59e0b" }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.issues.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.issues.subtitle}</p>
       <Card className="mb-4"><CardTitle icon={AlertTriangle} title={tx.issues.ticketTitle} color="#f59e0b" /><p className="text-white/50 text-sm">{tx.issues.ticketDesc}</p></Card>
       <Card className="mb-4">
@@ -299,7 +453,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       </Card>
       <Card>
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-9 h-9 rounded-full bg-[#5865F2]/20 flex items-center justify-center"><MessageCircle size={18} className="text-[#5865F2]" /></div>
+          <div className="w-9 h-9 rounded-full bg-[#5865F2]/20 flex items-center justify-center shrink-0"><MessageCircle size={18} className="text-[#5865F2]" /></div>
           <div><p className="text-white font-bold text-sm">{tx.issues.helpTitle}</p><a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="text-[#5865F2] text-xs hover:underline">Join Discord</a></div>
         </div>
         <p className="text-white/40 text-sm mb-4">{tx.issues.helpDesc}</p>
@@ -338,7 +492,6 @@ export default function TutorialPage() {
   const { locale, changeLocale, t } = useLanguage();
 
   const productId = params?.productId;
-  // Use t.tutorial from LanguageContext — no local T object needed
   const tx = t.tutorial;
 
   const [products,        setProducts]        = useState([]);
@@ -352,8 +505,8 @@ export default function TutorialPage() {
   const [setupOpen,   setSetupOpen]   = useState(true);
   const [troubleOpen, setTroubleOpen] = useState(true);
   const [langOpen,    setLangOpen]    = useState(false);
-  const productBtnRef = React.useRef(null);
-  const [dropdownTop, setDropdownTop] = useState(0);
+  // Mobile drawer
+  const [drawerOpen,  setDrawerOpen]  = useState(false);
 
   const handleChangeLang = (code) => { changeLocale(code); setLangOpen(false); };
 
@@ -372,6 +525,13 @@ export default function TutorialPage() {
 
   useEffect(() => { if (urlSection) setActiveSection(urlSection); }, [urlSection]);
 
+  // Close drawer on resize to desktop
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth >= 768) setDrawerOpen(false); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const handleSectionChange = useCallback((sectionId) => {
     setActiveSection(sectionId);
     const url = new URL(window.location.href);
@@ -387,185 +547,90 @@ export default function TutorialPage() {
   const productName = currentProduct?.name || productId?.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "Producto";
   const isGroup1    = GROUP1.includes(productId);
 
-  const LANGUAGES = [
-    { code: "es", label: "Español", flag: "🇪🇸" },
-    { code: "en", label: "English", flag: "🇺🇸" },
-  ];
+  const sidebarProps = {
+    tx, locale, productId, productName, CurrentIcon,
+    products, loadingProducts, productOpen, setProductOpen,
+    setupOpen, setSetupOpen, troubleOpen, setTroubleOpen,
+    langOpen, setLangOpen, activeSection, handleSectionChange,
+    handleChangeLang,
+  };
 
   return (
-    <div className="text-white flex" style={{ background: "#0d0f12", fontFamily: "var(--font-outfit), sans-serif", height: "100vh", overflow: "hidden" }}>
+    <div className="text-white" style={{ background: "#0d0f12", fontFamily: "var(--font-outfit), sans-serif", minHeight: "100vh" }}>
 
-      {/* ── Sidebar ── */}
-      <aside className="w-[260px] shrink-0 border-r border-white/10 flex flex-col h-full overflow-y-auto hide-scrollbar" style={{ background: "#13161c" }}>
-        <div className="px-4 pt-4 pb-3">
-          <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-white text-sm transition-colors font-medium">
-            <Home size={14} /> {tx.backToSite}
-          </Link>
+      {/* ── Mobile top bar ── */}
+      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-white/10 sticky top-0 z-40" style={{ background: "#13161c" }}>
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: ACCENT }}>
+            <CurrentIcon size={13} />
+          </div>
+          <span className="text-white font-bold text-sm truncate max-w-[180px]">{productName}</span>
         </div>
+        <button onClick={() => setDrawerOpen(true)} className="text-white/60 hover:text-white p-1">
+          <Menu size={22} />
+        </button>
+      </div>
 
-        <div className="px-3 pb-2">
-          <button
-            ref={productBtnRef}
-            onClick={() => {
-              if (!productOpen && productBtnRef.current) {
-                const rect = productBtnRef.current.getBoundingClientRect();
-                setDropdownTop(rect.bottom + 4);
-              }
-              setProductOpen(!productOpen);
-            }}
-            className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-white font-semibold text-sm transition-all"
-            style={{ background: `${ACCENT}35`, border: `1px solid ${ACCENT}60` }}>
-            <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: ACCENT }}>
-              <CurrentIcon size={14} />
-            </div>
-            <div className="flex-1 text-left overflow-hidden">
-              <p className="text-white font-bold text-sm truncate">{productName}</p>
-              <p className="text-white/50 text-xs">{tx.tutorial}</p>
-            </div>
-            <ChevronsUpDown size={14} className="text-white/60 shrink-0" />
-          </button>
-
-          {productOpen && (
-            <div className="fixed rounded-xl shadow-2xl border border-white/15 hide-scrollbar"
-              style={{ background: "#1a1d24", maxHeight: "300px", overflowY: "auto", width: "236px", left: "12px",
-                top: dropdownTop > 0 ? `${dropdownTop}px` : productBtnRef.current ? `${productBtnRef.current.getBoundingClientRect().bottom + 4}px` : "120px", zIndex: 9999 }}>
-              {loadingProducts
-                ? <div className="px-4 py-3 text-white/40 text-xs">{tx.loading}</div>
-                : products.map(p => {
-                    const slug   = p.name?.toLowerCase().replace(/\s+/g, "-");
-                    const PIcon  = PRODUCT_ICONS[slug] || Package;
-                    const isActive = slug === productId;
-                    return (
-                      <Link key={p.id} href={`/tutorial/${slug}`} onClick={() => setProductOpen(false)}
-                        className={`flex items-center gap-2.5 px-4 py-2.5 text-xs transition-colors hover:bg-white/8 ${isActive ? "text-white font-semibold" : "text-white/65"}`}>
-                        <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
-                          style={{ background: isActive ? `${ACCENT}40` : "rgba(255,255,255,0.07)" }}>
-                          <PIcon size={11} style={{ color: isActive ? ACCENT : "rgba(255,255,255,0.5)" }} />
-                        </div>
-                        <span className="flex-1 truncate">{p.name}</span>
-                        {isActive && <Check size={11} className="text-green-400 shrink-0" />}
-                      </Link>
-                    );
-                  })
-              }
-            </div>
-          )}
-        </div>
-
-        <div className="h-px bg-white/10 mx-3 mb-3" />
-
-        <nav className="px-3">
-          <button onClick={() => setSetupOpen(!setupOpen)}
-            className="w-full flex items-center justify-between px-1 py-2 mb-1 hover:text-white/80 transition-colors"
-            style={{ color: "rgba(255,255,255,0.8)" }}>
-            <div className="flex items-center gap-1.5">
-              <BookOpen size={11} style={{ color: ACCENT }} />
-              <span className="text-[10px] font-extrabold tracking-widest uppercase whitespace-nowrap">{tx.setupGuide}</span>
-            </div>
-            <ChevronDown size={10} className={`transition-transform shrink-0 ${setupOpen ? "rotate-180" : ""}`} />
-          </button>
-          {setupOpen && (
-            <div className="relative ml-2 pl-3 mb-3" style={{ borderLeft: `1.5px solid ${ACCENT}50` }}>
-              {SECTIONS.filter(s => s.group === "SETUP").map(s => {
-                const isActive = activeSection === s.id;
-                return (
-                  <button key={s.id} onClick={() => handleSectionChange(s.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all mb-0.5 text-left ${isActive ? "font-semibold" : "text-white/60 hover:text-white hover:bg-white/5"}`}
-                    style={isActive ? { background: `${ACCENT}22`, color: ACCENT } : {}}>
-                    {tx.sections[s.id]}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          <button onClick={() => setTroubleOpen(!troubleOpen)}
-            className="w-full flex items-center justify-between px-1 py-2 mb-1 hover:text-white/80 transition-colors"
-            style={{ color: "rgba(255,255,255,0.8)" }}>
-            <div className="flex items-center gap-1.5">
-              <AlertTriangle size={11} style={{ color: "#f59e0b" }} />
-              <span className="text-[10px] font-extrabold tracking-widest uppercase whitespace-nowrap">{tx.troubleshooting}</span>
-            </div>
-            <ChevronDown size={10} className={`transition-transform shrink-0 ${troubleOpen ? "rotate-180" : ""}`} />
-          </button>
-          {troubleOpen && (
-            <div className="relative ml-2 pl-3 mb-3" style={{ borderLeft: "1.5px solid rgba(245,158,11,0.4)" }}>
-              {SECTIONS.filter(s => s.group === "TROUBLE").map(s => {
-                const isActive = activeSection === s.id;
-                return (
-                  <button key={s.id} onClick={() => handleSectionChange(s.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all mb-0.5 text-left ${isActive ? "font-semibold" : "text-white/60 hover:text-white hover:bg-white/5"}`}
-                    style={isActive ? { background: "rgba(245,158,11,0.15)", color: "#f59e0b" } : {}}>
-                    {tx.sections[s.id]}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </nav>
-
-        <div className="h-px bg-white/10 mx-3 mb-3" />
-
-        <div className="px-3 pb-5 flex flex-col gap-3">
-          <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110"
-            style={{ background: "rgba(88,101,242,0.15)", border: "1px solid rgba(88,101,242,0.3)", color: "#8b96f8" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-            </svg>
-            {tx.discordSupport}
-          </a>
-          <div>
-            <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-2 px-1">{tx.language}</p>
-            <div className="relative">
-              <button onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-sm hover:text-white transition-colors">
-                <span className="text-base">{LANGUAGES.find(l => l.code === locale)?.flag}</span>
-                <span>{LANGUAGES.find(l => l.code === locale)?.label}</span>
-                <ChevronDown size={11} className={`ml-1 transition-transform ${langOpen ? "rotate-180" : ""}`} />
+      {/* ── Mobile drawer overlay ── */}
+      {drawerOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          {/* backdrop */}
+          <div className="absolute inset-0 bg-black/60" onClick={() => setDrawerOpen(false)} />
+          {/* drawer panel */}
+          <div className="relative w-[280px] h-full flex flex-col overflow-y-auto hide-scrollbar" style={{ background: "#13161c" }}>
+            <div className="flex items-center justify-between px-4 pt-4 pb-2">
+              <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Menu</span>
+              <button onClick={() => setDrawerOpen(false)} className="text-white/60 hover:text-white">
+                <X size={18} />
               </button>
-              {langOpen && (
-                <div className="absolute top-full mt-1 left-0 rounded-lg border border-white/10 overflow-hidden shadow-xl z-10" style={{ background: "#1a1d24", minWidth: "140px" }}>
-                  {LANGUAGES.map(l => (
-                    <button key={l.code} onClick={() => handleChangeLang(l.code)}
-                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-white/5 transition-colors ${locale === l.code ? "text-white font-semibold" : "text-white/60"}`}>
-                      <span className="text-base">{l.flag}</span><span>{l.label}</span>
-                      {locale === l.code && <Check size={12} className="ml-auto text-green-400" />}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
+            <SidebarContent {...sidebarProps} onNavClick={() => setDrawerOpen(false)} />
           </div>
         </div>
-      </aside>
+      )}
 
-      {/* ── Main ── */}
-      <main className="flex-1 flex flex-col h-full overflow-y-auto hide-scrollbar">
-        <div className="flex-1 px-10 py-8 max-w-3xl mx-auto w-full">
+      {/* ── Desktop layout ── */}
+      <div className="hidden md:flex" style={{ height: "100vh", overflow: "hidden" }}>
+        {/* Sidebar */}
+        <aside className="w-[260px] shrink-0 border-r border-white/10 flex flex-col h-full overflow-y-auto hide-scrollbar" style={{ background: "#13161c" }}>
+          <SidebarContent {...sidebarProps} />
+        </aside>
+
+        {/* Main */}
+        <main className="flex-1 flex flex-col h-full overflow-y-auto hide-scrollbar">
+          <div className="flex-1 px-10 py-8 max-w-3xl mx-auto w-full">
+            {isGroup1
+              ? <Group1Content key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />
+              : <ComingSoon productName={productName} tx={tx} />
+            }
+          </div>
+          {isGroup1 && (
+            <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
+              {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
+              {nextSection ? <button onClick={() => handleSectionChange(nextSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">{tx.sections[nextSection.id]} <ChevronRight size={15} /></button> : <div />}
+            </div>
+          )}
+          <div className="text-center py-4 text-white/20 text-sm border-t border-white/5">© 2026 HyperV Community</div>
+        </main>
+      </div>
+
+      {/* ── Mobile main content ── */}
+      <div className="md:hidden flex flex-col min-h-[calc(100vh-53px)]">
+        <div className="flex-1 px-4 py-6 w-full max-w-2xl mx-auto">
           {isGroup1
             ? <Group1Content key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />
             : <ComingSoon productName={productName} tx={tx} />
           }
         </div>
-
         {isGroup1 && (
-          <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
-            {prevSection
-              ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">
-                  <ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}
-                </button>
-              : <div />}
-            {nextSection
-              ? <button onClick={() => handleSectionChange(nextSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">
-                  {tx.sections[nextSection.id]} <ChevronRight size={15} />
-                </button>
-              : <div />}
+          <div className="px-4 py-5 border-t border-white/10 flex items-center justify-between">
+            {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
+            {nextSection ? <button onClick={() => handleSectionChange(nextSection.id)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">{tx.sections[nextSection.id]} <ChevronRight size={15} /></button> : <div />}
           </div>
         )}
-
         <div className="text-center py-4 text-white/20 text-sm border-t border-white/5">© 2026 HyperV Community</div>
-      </main>
+      </div>
+
     </div>
   );
 }
