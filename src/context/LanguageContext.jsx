@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 
 const translations = {
   en: {
@@ -75,7 +75,7 @@ const translations = {
       { username: "Theninoig",          date: "March 14, 2026",  message: "Product: Valorant Aimbot | No ban in 3 months and already hit diamond." },
       { username: "Diego",              date: "March 14, 2026",  message: "Product: Valorant Aimbot | +rep color aimbot undetectable 🚀 best on the market" },
       { username: "NovaStar",           date: "March 14, 2026",  message: "Product: Panel Blood | Super fast support, fixed my issue in 5 min" },
-      { username: "Jxzxn",              date: "March 14, 2026",  message: "Product: Menu Chams | Now I can see all players with their HP and distance lmao 💯" },
+      { username: "Jxzxn",             date: "March 14, 2026",  message: "Product: Menu Chams | Now I can see all players with their HP and distance lmao 💯" },
     ],
 
     affiliatePage: {
@@ -123,92 +123,133 @@ const translations = {
       lastUpdated: "Last Updated: March 17, 2026",
       finalDisclaimer: "BY PURCHASING OR USING OUR PRODUCTS, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS OF SERVICE.",
       sections: [
-        {
-          n: "1", title: "Acceptance of Terms",
-          intro: "By purchasing, accessing, or using any products or services provided by HyperV (\"we\", \"us\", \"our\"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not purchase or use our products.",
-          items: [],
-        },
-        {
-          n: "2", title: "Product Nature & Delivery",
-          intro: "All products sold are digital licenses delivered as pre-activated keys, similar to gift cards. Once purchased:",
-          items: ["Keys are generated and delivered instantly to your email or account","Products are immediately activated and ready for use","No physical goods or downloads are provided unless specified","Access credentials are non-transferable and for single-user use only"],
-        },
-        {
-          n: "3", title: "Payment & Pricing",
-          intro: "All payments are processed securely through our payment providers. By making a purchase, you acknowledge that:",
-          items: ["Prices are listed in USD or BRL and may change without notice","Payment must be completed before product activation","Disputing or reversing payments will result in immediate account suspension","We reserve the right to refuse service to anyone for any reason"],
-        },
-        {
-          n: "4", title: "Product Guarantee & Refund Policy",
-          highlight: "We guarantee that all products will function as advertised at the time of purchase. If a product fails to work properly due to issues on our end, you are eligible for a refund after proper verification by our support team.",
-          validTitle: "Valid Refund Cases (After Support Analysis)",
-          validItems: ["Product activation failure caused by our systems or infrastructure","Product completely non-functional despite following all setup instructions","Incorrect product or subscription tier delivered due to our error"],
-          process: "REFUND PROCESS: All refund requests must go through our support team via Discord. You must provide proof of the issue, follow troubleshooting steps, and allow our team to verify the problem. Refunds are processed within 5-10 business days after approval.",
-          noRefundTitle: "Refunds Will NOT Be Provided For",
-          noRefundItems: ["Game account bans, suspensions, or penalties","Anti-cheat detection, updates, or game patches","User error or improper usage","System incompatibility or minimum requirements not met","Change of mind or buyer's remorse","Third-party issues (internet, PC, game servers)","Refusal to cooperate with support team","Inability to provide proof of issue"],
-          chargebackTitle: "Protection Against Fraudulent Chargebacks",
-          chargebackText: "Filing a payment dispute, chargeback, or reversal without going through our official support process is considered fraud and will result in: permanent ban from all services, license revocation without refund, legal action for fraud, and reporting to payment processors and fraud prevention databases.",
-        },
-        {
-          n: "5", title: "License Terms & Restrictions",
-          intro: "When you purchase a product, you receive a limited, non-exclusive, non-transferable license. You agree NOT to:",
-          items: ["Share, resell, or redistribute your license key","Reverse engineer, decompile, or modify our products","Use products on multiple accounts simultaneously (unless specified)","Allow unauthorized users to access your account or products","Use products for commercial purposes without authorization"],
-        },
-        {
-          n: "6", title: "Account Management",
-          intro: "We reserve the right to:",
-          items: ["Deactivate your license at our discretion without prior notice","Terminate accounts for violation of these terms","Suspend service for suspicious activity or payment disputes","Modify or discontinue products at any time"],
-          note: "\"Lifetime\" licenses refer only to the product's availability period, not indefinite access.",
-        },
-        {
-          n: "7", title: "Prohibited Users & Activities",
-          intro: "The following individuals and activities are strictly prohibited:",
-          items: ["Employees or affiliates of game developers or anti-cheat companies","Individuals attempting to attack, exploit, or compromise our systems","Sharing internal community information publicly","Creating content featuring our products without proper branding","Using unauthorized payment methods or fraudulent transactions"],
-          danger: true,
-        },
-        {
-          n: "8", title: "Warranties & Liability",
-          intro: "Our products and services are provided \"AS IS\" without warranties of any kind. We explicitly disclaim:",
-          items: ["Any warranty of merchantability or fitness for a particular purpose","Any guarantee of undetectability or continued functionality","Responsibility for game bans, account suspensions, or data loss","Liability for indirect, incidental, or consequential damages"],
-          note: "You use our products at your own risk and accept full responsibility for any consequences.",
-        },
-        {
-          n: "9", title: "Product Updates & Availability",
-          intro: "",
-          items: ["We do not guarantee continuous availability or updates","Products may become unavailable due to game updates or anti-cheat changes","No compensation is provided if a product stops working","Update timelines are estimates and not guarantees"],
-        },
-        {
-          n: "10", title: "Content Creation & Branding",
-          intro: "",
-          items: ["You must include proper HyperV branding and attribution","You must protect your account information and personal details","You may not make false claims about product capabilities","We reserve the right to request removal of content violating these terms"],
-        },
-        {
-          n: "11", title: "Support & Communication",
-          intro: "",
-          items: ["Response times are not guaranteed","Support is limited to product-related technical issues","Abusive or harassing behavior will result in permanent ban","We reserve the right to refuse support at our discretion"],
-        },
-        {
-          n: "12", title: "Privacy & Data",
-          intro: "",
-          items: ["We collect minimal data necessary for product delivery and support","Payment information is processed by third-party providers","We do not sell or share your personal information","Discord IDs and emails may be stored for account management","Hardware identifiers (HWID) are collected to prevent license sharing"],
-          note: "Hardware Binding: Licenses are bound to your PC's hardware configuration. Sharing your license key or using it on multiple devices will result in automatic deactivation and permanent ban without refund.",
-        },
-        {
-          n: "13", title: "Modifications to Terms",
-          intro: "We reserve the right to modify these Terms of Service at any time. Continued use of our products after changes constitutes acceptance of the updated terms. Material changes will be announced via Discord.",
-          items: [],
-        },
-        {
-          n: "14", title: "Governing Law & Disputes",
-          intro: "These terms are governed by applicable laws. Any disputes must be resolved individually, and you waive any right to participate in class action lawsuits. By purchasing, you agree to resolve disputes through binding arbitration.",
-          items: [],
-        },
-        {
-          n: "15", title: "Contact Information",
-          intro: "For questions about these Terms of Service, contact us via:",
-          contact: { label: "Discord:", link: "discord.gg/hypervgg", href: "https://discord.gg/hypervgg" },
-        },
+        { n: "1", title: "Acceptance of Terms", intro: "By purchasing, accessing, or using any products or services provided by HyperV (\"we\", \"us\", \"our\"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not purchase or use our products.", items: [] },
+        { n: "2", title: "Product Nature & Delivery", intro: "All products sold are digital licenses delivered as pre-activated keys, similar to gift cards. Once purchased:", items: ["Keys are generated and delivered instantly to your email or account","Products are immediately activated and ready for use","No physical goods or downloads are provided unless specified","Access credentials are non-transferable and for single-user use only"] },
+        { n: "3", title: "Payment & Pricing", intro: "All payments are processed securely through our payment providers. By making a purchase, you acknowledge that:", items: ["Prices are listed in USD or BRL and may change without notice","Payment must be completed before product activation","Disputing or reversing payments will result in immediate account suspension","We reserve the right to refuse service to anyone for any reason"] },
+        { n: "4", title: "Product Guarantee & Refund Policy", highlight: "We guarantee that all products will function as advertised at the time of purchase. If a product fails to work properly due to issues on our end, you are eligible for a refund after proper verification by our support team.", validTitle: "Valid Refund Cases (After Support Analysis)", validItems: ["Product activation failure caused by our systems or infrastructure","Product completely non-functional despite following all setup instructions","Incorrect product or subscription tier delivered due to our error"], process: "REFUND PROCESS: All refund requests must go through our support team via Discord. You must provide proof of the issue, follow troubleshooting steps, and allow our team to verify the problem. Refunds are processed within 5-10 business days after approval.", noRefundTitle: "Refunds Will NOT Be Provided For", noRefundItems: ["Game account bans, suspensions, or penalties","Anti-cheat detection, updates, or game patches","User error or improper usage","System incompatibility or minimum requirements not met","Change of mind or buyer's remorse","Third-party issues (internet, PC, game servers)","Refusal to cooperate with support team","Inability to provide proof of issue"], chargebackTitle: "Protection Against Fraudulent Chargebacks", chargebackText: "Filing a payment dispute, chargeback, or reversal without going through our official support process is considered fraud and will result in: permanent ban from all services, license revocation without refund, legal action for fraud, and reporting to payment processors and fraud prevention databases." },
+        { n: "5", title: "License Terms & Restrictions", intro: "When you purchase a product, you receive a limited, non-exclusive, non-transferable license. You agree NOT to:", items: ["Share, resell, or redistribute your license key","Reverse engineer, decompile, or modify our products","Use products on multiple accounts simultaneously (unless specified)","Allow unauthorized users to access your account or products","Use products for commercial purposes without authorization"] },
+        { n: "6", title: "Account Management", intro: "We reserve the right to:", items: ["Deactivate your license at our discretion without prior notice","Terminate accounts for violation of these terms","Suspend service for suspicious activity or payment disputes","Modify or discontinue products at any time"], note: "\"Lifetime\" licenses refer only to the product's availability period, not indefinite access." },
+        { n: "7", title: "Prohibited Users & Activities", intro: "The following individuals and activities are strictly prohibited:", items: ["Employees or affiliates of game developers or anti-cheat companies","Individuals attempting to attack, exploit, or compromise our systems","Sharing internal community information publicly","Creating content featuring our products without proper branding","Using unauthorized payment methods or fraudulent transactions"], danger: true },
+        { n: "8", title: "Warranties & Liability", intro: "Our products and services are provided \"AS IS\" without warranties of any kind. We explicitly disclaim:", items: ["Any warranty of merchantability or fitness for a particular purpose","Any guarantee of undetectability or continued functionality","Responsibility for game bans, account suspensions, or data loss","Liability for indirect, incidental, or consequential damages"], note: "You use our products at your own risk and accept full responsibility for any consequences." },
+        { n: "9", title: "Product Updates & Availability", intro: "", items: ["We do not guarantee continuous availability or updates","Products may become unavailable due to game updates or anti-cheat changes","No compensation is provided if a product stops working","Update timelines are estimates and not guarantees"] },
+        { n: "10", title: "Content Creation & Branding", intro: "", items: ["You must include proper HyperV branding and attribution","You must protect your account information and personal details","You may not make false claims about product capabilities","We reserve the right to request removal of content violating these terms"] },
+        { n: "11", title: "Support & Communication", intro: "", items: ["Response times are not guaranteed","Support is limited to product-related technical issues","Abusive or harassing behavior will result in permanent ban","We reserve the right to refuse support at our discretion"] },
+        { n: "12", title: "Privacy & Data", intro: "", items: ["We collect minimal data necessary for product delivery and support","Payment information is processed by third-party providers","We do not sell or share your personal information","Discord IDs and emails may be stored for account management","Hardware identifiers (HWID) are collected to prevent license sharing"], note: "Hardware Binding: Licenses are bound to your PC's hardware configuration. Sharing your license key or using it on multiple devices will result in automatic deactivation and permanent ban without refund." },
+        { n: "13", title: "Modifications to Terms", intro: "We reserve the right to modify these Terms of Service at any time. Continued use of our products after changes constitutes acceptance of the updated terms. Material changes will be announced via Discord.", items: [] },
+        { n: "14", title: "Governing Law & Disputes", intro: "These terms are governed by applicable laws. Any disputes must be resolved individually, and you waive any right to participate in class action lawsuits. By purchasing, you agree to resolve disputes through binding arbitration.", items: [] },
+        { n: "15", title: "Contact Information", intro: "For questions about these Terms of Service, contact us via:", contact: { label: "Discord:", link: "discord.gg/hypervgg", href: "https://discord.gg/hypervgg" } },
       ],
+    },
+
+    // ── Tutorial page translations ──────────────────────
+    tutorial: {
+      backToSite: "Back to Site",
+      setupGuide: "Setup Guide",
+      troubleshooting: "Troubleshooting",
+      discordSupport: "Discord Support",
+      language: "LANGUAGE",
+      tutorial: "Tutorial",
+      loading: "Loading products...",
+      copyLink: "Copy Link",
+      sections: {
+        "general-dependencies": "General Dependencies",
+        "requirements":         "Requirements",
+        "download":             "Download",
+        "installation":         "Installation",
+        "common-issues":        "Common Issues",
+      },
+      deps: {
+        title: "General Dependencies",
+        subtitle: "Follow the steps below to set up",
+        warning: "Install everything before using any product",
+        warningDesc: "These dependencies are required to avoid DLL errors, crashes, and execution issues.",
+        defender: {
+          title: "1. Disable Windows Defender",
+          desc: "You MUST disable Windows Defender before running any product. This prevents false positives and blocks.",
+          manual: "Disable Manually",
+          steps: [
+            { t: "Open Windows Security", d: 'Select Start and type "Windows Security". Open the Windows Security app from search results.' },
+            { t: "Virus & Threat Protection", d: 'Go to "Virus & threat protection". Under settings, select "Manage settings".' },
+            { t: "Turn Off Protections", d: 'Switch "Real-time protection" and "Tamper protection" to Off.' },
+          ],
+          then: "THEN",
+          dcontrol: "Then, Disable with dControl",
+          downloadDcontrol: "Download dControl",
+          password: "Password",
+          runAndDisable: "Run and disable",
+          runDesc: 'Open dControl and click "Disable Windows Defender". It should turn red.',
+        },
+        vcpp: {
+          title: "2. Visual C++ Redistributables (All-in-One)",
+          desc: "Install these to avoid DLL errors or crashes.",
+          download: "Download the package",
+          install: "Install",
+          installDesc: "Extract, right-click install_all.bat, and Run as Admin. Restart PC after.",
+        },
+        directx: {
+          title: "3. DirectX Runtime",
+          desc: "Required for graphics rendering and compatibility.",
+          download: "Download",
+          install: "Install",
+          installDesc: 'Run the installer. Uncheck "Bing Bar" during installation.',
+        },
+      },
+      req: {
+        title: "Requirements",
+        subtitle: "Follow the steps below to set up",
+        sysTitle: "System Configuration",
+        sysWarning: "System Requirements",
+        items: ["Windows 8 / 10 / 11", "HVCI ON & OFF", "All mice compatible", "Emulators: Bluestacks 5.14, 5.22, MSI 5.12"],
+        gameTitle: "Game Configuration",
+        gameWarning: "ADB Required",
+        gameDesc: "The emulator must have ADB enabled for the product to work correctly.",
+      },
+      dl: {
+        title: "Download",
+        subtitle: "Follow the steps below to set up",
+        loaderTitle: "Download HyperV",
+        loaderDesc: "Click the button below to go to the download page. You will need to verify with Discord and enter your license key.",
+        loaderBtn: "Go to Download",
+        ffTitle: "Free Fire (Emulator)",
+        ffDesc: "Download the Free Fire version compatible with your emulator.",
+        emuTitle: "Compatible Emulators",
+        remoteTitle: "Remote Support Tools",
+        remoteDesc: "In case you need technical assistance.",
+        reminder: "Make sure you have disabled antivirus and installed all dependencies before downloading and extracting the files.",
+      },
+      install: {
+        title: "Installation",
+        subtitle: "Follow the steps below to set up",
+        videoTitle: "Video Tutorial",
+        stepsTitle: "Installation Steps",
+        steps: [
+          { t: "Run as Administrator", d: 'Right-click the file and select "Run as administrator".' },
+          { t: "Wait for Initialization", d: "The loader will configure your system automatically. Wait for the process to complete." },
+          { t: "Login", d: "The browser will open automatically. Enter your license key to activate the product." },
+          { t: "Test Move", d: 'Click the "Test Move" button to verify it\'s working.' },
+        ],
+        works: "If it works:",
+        worksDesc: "The mouse will move a little bit automatically. This means everything is working!",
+        fails: "If it does NOT work:",
+        failsDesc: 'Check the "Common Issues" section or contact support through Discord.',
+      },
+      issues: {
+        title: "Common Issues",
+        subtitle: "Solutions for common issues",
+        ticketTitle: "Before Opening a Ticket",
+        ticketDesc: "Check the solutions below before contacting support.",
+        issuesTitle: "Common Issues",
+        items: [
+          { t: "Monitor Scale at 100%", d: "Make sure monitor scale is at 100% in Windows settings (Display → Scale)." },
+          { t: "Uninstall Extra Mouse Software", d: "Uninstall any extra mouse software (Razer Synapse, Corsair iCUE, SteelSeries GG, etc.)." },
+          { t: "Loader Won't Start", d: "Make sure Windows Defender is completely disabled and run as administrator." },
+          { t: "DLL Error", d: 'Install the General Dependencies (Visual C++ and DirectX). See the "General Dependencies" section.' },
+          { t: "Still Having Issues?", d: "Open a ticket in Discord with screenshots of the errors." },
+        ],
+        helpTitle: "Need Help?",
+        helpDesc: "Our support team is available to help with any issues.",
+        joinDiscord: "Join Discord",
+      },
     },
   },
 
@@ -285,7 +326,7 @@ const translations = {
       { username: "Theninoig",          date: "14 de Marzo, 2026", message: "Producto: Aimbot de Valorant | sin ban hace 3 meses y subi a diamante ya." },
       { username: "Diego",              date: "14 de Marzo, 2026", message: "Producto: Aimbot de Valorant | +rep aimbot color indetectable 🚀 mejor del mercado" },
       { username: "NovaStar",           date: "14 de Marzo, 2026", message: "Producto: Panel Blood | soporte rapidísimo, resolvieron mi problema en 5 min" },
-      { username: "Jxzxn",              date: "14 de Marzo, 2026", message: "Producto: Menu Chams | ahora se ven todos los jugadores hasta con su HP y distancia jajsja 💯" },
+      { username: "Jxzxn",             date: "14 de Marzo, 2026", message: "Producto: Menu Chams | ahora se ven todos los jugadores hasta con su HP y distancia jajsja 💯" },
     ],
 
     affiliatePage: {
@@ -333,92 +374,133 @@ const translations = {
       lastUpdated: "Última Actualización: 17 de Marzo, 2026",
       finalDisclaimer: "AL COMPRAR O USAR NUESTROS PRODUCTOS, RECONOCES QUE HAS LEÍDO, ENTENDIDO Y ACEPTAS QUEDAR VINCULADO POR ESTOS TÉRMINOS DE SERVICIO.",
       sections: [
-        {
-          n: "1", title: "Aceptación de Términos",
-          intro: "Al comprar, acceder o utilizar cualquier producto o servicio proporcionado por HyperV (\"nosotros\", \"nuestro\"), aceptas quedar vinculado por estos Términos de Servicio. Si no estás de acuerdo con estos términos, no compres ni uses nuestros productos.",
-          items: [],
-        },
-        {
-          n: "2", title: "Naturaleza del Producto y Entrega",
-          intro: "Todos los productos vendidos son licencias digitales entregadas como claves pre-activadas, similares a tarjetas de regalo. Una vez compradas:",
-          items: ["Las claves se generan y entregan instantáneamente a tu correo o cuenta","Los productos se activan de inmediato y están listos para usar","No se proporcionan bienes físicos ni descargas a menos que se especifique","Las credenciales de acceso no son transferibles y son solo para un usuario"],
-        },
-        {
-          n: "3", title: "Pago y Precios",
-          intro: "Todos los pagos se procesan de forma segura a través de nuestros proveedores de pago. Al realizar una compra, reconoces que:",
-          items: ["Los precios están en USD o BRL y pueden cambiar sin previo aviso","El pago debe completarse antes de la activación del producto","Disputar o revertir pagos resultará en la suspensión inmediata de la cuenta","Nos reservamos el derecho de rechazar el servicio a cualquier persona"],
-        },
-        {
-          n: "4", title: "Garantía del Producto y Política de Reembolso",
-          highlight: "Garantizamos que todos los productos funcionarán según lo anunciado en el momento de la compra. Si un producto no funciona correctamente por problemas de nuestra parte, eres elegible para un reembolso después de la verificación por nuestro equipo de soporte.",
-          validTitle: "Casos Válidos de Reembolso (Tras Análisis de Soporte)",
-          validItems: ["Fallo de activación del producto causado por nuestros sistemas o infraestructura","Producto completamente no funcional a pesar de seguir todas las instrucciones","Producto o nivel de suscripción incorrecto entregado por nuestro error"],
-          process: "PROCESO DE REEMBOLSO: Todas las solicitudes deben pasar por nuestro equipo de soporte vía Discord. Debes proporcionar prueba del problema, seguir los pasos de solución y permitir que nuestro equipo verifique el problema. Los reembolsos se procesan en 5-10 días hábiles tras la aprobación.",
-          noRefundTitle: "No Se Proporcionarán Reembolsos Por",
-          noRefundItems: ["Baneos, suspensiones o penalizaciones de cuenta de juego","Detección de anti-cheat, actualizaciones o parches del juego","Error del usuario o uso inadecuado del producto","Incompatibilidad del sistema o requisitos mínimos no cumplidos","Cambio de opinión o arrepentimiento del comprador","Problemas de terceros (internet, PC, servidores del juego)","Negarse a cooperar con el equipo de soporte","Imposibilidad de proporcionar prueba del problema"],
-          chargebackTitle: "Protección Contra Contracargos Fraudulentos",
-          chargebackText: "Presentar una disputa de pago, contracargo o reversión sin pasar por nuestro proceso de soporte oficial se considera fraude y resultará en: baneo permanente de todos los servicios, revocación de licencia sin reembolso, acción legal por fraude, y reporte a procesadores de pago y bases de datos antifraude.",
-        },
-        {
-          n: "5", title: "Términos y Restricciones de Licencia",
-          intro: "Al comprar un producto, recibes una licencia limitada, no exclusiva e intransferible. Aceptas NO:",
-          items: ["Compartir, revender o redistribuir tu clave de licencia","Realizar ingeniería inversa, descompilar o modificar nuestros productos","Usar productos en múltiples cuentas simultáneamente (salvo que se especifique)","Permitir el acceso no autorizado a tu cuenta o productos","Usar productos con fines comerciales sin autorización"],
-        },
-        {
-          n: "6", title: "Gestión de Cuenta",
-          intro: "Nos reservamos el derecho de:",
-          items: ["Desactivar tu licencia a nuestra discreción sin previo aviso","Terminar cuentas por violación de estos términos","Suspender el servicio por actividad sospechosa o disputas de pago","Modificar o descontinuar productos en cualquier momento"],
-          note: "Las licencias \"de por vida\" se refieren únicamente al período de disponibilidad del producto, no a un acceso indefinido.",
-        },
-        {
-          n: "7", title: "Usuarios y Actividades Prohibidas",
-          intro: "Las siguientes personas y actividades están estrictamente prohibidas:",
-          items: ["Empleados o afiliados de desarrolladores de juegos o empresas anti-cheat","Individuos que intenten atacar, explotar o comprometer nuestros sistemas","Compartir información interna de la comunidad públicamente","Crear contenido con nuestros productos sin la marca adecuada","Usar métodos de pago no autorizados o transacciones fraudulentas"],
-          danger: true,
-        },
-        {
-          n: "8", title: "Garantías y Responsabilidad",
-          intro: "Nuestros productos y servicios se proporcionan \"TAL CUAL\" sin garantías de ningún tipo. Renunciamos expresamente a:",
-          items: ["Cualquier garantía de comerciabilidad o idoneidad para un propósito particular","Cualquier garantía de indetectabilidad o funcionalidad continua","Responsabilidad por baneos de juegos, suspensiones de cuentas o pérdida de datos","Responsabilidad por daños indirectos, incidentales o consecuentes"],
-          note: "Usas nuestros productos bajo tu propio riesgo y aceptas plena responsabilidad por las consecuencias.",
-        },
-        {
-          n: "9", title: "Actualizaciones y Disponibilidad del Producto",
-          intro: "",
-          items: ["No garantizamos disponibilidad continua ni actualizaciones","Los productos pueden dejar de estar disponibles debido a actualizaciones del juego o cambios en el anti-cheat","No se proporciona compensación si un producto deja de funcionar","Los plazos de actualización son estimaciones y no garantías"],
-        },
-        {
-          n: "10", title: "Creación de Contenido y Marca",
-          intro: "",
-          items: ["Debes incluir la marca y atribución correcta de HyperV","Debes proteger tu información de cuenta y datos personales","No puedes hacer afirmaciones falsas sobre las capacidades del producto","Nos reservamos el derecho de solicitar la eliminación de contenido que viole estos términos"],
-        },
-        {
-          n: "11", title: "Soporte y Comunicación",
-          intro: "",
-          items: ["Los tiempos de respuesta no están garantizados","El soporte se limita a problemas técnicos relacionados con el producto","El comportamiento abusivo o acosador resultará en baneo permanente","Nos reservamos el derecho de rechazar soporte a nuestra discreción"],
-        },
-        {
-          n: "12", title: "Privacidad y Datos",
-          intro: "",
-          items: ["Recopilamos datos mínimos necesarios para la entrega del producto y soporte","La información de pago es procesada por proveedores de terceros","No vendemos ni compartimos tu información personal","Los IDs de Discord y correos pueden almacenarse para la gestión de cuentas","Los identificadores de hardware (HWID) se recopilan para prevenir el intercambio de licencias"],
-          note: "Vinculación de Hardware: Las licencias están vinculadas a la configuración de hardware de tu PC. Compartir tu clave de licencia o usarla en múltiples dispositivos resultará en desactivación automática y baneo permanente sin reembolso.",
-        },
-        {
-          n: "13", title: "Modificaciones a los Términos",
-          intro: "Nos reservamos el derecho de modificar estos Términos de Servicio en cualquier momento. El uso continuado de nuestros productos después de los cambios constituye la aceptación de los términos actualizados. Los cambios importantes se anunciarán vía Discord.",
-          items: [],
-        },
-        {
-          n: "14", title: "Ley Aplicable y Disputas",
-          intro: "Estos términos se rigen por las leyes aplicables. Cualquier disputa debe resolverse individualmente y renuncias a cualquier derecho de participar en demandas colectivas. Al comprar, aceptas resolver las disputas mediante arbitraje vinculante.",
-          items: [],
-        },
-        {
-          n: "15", title: "Información de Contacto",
-          intro: "Para preguntas sobre estos Términos de Servicio, contáctanos vía:",
-          contact: { label: "Discord:", link: "discord.gg/hypervgg", href: "https://discord.gg/hypervgg" },
-        },
+        { n: "1", title: "Aceptación de Términos", intro: "Al comprar, acceder o utilizar cualquier producto o servicio proporcionado por HyperV (\"nosotros\", \"nuestro\"), aceptas quedar vinculado por estos Términos de Servicio. Si no estás de acuerdo con estos términos, no compres ni uses nuestros productos.", items: [] },
+        { n: "2", title: "Naturaleza del Producto y Entrega", intro: "Todos los productos vendidos son licencias digitales entregadas como claves pre-activadas, similares a tarjetas de regalo. Una vez compradas:", items: ["Las claves se generan y entregan instantáneamente a tu correo o cuenta","Los productos se activan de inmediato y están listos para usar","No se proporcionan bienes físicos ni descargas a menos que se especifique","Las credenciales de acceso no son transferibles y son solo para un usuario"] },
+        { n: "3", title: "Pago y Precios", intro: "Todos los pagos se procesan de forma segura a través de nuestros proveedores de pago. Al realizar una compra, reconoces que:", items: ["Los precios están en USD o BRL y pueden cambiar sin previo aviso","El pago debe completarse antes de la activación del producto","Disputar o revertir pagos resultará en la suspensión inmediata de la cuenta","Nos reservamos el derecho de rechazar el servicio a cualquier persona"] },
+        { n: "4", title: "Garantía del Producto y Política de Reembolso", highlight: "Garantizamos que todos los productos funcionarán según lo anunciado en el momento de la compra. Si un producto no funciona correctamente por problemas de nuestra parte, eres elegible para un reembolso después de la verificación por nuestro equipo de soporte.", validTitle: "Casos Válidos de Reembolso (Tras Análisis de Soporte)", validItems: ["Fallo de activación del producto causado por nuestros sistemas o infraestructura","Producto completamente no funcional a pesar de seguir todas las instrucciones","Producto o nivel de suscripción incorrecto entregado por nuestro error"], process: "PROCESO DE REEMBOLSO: Todas las solicitudes deben pasar por nuestro equipo de soporte vía Discord. Debes proporcionar prueba del problema, seguir los pasos de solución y permitir que nuestro equipo verifique el problema. Los reembolsos se procesan en 5-10 días hábiles tras la aprobación.", noRefundTitle: "No Se Proporcionarán Reembolsos Por", noRefundItems: ["Baneos, suspensiones o penalizaciones de cuenta de juego","Detección de anti-cheat, actualizaciones o parches del juego","Error del usuario o uso inadecuado del producto","Incompatibilidad del sistema o requisitos mínimos no cumplidos","Cambio de opinión o arrepentimiento del comprador","Problemas de terceros (internet, PC, servidores del juego)","Negarse a cooperar con el equipo de soporte","Imposibilidad de proporcionar prueba del problema"], chargebackTitle: "Protección Contra Contracargos Fraudulentos", chargebackText: "Presentar una disputa de pago, contracargo o reversión sin pasar por nuestro proceso de soporte oficial se considera fraude y resultará en: baneo permanente de todos los servicios, revocación de licencia sin reembolso, acción legal por fraude, y reporte a procesadores de pago y bases de datos antifraude." },
+        { n: "5", title: "Términos y Restricciones de Licencia", intro: "Al comprar un producto, recibes una licencia limitada, no exclusiva e intransferible. Aceptas NO:", items: ["Compartir, revender o redistribuir tu clave de licencia","Realizar ingeniería inversa, descompilar o modificar nuestros productos","Usar productos en múltiples cuentas simultáneamente (salvo que se especifique)","Permitir el acceso no autorizado a tu cuenta o productos","Usar productos con fines comerciales sin autorización"] },
+        { n: "6", title: "Gestión de Cuenta", intro: "Nos reservamos el derecho de:", items: ["Desactivar tu licencia a nuestra discreción sin previo aviso","Terminar cuentas por violación de estos términos","Suspender el servicio por actividad sospechosa o disputas de pago","Modificar o descontinuar productos en cualquier momento"], note: "Las licencias \"de por vida\" se refieren únicamente al período de disponibilidad del producto, no a un acceso indefinido." },
+        { n: "7", title: "Usuarios y Actividades Prohibidas", intro: "Las siguientes personas y actividades están estrictamente prohibidas:", items: ["Empleados o afiliados de desarrolladores de juegos o empresas anti-cheat","Individuos que intenten atacar, explotar o comprometer nuestros sistemas","Compartir información interna de la comunidad públicamente","Crear contenido con nuestros productos sin la marca adecuada","Usar métodos de pago no autorizados o transacciones fraudulentas"], danger: true },
+        { n: "8", title: "Garantías y Responsabilidad", intro: "Nuestros productos y servicios se proporcionan \"TAL CUAL\" sin garantías de ningún tipo. Renunciamos expresamente a:", items: ["Cualquier garantía de comerciabilidad o idoneidad para un propósito particular","Cualquier garantía de indetectabilidad o funcionalidad continua","Responsabilidad por baneos de juegos, suspensiones de cuentas o pérdida de datos","Responsabilidad por daños indirectos, incidentales o consecuentes"], note: "Usas nuestros productos bajo tu propio riesgo y aceptas plena responsabilidad por las consecuencias." },
+        { n: "9", title: "Actualizaciones y Disponibilidad del Producto", intro: "", items: ["No garantizamos disponibilidad continua ni actualizaciones","Los productos pueden dejar de estar disponibles debido a actualizaciones del juego o cambios en el anti-cheat","No se proporciona compensación si un producto deja de funcionar","Los plazos de actualización son estimaciones y no garantías"] },
+        { n: "10", title: "Creación de Contenido y Marca", intro: "", items: ["Debes incluir la marca y atribución correcta de HyperV","Debes proteger tu información de cuenta y datos personales","No puedes hacer afirmaciones falsas sobre las capacidades del producto","Nos reservamos el derecho de solicitar la eliminación de contenido que viole estos términos"] },
+        { n: "11", title: "Soporte y Comunicación", intro: "", items: ["Los tiempos de respuesta no están garantizados","El soporte se limita a problemas técnicos relacionados con el producto","El comportamiento abusivo o acosador resultará en baneo permanente","Nos reservamos el derecho de rechazar soporte a nuestra discreción"] },
+        { n: "12", title: "Privacidad y Datos", intro: "", items: ["Recopilamos datos mínimos necesarios para la entrega del producto y soporte","La información de pago es procesada por proveedores de terceros","No vendemos ni compartimos tu información personal","Los IDs de Discord y correos pueden almacenarse para la gestión de cuentas","Los identificadores de hardware (HWID) se recopilan para prevenir el intercambio de licencias"], note: "Vinculación de Hardware: Las licencias están vinculadas a la configuración de hardware de tu PC. Compartir tu clave de licencia o usarla en múltiples dispositivos resultará en desactivación automática y baneo permanente sin reembolso." },
+        { n: "13", title: "Modificaciones a los Términos", intro: "Nos reservamos el derecho de modificar estos Términos de Servicio en cualquier momento. El uso continuado de nuestros productos después de los cambios constituye la aceptación de los términos actualizados. Los cambios importantes se anunciarán vía Discord.", items: [] },
+        { n: "14", title: "Ley Aplicable y Disputas", intro: "Estos términos se rigen por las leyes aplicables. Cualquier disputa debe resolverse individualmente y renuncias a cualquier derecho de participar en demandas colectivas. Al comprar, aceptas resolver las disputas mediante arbitraje vinculante.", items: [] },
+        { n: "15", title: "Información de Contacto", intro: "Para preguntas sobre estos Términos de Servicio, contáctanos vía:", contact: { label: "Discord:", link: "discord.gg/hypervgg", href: "https://discord.gg/hypervgg" } },
       ],
+    },
+
+    // ── Tutorial page translations ──────────────────────
+    tutorial: {
+      backToSite: "Volver al sitio",
+      setupGuide: "Guía de Configuración",
+      troubleshooting: "Solución de Problemas",
+      discordSupport: "Soporte de Discord",
+      language: "IDIOMA",
+      tutorial: "Tutorial",
+      loading: "Cargando productos...",
+      copyLink: "Copiar enlace",
+      sections: {
+        "general-dependencies": "Dependencias generales",
+        "requirements":         "Requisitos",
+        "download":             "Descargar",
+        "installation":         "Instalación",
+        "common-issues":        "Problemas comunes",
+      },
+      deps: {
+        title: "Dependencias Generales",
+        subtitle: "Siga los pasos a continuación para configurarlo",
+        warning: "Instala todo antes de usar cualquier producto",
+        warningDesc: "Estas dependencias son necesarias para evitar errores DLL, crashes y problemas de ejecución.",
+        defender: {
+          title: "1. Desactivar Windows Defender",
+          desc: "Debes desactivar Windows Defender antes de ejecutar cualquier producto. Esto evita falsos positivos y bloqueos.",
+          manual: "Desactivar Manualmente",
+          steps: [
+            { t: "Abrir Seguridad de Windows", d: 'Presiona Start y escribe "Seguridad de Windows". Abre la app.' },
+            { t: "Protección contra virus y amenazas", d: 'Ve a "Protección contra virus y amenazas" → "Administrar configuración".' },
+            { t: "Desactivar protecciones", d: 'Desactiva "Protección en tiempo real" y "Protección contra alteraciones".' },
+          ],
+          then: "LUEGO",
+          dcontrol: "Desactivar con dControl",
+          downloadDcontrol: "Descargar dControl",
+          password: "Contraseña",
+          runAndDisable: "Ejecutar y desactivar",
+          runDesc: 'Abre dControl y presiona "Disable Windows Defender". Debería ponerse en rojo.',
+        },
+        vcpp: {
+          title: "2. Visual C++ Redistributables (All-in-One)",
+          desc: "Instala estos para evitar errores DLL o crashes.",
+          download: "Descargar el paquete",
+          install: "Instalar",
+          installDesc: "Extrae el archivo, haz clic derecho en install_all.bat y ejecuta como Administrador. Reinicia el PC.",
+        },
+        directx: {
+          title: "3. DirectX Runtime",
+          desc: "Necesario para renderizado gráfico y compatibilidad.",
+          download: "Descargar",
+          install: "Instalar",
+          installDesc: 'Ejecuta el instalador. Desmarca "Bing Bar" durante la instalación.',
+        },
+      },
+      req: {
+        title: "Requisitos",
+        subtitle: "Siga los pasos a continuación para configurarlo",
+        sysTitle: "Configuración del Sistema",
+        sysWarning: "Requisitos del Sistema",
+        items: ["Windows 8 / 10 / 11", "HVCI ON & OFF", "Todos los ratones compatibles", "Emuladores: Bluestacks 5.14, 5.22, MSI 5.12"],
+        gameTitle: "Configuración del Juego",
+        gameWarning: "Modo ADB Requerido",
+        gameDesc: "El emulador debe tener el ADB activado para que el producto funcione correctamente.",
+      },
+      dl: {
+        title: "Descargar",
+        subtitle: "Siga los pasos a continuación para configurarlo",
+        loaderTitle: "Descargar HyperV",
+        loaderDesc: "Haz clic en el botón para ir a la página de descarga. Necesitarás verificar con Discord e ingresar tu clave de licencia.",
+        loaderBtn: "Go to Download",
+        ffTitle: "Free Fire (Emulador)",
+        ffDesc: "Descarga la versión de Free Fire compatible con tu emulador.",
+        emuTitle: "Emuladores Compatibles",
+        remoteTitle: "Herramientas de Soporte Remoto",
+        remoteDesc: "En caso de necesitar asistencia técnica.",
+        reminder: "Asegúrate de haber desactivado el antivirus e instalado todas las dependencias antes de descargar y extraer los archivos.",
+      },
+      install: {
+        title: "Instalación",
+        subtitle: "Siga los pasos a continuación para configurarlo",
+        videoTitle: "Video Tutorial",
+        stepsTitle: "Pasos de Instalación",
+        steps: [
+          { t: "Ejecutar como Administrador", d: 'Haz clic derecho en el archivo y selecciona "Ejecutar como administrador".' },
+          { t: "Esperar inicialización", d: "El loader configurará tu sistema automáticamente. Espera a que el proceso termine." },
+          { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." },
+          { t: "Test Move", d: 'Haz clic en el botón "Test Move" para verificar que funciona correctamente.' },
+        ],
+        works: "Si funciona:",
+        worksDesc: "El ratón se moverá un poco automáticamente. ¡Eso significa que todo está funcionando!",
+        fails: "Si NO funciona:",
+        failsDesc: 'Revisa la sección "Problemas comunes" o contacta soporte a través de Discord.',
+      },
+      issues: {
+        title: "Problemas Comunes",
+        subtitle: "Soluciones para problemas comunes",
+        ticketTitle: "Antes de Abrir un Ticket",
+        ticketDesc: "Revisa las soluciones abajo antes de contactar soporte.",
+        issuesTitle: "Problemas Comunes",
+        items: [
+          { t: "Escala del monitor al 100%", d: "Asegúrate de que la escala del monitor esté al 100% en la configuración de Windows (Pantalla → Escala)." },
+          { t: "Desinstalar software extra del ratón", d: "Desinstala cualquier software extra del ratón como Razer Synapse, Corsair iCUE, SteelSeries GG, etc." },
+          { t: "El loader no inicia", d: "Asegúrate de que Windows Defender esté completamente desactivado y ejecuta como administrador." },
+          { t: "Error DLL", d: 'Instala las General Dependencies (Visual C++ y DirectX). Ve a la sección "Dependencias generales".' },
+          { t: "¿Sigues teniendo problemas?", d: "Abre un ticket en Discord con capturas de pantalla de los errores." },
+        ],
+        helpTitle: "¿Necesitas ayuda?",
+        helpDesc: "Nuestro equipo de soporte está disponible para ayudarte con cualquier problema.",
+        joinDiscord: "Join Discord",
+      },
     },
   },
 };
@@ -433,14 +515,14 @@ export const LanguageProvider = ({ children }) => {
     if (saved && translations[saved]) setLocale(saved);
   }, []);
 
-  const changeLocale = (code) => {
+  const changeLocale = useCallback((code) => {
     setLocale(code);
     localStorage.setItem("locale", code);
-  };
+  }, []);
 
   const value = useMemo(
     () => ({ locale, changeLocale, t: translations[locale] }),
-    [locale]
+    [locale, changeLocale]
   );
 
   return (
@@ -455,5 +537,3 @@ export const useLanguage = () => {
   if (!context) throw new Error("useLanguage debe usarse dentro de LanguageProvider");
   return context;
 };
-
-// NOTE: append this termsPage block inside BOTH en and es translation objects

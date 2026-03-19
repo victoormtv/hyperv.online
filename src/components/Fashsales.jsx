@@ -139,7 +139,6 @@ const Fashsales = ({ products }) => {
             })}
           </CarouselContent>
 
-          {/* Flechas visibles en mobile — dentro del contenedor, no fuera */}
           <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 bg-black/70 border border-white/20 text-white hover:bg-black hover:text-white transition-all duration-200 rounded-full flex items-center justify-center z-20 shadow-lg">
             <ChevronLeft className="w-5 h-5" />
           </CarouselPrevious>
