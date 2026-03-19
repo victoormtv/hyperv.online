@@ -559,35 +559,39 @@ export default function TutorialPage() {
     <div className="text-white" style={{ background: "#0d0f12", fontFamily: "var(--font-outfit), sans-serif", minHeight: "100vh" }}>
 
       {/* ── Mobile top bar ── */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-white/10 sticky top-0 z-40" style={{ background: "#13161c" }}>
-        <div className="flex items-center gap-2">
+      <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-white/10 sticky top-0 z-40" style={{ background: "#13161c" }}>
+        <button onClick={() => setDrawerOpen(true)} className="text-white/60 hover:text-white p-1 shrink-0">
+          <Menu size={22} />
+        </button>
+        <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: ACCENT }}>
             <CurrentIcon size={13} />
           </div>
-          <span className="text-white font-bold text-sm truncate max-w-[180px]">{productName}</span>
+          <span className="text-white font-bold text-sm truncate">{productName}</span>
         </div>
-        <button onClick={() => setDrawerOpen(true)} className="text-white/60 hover:text-white p-1">
-          <Menu size={22} />
-        </button>
       </div>
 
       {/* ── Mobile drawer overlay ── */}
-      {drawerOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex">
-          {/* backdrop */}
-          <div className="absolute inset-0 bg-black/60" onClick={() => setDrawerOpen(false)} />
-          {/* drawer panel */}
-          <div className="relative w-[280px] h-full flex flex-col overflow-y-auto hide-scrollbar" style={{ background: "#13161c" }}>
-            <div className="flex items-center justify-between px-4 pt-4 pb-2">
-              <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Menu</span>
-              <button onClick={() => setDrawerOpen(false)} className="text-white/60 hover:text-white">
-                <X size={18} />
-              </button>
-            </div>
-            <SidebarContent {...sidebarProps} onNavClick={() => setDrawerOpen(false)} />
+      <div className={`md:hidden fixed inset-0 z-50 flex transition-all duration-300 ${drawerOpen ? "visible" : "invisible"}`}>
+        {/* backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${drawerOpen ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setDrawerOpen(false)}
+        />
+        {/* drawer panel */}
+        <div
+          className={`relative w-[280px] h-full flex flex-col overflow-y-auto hide-scrollbar transition-transform duration-300 ease-out ${drawerOpen ? "translate-x-0" : "-translate-x-full"}`}
+          style={{ background: "#13161c" }}
+        >
+          <div className="flex items-center justify-between px-4 pt-4 pb-2">
+            <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Menu</span>
+            <button onClick={() => setDrawerOpen(false)} className="text-white/60 hover:text-white">
+              <X size={18} />
+            </button>
           </div>
+          <SidebarContent {...sidebarProps} onNavClick={() => setDrawerOpen(false)} />
         </div>
-      )}
+      </div>
 
       {/* ── Desktop layout ── */}
       <div className="hidden md:flex" style={{ height: "100vh", overflow: "hidden" }}>
