@@ -187,7 +187,7 @@ const SidebarContent = ({
       <div className="h-px bg-white/10 mx-3 mb-3" />
 
       {/* Nav */}
-      <nav className="px-3 flex-1">
+      <nav className="px-3">
         <button onClick={() => setSetupOpen(!setupOpen)}
           className="w-full flex items-center justify-between px-1 py-2 mb-1 hover:text-white/80 transition-colors"
           style={{ color: "rgba(255,255,255,0.8)" }}>
