@@ -42,7 +42,7 @@ const translations = {
 
     profile: [
       {
-        badge: "✦ Status: Undetected",
+        badge: "Status: Undetected",
         heading: "Dominate every lobby",
         subheading: "HyperV",
         text: "Discover premium products with fast delivery, constant updates and dedicated support. Quality you can trust.",

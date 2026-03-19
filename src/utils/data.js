@@ -42,7 +42,7 @@ export const profile = [
   {
     title: "Profile",
     img: "/banner1.png",
-    badge: "✦ Status: Indetectable",
+    badge: "Status: Indetectable",
     heading: "Domina todo el lobby",
     subheading: "HyperV",
     text: "Descubre productos premium con entrega rápida, actualizaciones constantes y soporte dedicado. Calidad en la que puedes confiar.",

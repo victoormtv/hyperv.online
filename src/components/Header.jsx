@@ -125,7 +125,7 @@ const Header = ({ categories, session }) => {
             <Link href="/" className="flex items-center gap-2">
               <img src="/logo.png" className="h-8 cursor-pointer" alt="logo" />
               <span className="text-white font-bold hidden sm:block" style={{ fontSize: "1.5rem" }}>
-                HyperV Community
+                HyperV Store
               </span>
             </Link>
 

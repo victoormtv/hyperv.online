@@ -13,7 +13,7 @@ export async function POST(req) {
       title: String(item.product.name),
       quantity: Math.max(1, Math.round(Number(item.quantity))),
       unit_price: Math.max(0.01, Number(item.product.price)),
-      currency_id: "PEN",
+      currency_id: "USD",
     }));
 
     const preference = new Preference(client);
