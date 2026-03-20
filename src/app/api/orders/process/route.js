@@ -1,4 +1,3 @@
-// app/api/orders/process/route.js
 import { NextResponse } from "next/server";
 import prisma from "@/utils/connection";
 import { generateKeyAuthLicense } from "@/lib/keyauth";
