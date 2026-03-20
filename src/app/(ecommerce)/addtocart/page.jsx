@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCart } from "@/redux/slice/cartSlice";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Tag, X, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { siMercadopago, siPaypal } from "simple-icons";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
@@ -34,6 +34,13 @@ const loadPayPalScript = (clientId) =>
     document.body.appendChild(s);
   });
 
+// ── Cupones válidos ───────────────────────────────────
+const COUPONS = {
+  "CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
+  "HYPERV10": { discount: 0.10, label: "10% OFF",    onlyMethod: null     },
+  "DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
+};
+
 // ── Cryptos disponibles ───────────────────────────────
 const CRYPTOS = [
   { id: "USDT", label: "USDT",     network: "TRC20/BEP20", color: "#26A17B", icon: "₮" },
@@ -49,7 +56,7 @@ const CRYPTOS = [
 const PAYMENT_METHODS = [
   { id: "mercadopago", label: "Mercado Pago", sub: "Tarjeta / Transferencia", icon: siMercadopago, color: "#00b1ea" },
   { id: "paypal",      label: "PayPal",        sub: "PayPal Balance / Card",   icon: siPaypal,      color: "#003087" },
-  { id: "crypto",      label: "Crypto",        sub: "USDT, BTC, ETH y más",    icon: null,          color: "#F0B90B" },
+  { id: "crypto",      label: "Crypto",        sub: "USDT · BTC · ETH y más", icon: null,          color: "#F0B90B" },
 ];
 
 export default function CheckoutPage() {
@@ -66,11 +73,15 @@ export default function CheckoutPage() {
   const [error,          setError]          = useState("");
   const [mpPreferenceId, setMpPreferenceId] = useState(null);
 
+  // ── Cupón ─────────────────────────────────────────
+  const [couponInput,   setCouponInput]   = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null); // { code, discount, label, onlyMethod }
+  const [couponError,   setCouponError]   = useState("");
+  const [couponSuccess, setCouponSuccess] = useState("");
+
   useEffect(() => {
     setMounted(true);
-    if (process.env.NEXT_PUBLIC_MP_PUBLIC_KEY) {
-      initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY);
-    }
+    if (process.env.NEXT_PUBLIC_MP_PUBLIC_KEY) initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY);
   }, []);
 
   const safeCart = useMemo(() => {
@@ -86,11 +97,44 @@ export default function CheckoutPage() {
     }));
   }, [cart]);
 
-  const total = useMemo(() =>
+  const subtotal = useMemo(() =>
     safeCart.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
   [safeCart]);
 
+  // Descuento automático 20% si método es crypto
+  const autoCryptoDiscount = method === "crypto" ? 0.20 : 0;
+
+  // Descuento por cupón (solo si aplica al método actual)
+  const couponDiscount = appliedCoupon
+    ? (appliedCoupon.onlyMethod && appliedCoupon.onlyMethod !== method ? 0 : appliedCoupon.discount)
+    : 0;
+
+  // El mayor descuento gana (no se acumulan)
+  const finalDiscount = Math.max(autoCryptoDiscount, couponDiscount);
+  const discountAmount = subtotal * finalDiscount;
+  const total = subtotal - discountAmount;
+
+  // Aviso si cupón no aplica al método actual
+  const couponMethodMismatch = appliedCoupon?.onlyMethod && appliedCoupon.onlyMethod !== method;
+
   if (!mounted) return null;
+
+  const applyCoupon = () => {
+    setCouponError("");
+    setCouponSuccess("");
+    const code = couponInput.trim().toUpperCase();
+    const found = COUPONS[code];
+    if (!found) { setCouponError("Cupón inválido."); return; }
+    setAppliedCoupon({ code, ...found });
+    setCouponSuccess(`Cupón ${found.label} aplicado.`);
+    setCouponInput("");
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError("");
+    setCouponSuccess("");
+  };
 
   const validateCheckout = () => {
     if (!email || !email.includes("@")) { setError("Ingresa un email válido."); return false; }
@@ -98,17 +142,23 @@ export default function CheckoutPage() {
     return true;
   };
 
+  // Cart with discounted prices to send to backend
+  const discountedCart = safeCart.map(i => ({
+    ...i,
+    product: { ...i.product, price: +(i.product.price * (1 - finalDiscount)).toFixed(2) },
+  }));
+
   const handleMercadoPago = async () => {
     if (!validateCheckout()) return;
     setLoading(true); setError(""); setMpPreferenceId(null);
     try {
       const res  = await fetch("/api/checkout/mercadopago", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart: safeCart, email }),
+        body: JSON.stringify({ cart: discountedCart, email }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Error al crear preferencia.");
-      if (data?.init_point)    window.location.href = data.init_point;
+      if (data?.init_point)        window.location.href = data.init_point;
       else if (data?.preferenceId) { setMpPreferenceId(data.preferenceId); setLoading(false); }
       else throw new Error("Mercado Pago no devolvió URL de pago.");
     } catch (err) { setError(err?.message || "Error con Mercado Pago."); setLoading(false); }
@@ -128,7 +178,7 @@ export default function CheckoutPage() {
         createOrder: async () => {
           const res  = await fetch("/api/checkout/paypal/create", {
             method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cart: safeCart, email }),
+            body: JSON.stringify({ cart: discountedCart, email }),
           });
           if (!res.ok) throw new Error(await res.text());
           const data = await res.json();
@@ -158,7 +208,7 @@ export default function CheckoutPage() {
     try {
       const res  = await fetch("/api/checkout/plisio", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart: safeCart, email, currency: cryptoCurrency }),
+        body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency }),
       });
       const data = await res.json();
       if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
@@ -181,8 +231,9 @@ export default function CheckoutPage() {
 
         <h1 className="text-4xl font-extrabold text-white mb-8">Checkout</h1>
 
-        {/* Order summary */}
+        {/* ── Order summary ── */}
         <div className="bg-white/[0.04] border border-white/10 rounded-2xl px-6 py-5 mb-6">
+          <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-3">Resumen de orden</p>
           {safeCart.map((item, i) => (
             <div key={i}>
               <div className="flex items-center justify-between py-3">
@@ -190,19 +241,62 @@ export default function CheckoutPage() {
                   <p className="text-white font-bold text-sm uppercase tracking-wide">{item.product.name}</p>
                   <p className="text-white/40 text-xs mt-0.5">{item.product.plans?.[0]?.label ?? "Standard"} × {item.quantity}</p>
                 </div>
-                <span className="text-cyan-400 font-bold">${(item.product.price * item.quantity).toFixed(2)}</span>
+                <span className="text-white/80 font-bold">${(item.product.price * item.quantity).toFixed(2)}</span>
               </div>
               {i < safeCart.length - 1 && <div className="h-px bg-white/5" />}
             </div>
           ))}
+
           <div className="h-px bg-white/10 my-3" />
+
+          {/* Subtotal */}
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-white/50 text-sm">Subtotal</span>
+            <span className="text-white/70 text-sm">${subtotal.toFixed(2)}</span>
+          </div>
+
+          {/* Descuento crypto automático */}
+          {method === "crypto" && (
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-green-400 text-sm flex items-center gap-1.5">
+                <Tag size={13} /> 20% descuento crypto
+              </span>
+              <span className="text-green-400 text-sm font-bold">-${(subtotal * 0.20).toFixed(2)}</span>
+            </div>
+          )}
+
+          {/* Descuento por cupón (si es mayor que el de crypto) */}
+          {appliedCoupon && !couponMethodMismatch && couponDiscount > autoCryptoDiscount && (
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-green-400 text-sm flex items-center gap-1.5">
+                <Tag size={13} /> Cupón {appliedCoupon.code} ({appliedCoupon.label})
+              </span>
+              <span className="text-green-400 text-sm font-bold">-${discountAmount.toFixed(2)}</span>
+            </div>
+          )}
+
+          {/* Aviso si cupón no aplica al método */}
+          {couponMethodMismatch && (
+            <div className="flex items-center gap-2 mb-2 text-yellow-400/80 text-xs">
+              <Tag size={12} /> Cupón solo válido para pago con {appliedCoupon.onlyMethod}
+            </div>
+          )}
+
+          <div className="h-px bg-white/10 my-3" />
+
+          {/* Total */}
           <div className="flex items-center justify-between">
             <span className="text-white font-extrabold text-lg">Total</span>
-            <span className="text-white font-extrabold text-2xl">${total.toFixed(2)}</span>
+            <div className="text-right">
+              {finalDiscount > 0 && (
+                <p className="text-white/30 text-xs line-through">${subtotal.toFixed(2)}</p>
+              )}
+              <span className="text-white font-extrabold text-2xl">${total.toFixed(2)}</span>
+            </div>
           </div>
         </div>
 
-        {/* Form */}
+        {/* ── Form ── */}
         <div className="bg-white/[0.04] border border-white/10 rounded-2xl px-6 py-6 flex flex-col gap-6">
 
           {/* Email */}
@@ -214,6 +308,51 @@ export default function CheckoutPage() {
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
             />
             <p className="text-white/30 text-xs mt-2">You'll receive your license keys at this email.</p>
+          </div>
+
+          {/* Cupón */}
+          <div>
+            <label className="text-white font-semibold text-sm mb-2 block">
+              Cupón de descuento
+              {method === "crypto" && (
+                <span className="ml-2 text-green-400 text-xs font-normal">
+                  🎉 20% OFF automático por pagar con crypto
+                </span>
+              )}
+            </label>
+
+            {appliedCoupon ? (
+              <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/30 rounded-xl px-4 py-3">
+                <Check size={16} className="text-green-400 shrink-0" />
+                <span className="text-green-400 text-sm font-bold flex-1">
+                  {appliedCoupon.code} — {appliedCoupon.label}
+                </span>
+                <button onClick={removeCoupon} className="text-white/30 hover:text-white transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={couponInput}
+                  onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); setCouponError(""); }}
+                  onKeyDown={(e) => e.key === "Enter" && applyCoupon()}
+                  placeholder="Ej: HYPERV10"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors uppercase"
+                />
+                <button
+                  onClick={applyCoupon}
+                  className="px-5 py-3 rounded-xl text-sm font-bold text-white transition-all"
+                  style={{ background: "linear-gradient(135deg, #3b82f6, #06b6d4)" }}
+                >
+                  Aplicar
+                </button>
+              </div>
+            )}
+
+            {couponError   && <p className="text-red-400 text-xs mt-2">{couponError}</p>}
+            {couponSuccess && <p className="text-green-400 text-xs mt-2">{couponSuccess}</p>}
           </div>
 
           {/* Payment method */}
@@ -234,12 +373,20 @@ export default function CheckoutPage() {
                       ? "border-cyan-500/60 bg-cyan-500/10 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
                       : "border-white/10 bg-white/5 hover:border-white/20"
                   }`}>
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center"
-                    style={{ background: `${m.color}22`, border: `1px solid ${m.color}44` }}>
-                    {m.icon
-                      ? <SI icon={m.icon} size={22} color={m.color} />
-                      : <span className="text-lg font-extrabold" style={{ color: m.color }}>₿</span>
-                    }
+                  <div className="relative">
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center"
+                      style={{ background: `${m.color}22`, border: `1px solid ${m.color}44` }}>
+                      {m.icon
+                        ? <SI icon={m.icon} size={22} color={m.color} />
+                        : <span className="text-lg font-extrabold" style={{ color: m.color }}>₿</span>
+                      }
+                    </div>
+                    {/* Badge 20% OFF en crypto */}
+                    {m.id === "crypto" && (
+                      <span className="absolute -top-2 -right-3 bg-green-500 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full leading-none">
+                        -20%
+                      </span>
+                    )}
                   </div>
                   <div className="text-center">
                     <p className={`text-xs font-bold ${method === m.id ? "text-white" : "text-white/70"}`}>{m.label}</p>
@@ -259,12 +406,10 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            {/* ── Crypto selector ── */}
+            {/* Crypto selector */}
             {method === "crypto" && (
               <div className="mt-4">
-                <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">
-                  Selecciona tu moneda
-                </p>
+                <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Selecciona tu moneda</p>
                 <div className="grid grid-cols-4 gap-2">
                   {CRYPTOS.map((c) => (
                     <button key={c.id} type="button" onClick={() => setCryptoCurrency(c.id)}
@@ -277,9 +422,7 @@ export default function CheckoutPage() {
                         style={{ background: `${c.color}25`, border: `1px solid ${c.color}50`, color: c.color }}>
                         {c.icon}
                       </div>
-                      <p className={`text-[10px] font-bold ${cryptoCurrency === c.id ? "text-white" : "text-white/60"}`}>
-                        {c.label}
-                      </p>
+                      <p className={`text-[10px] font-bold ${cryptoCurrency === c.id ? "text-white" : "text-white/60"}`}>{c.label}</p>
                       <p className="text-white/30 text-[9px] leading-tight text-center">{c.network}</p>
                     </button>
                   ))}
@@ -289,9 +432,9 @@ export default function CheckoutPage() {
 
             <p className="text-white/30 text-xs mt-3">Secure payment. Prices in USD.</p>
             <p className="text-white/30 text-xs mt-1">
-              Can't find your payment method? Open a ticket on our{" "}
+              Can't find your payment method?{" "}
               <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer"
-                className="text-cyan-400 hover:text-cyan-300 transition-colors">Discord</a>
+                className="text-cyan-400 hover:text-cyan-300 transition-colors">Open a ticket on Discord</a>
             </p>
           </div>
 
@@ -316,7 +459,7 @@ export default function CheckoutPage() {
               cursor: loading ? "not-allowed" : "pointer", transition: "all 0.3s ease",
               boxShadow: loading ? "none" : "0 4px 25px rgba(59,130,246,0.5), 0 0 40px rgba(59,130,246,0.2)",
             }}>
-            {loading ? "Procesando..." : "Continuar al Pago"}
+            {loading ? "Procesando..." : `Pagar $${total.toFixed(2)}`}
           </button>
         </div>
       </div>
