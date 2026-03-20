@@ -46,7 +46,6 @@ export async function POST(req) {
         failure: `${baseUrl}/addtocart`,
         pending: `${baseUrl}/addtocart`,
       },
-      auto_return: "approved",
     };
 
     const result = await preference.create({ body });
