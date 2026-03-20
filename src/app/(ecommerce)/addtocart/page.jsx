@@ -9,7 +9,6 @@ import { ArrowLeft, Tag, X, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { siMercadopago, siPaypal } from "simple-icons";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
-import CryptoPayment from "@/components/ui/CryptoPayment";
 
 const SI = ({ icon, size = 24, color }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill={color} xmlns="http://www.w3.org/2000/svg">
@@ -223,15 +222,8 @@ export default function CheckoutPage() {
         body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Error creando pago crypto.");
-      // Si devuelve walletAddress mostramos QR embebido, si no redirigimos
-      if (data?.walletAddress) {
-        setCryptoPaymentData(data);
-      } else if (data?.checkoutUrl) {
-        window.location.href = data.checkoutUrl;
-      } else {
-        throw new Error("No se pudo crear el pago.");
-      }
+      if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
+      setCryptoPaymentData({ checkoutUrl: data.checkoutUrl });
     } catch (err) { setError(err?.message || "Error de conexión con Plisio."); }
     finally { setLoading(false); }
   };
@@ -437,13 +429,31 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            {/* Crypto QR embebido */}
-            {method === "crypto" && cryptoPaymentData && (
-              <div className="mt-4">
-                <CryptoPayment
-                  paymentData={cryptoPaymentData}
-                  onCancel={() => setCryptoPaymentData(null)}
+            {/* Crypto iframe embebido */}
+            {method === "crypto" && cryptoPaymentData?.checkoutUrl && (
+              <div className="mt-4 rounded-2xl overflow-hidden border border-white/10">
+                <iframe
+                  src={cryptoPaymentData.checkoutUrl}
+                  className="w-full"
+                  style={{ height: "580px", border: "none" }}
+                  allow="clipboard-write"
                 />
+                <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 bg-white/[0.02]">
+                  <a
+                    href={cryptoPaymentData.checkoutUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/40 hover:text-white text-xs flex items-center gap-1.5 transition-colors"
+                  >
+                    Abrir en nueva pestaña ↗
+                  </a>
+                  <button
+                    onClick={() => setCryptoPaymentData(null)}
+                    className="text-red-400/60 hover:text-red-400 text-xs transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                </div>
               </div>
             )}
 

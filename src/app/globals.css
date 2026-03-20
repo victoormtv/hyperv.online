@@ -52,7 +52,7 @@
 
 @layer base {
   html {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   * {
@@ -68,7 +68,7 @@
     background-size: 60px 60px;
     background-attachment: fixed;
     overscroll-behavior: none;
-    overflow-x: hidden;
+    overflow-x: clip;
     @apply text-foreground;
   }
 
