@@ -9,6 +9,7 @@ import { ArrowLeft, Tag, X, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { siMercadopago, siPaypal } from "simple-icons";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import CryptoPayment from "@/components/ui/CryptoPayment";
 
 const SI = ({ icon, size = 24, color }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill={color} xmlns="http://www.w3.org/2000/svg">
@@ -37,9 +38,9 @@ const loadPayPalScript = (clientId) =>
 
 // ── Cupones válidos ───────────────────────────────────
 const COUPONS = {
-  //"CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
+  "CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
   "HYPERV10": { discount: 0.10, label: "10% OFF",    onlyMethod: null     },
-  //"DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
+  "DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
 };
 
 // ── Cryptos disponibles ───────────────────────────────
@@ -74,7 +75,8 @@ export default function CheckoutPage() {
   const [cryptoCurrency, setCryptoCurrency] = useState("USDT");
   const [loading,        setLoading]        = useState(false);
   const [error,          setError]          = useState("");
-  const [mpPreferenceId, setMpPreferenceId] = useState(null);
+  const [mpPreferenceId,   setMpPreferenceId]   = useState(null);
+  const [cryptoPaymentData, setCryptoPaymentData] = useState(null);
 
   // ── Cupón ─────────────────────────────────────────
   const [couponInput,   setCouponInput]   = useState("");
@@ -221,9 +223,17 @@ export default function CheckoutPage() {
         body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency }),
       });
       const data = await res.json();
-      if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
-      window.location.href = data.checkoutUrl;
-    } catch (err) { setError(err?.message || "Error de conexión con Plisio."); setLoading(false); }
+      if (!res.ok) throw new Error(data?.error || "Error creando pago crypto.");
+      // Si devuelve walletAddress mostramos QR embebido, si no redirigimos
+      if (data?.walletAddress) {
+        setCryptoPaymentData(data);
+      } else if (data?.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        throw new Error("No se pudo crear el pago.");
+      }
+    } catch (err) { setError(err?.message || "Error de conexión con Plisio."); }
+    finally { setLoading(false); }
   };
 
   const handleSubmit = () => {
@@ -424,6 +434,16 @@ export default function CheckoutPage() {
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Crypto QR embebido */}
+            {method === "crypto" && cryptoPaymentData && (
+              <div className="mt-4">
+                <CryptoPayment
+                  paymentData={cryptoPaymentData}
+                  onCancel={() => setCryptoPaymentData(null)}
+                />
               </div>
             )}
 

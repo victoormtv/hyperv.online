@@ -32,15 +32,6 @@ export async function POST(req) {
     ).trim();
     const apiKey = process.env.PLISIO_SECRET_KEY?.trim();
 
-    // ── DEBUG: ver qué estamos mandando ──────────────
-    console.log("=== PLISIO DEBUG ===");
-    console.log("api_key:", apiKey ? `${apiKey.slice(0, 8)}...` : "MISSING");
-    console.log("currency:", currency);
-    console.log("total:", total);
-    console.log("email:", email);
-    console.log("baseUrl:", baseUrl);
-    // ─────────────────────────────────────────────────
-
     if (!apiKey)
       return Response.json(
         { error: "Falta PLISIO_SECRET_KEY en .env" },
@@ -55,35 +46,35 @@ export async function POST(req) {
       amount: total,
       source_currency: "USD",
       buyer_email: email,
-      callback_url: `${baseUrl}/api/webhooks/plisio`,
       success_url: `${baseUrl}/success`,
       fail_url: `${baseUrl}/addtocart`,
     });
 
-    const url = `https://plisio.net/api/v1/invoices/new?${params}`;
-    console.log("Plisio URL:", url.replace(apiKey, "***KEY***"));
-
-    const res = await fetch(url);
+    const res = await fetch(`https://plisio.net/api/v1/invoices/new?${params}`);
     const data = await res.json();
 
-    // ── DEBUG: ver respuesta exacta de Plisio ────────
-    console.log("Plisio status:", res.status);
     console.log("Plisio response:", JSON.stringify(data, null, 2));
-    // ─────────────────────────────────────────────────
 
-    if (data?.status !== "success" || !data?.data?.invoice_url)
+    if (data?.status !== "success")
       return Response.json(
         {
-          error:
-            data?.message ||
-            data?.data?.message ||
-            "Error creando pago en Plisio",
+          error: data?.data?.message || data?.message || "Error en Plisio",
           plisio: data,
         },
         { status: 400 },
       );
 
-    return Response.json({ checkoutUrl: data.data.invoice_url });
+    const invoice = data.data;
+
+    return Response.json({
+      checkoutUrl: invoice.invoice_url,
+      walletAddress: invoice.wallet_hash,
+      cryptoAmount: invoice.invoice_total_sum,
+      currency: invoice.currency,
+      orderId: invoice.txn_id,
+      expireAt: invoice.expire_utc,
+      qrCode: invoice.qr_code,
+    });
   } catch (error) {
     console.error("Plisio error:", error);
     return Response.json({ error: error?.message }, { status: 500 });
