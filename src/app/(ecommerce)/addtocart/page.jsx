@@ -81,16 +81,19 @@ export default function CheckoutPage() {
   const [cryptoPaymentData, setCryptoPaymentData] = useState(null);
   const [showPendingModal,  setShowPendingModal]  = useState(false);
 
-  // Interceptar navegación cuando hay pago crypto activo
+  // Pago activo = cualquier método en proceso
+  const paymentActive = !!(cryptoPaymentData || mpPreferenceId);
+
+  // Interceptar navegación cuando hay cualquier pago activo
   useEffect(() => {
-    if (!cryptoPaymentData) return;
+    if (!paymentActive) return;
     const handleBeforeUnload = (e) => {
       e.preventDefault();
       e.returnValue = "";
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [cryptoPaymentData]);
+  }, [paymentActive]);
 
   // ── Cupón ─────────────────────────────────────────
   const [couponInput,   setCouponInput]   = useState("");
@@ -171,8 +174,34 @@ export default function CheckoutPage() {
   // Cart with discounted prices to send to backend
   const discountedCart = safeCart.map(i => ({
     ...i,
-    product: { ...i.product, price: +(i.product.price * (1 - finalDiscount)).toFixed(2) },
+    product: {
+      ...i.product,
+      price:     +(i.product.price * (1 - finalDiscount)).toFixed(2),
+      planLabel: i.product.planLabel || i.product.plans?.[0]?.label || "Mensual",
+    },
   }));
+
+  // Helper: procesa la orden (KeyAuth + email) y redirige al success
+  const processOrderAndRedirect = async () => {
+    try {
+      const res  = await fetch("/api/orders/process", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: discountedCart, email }),
+      });
+      const data = await res.json();
+      if (data?.success) {
+        dispatch(setCart([]));
+        const encoded = encodeURIComponent(JSON.stringify(data));
+        window.location.href = `/success?data=${encoded}`;
+      } else {
+        dispatch(setCart([]));
+        window.location.href = "/success";
+      }
+    } catch {
+      dispatch(setCart([]));
+      window.location.href = "/success";
+    }
+  };
 
   const handleMercadoPago = async () => {
     if (!validateCheckout()) return;
@@ -218,8 +247,7 @@ export default function CheckoutPage() {
           });
           const capture = await res.json();
           if (capture?.status !== "COMPLETED") throw new Error("No se pudo capturar el pago.");
-          dispatch(setCart([]));
-          window.location.href = "/success";
+          await processOrderAndRedirect(); // ← genera key + email + redirige
         },
         onCancel: () => setError("Pago con PayPal cancelado."),
         onError:  () => setError("Error en el pago con PayPal."),
@@ -261,13 +289,18 @@ export default function CheckoutPage() {
               products: safeCart.map(i => i.product.name).join(", "),
             }}
             onContinue={() => setShowPendingModal(false)}
-            onCancel={() => { setCryptoPaymentData(null); setShowPendingModal(false); router.push("/products"); }}
+            onCancel={() => {
+              setCryptoPaymentData(null);
+              setMpPreferenceId(null);
+              setShowPendingModal(false);
+              router.push("/products");
+            }}
           />
         )}
 
         <button
           onClick={() => {
-            if (cryptoPaymentData) { setShowPendingModal(true); return; }
+            if (paymentActive) { setShowPendingModal(true); return; }
             router.push("/products");
           }}
           className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm mb-8 transition-colors"
@@ -436,6 +469,12 @@ export default function CheckoutPage() {
             {method === "mercadopago" && mpPreferenceId && (
               <div className="mt-4">
                 <Wallet initialization={{ preferenceId: mpPreferenceId, redirectMode: "self" }} />
+                <button
+                  onClick={() => setShowPendingModal(true)}
+                  className="mt-2 w-full py-2.5 rounded-xl border border-red-500/30 bg-red-500/8 text-red-400/60 hover:text-red-400 text-xs font-semibold transition-colors"
+                >
+                  Cancelar pago
+                </button>
               </div>
             )}
 
@@ -482,7 +521,7 @@ export default function CheckoutPage() {
                     Abrir en nueva pestaña ↗
                   </a>
                   <button
-                    onClick={() => setCryptoPaymentData(null)}
+                    onClick={() => setShowPendingModal(true)}
                     className="text-red-400/60 hover:text-red-400 text-xs transition-colors"
                   >
                     Cancelar

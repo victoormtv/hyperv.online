@@ -21,8 +21,6 @@ export default function PendingPaymentModal({ paymentData, onContinue, onCancel 
         <div className="w-full max-w-sm bg-[#0d1117] border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
           style={{ animation: "popupIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}>
 
-          <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, #3b82f6, #06b6d4)" }} />
-
           <div className="p-7 flex flex-col items-center text-center">
             <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5"
               style={{ background: "rgba(6,182,212,0.1)", border: "1px solid rgba(6,182,212,0.3)", boxShadow: "0 0 30px rgba(6,182,212,0.15)" }}>
