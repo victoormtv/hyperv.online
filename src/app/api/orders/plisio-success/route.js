@@ -1,15 +1,9 @@
-// app/api/orders/mp-success/route.js
+// app/api/orders/plisio-success/route.js
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const cartRaw = searchParams.get("cart");
     const email = searchParams.get("email");
-    const status = searchParams.get("status"); // MercadoPago pasa esto
-
-    // Solo procesar si el pago fue aprobado
-    if (status && status !== "approved") {
-      return Response.redirect(new URL("/addtocart", req.url));
-    }
 
     if (!cartRaw || !email) {
       return Response.redirect(new URL("/success", req.url));
@@ -17,12 +11,10 @@ export async function GET(req) {
 
     const cart = JSON.parse(decodeURIComponent(cartRaw));
     const decodedEmail = decodeURIComponent(email);
-
     const baseUrl = (
       process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
     ).trim();
 
-    // Llamar al endpoint de proceso de orden
     const res = await fetch(`${baseUrl}/api/orders/process`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -30,7 +22,7 @@ export async function GET(req) {
     });
 
     const data = await res.json();
-    console.log("MP success - process result:", data);
+    console.log("Plisio success - process result:", data);
 
     if (data?.success) {
       const encoded = encodeURIComponent(JSON.stringify(data));
@@ -39,7 +31,7 @@ export async function GET(req) {
 
     return Response.redirect(new URL("/success", req.url));
   } catch (error) {
-    console.error("MP success error:", error);
+    console.error("Plisio success error:", error);
     return Response.redirect(new URL("/success", req.url));
   }
 }

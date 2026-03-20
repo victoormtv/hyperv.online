@@ -38,6 +38,10 @@ export async function POST(req) {
         { status: 500 },
       );
 
+    // Pasar cart y email en el success_url para procesar la orden
+    const cartEncoded = encodeURIComponent(JSON.stringify(cart));
+    const emailEncoded = encodeURIComponent(email || "");
+
     const params = new URLSearchParams({
       api_key: apiKey,
       currency,
@@ -46,7 +50,7 @@ export async function POST(req) {
       amount: total,
       source_currency: "USD",
       buyer_email: email,
-      success_url: `${baseUrl}/success`,
+      success_url: `${baseUrl}/api/orders/plisio-success?cart=${cartEncoded}&email=${emailEncoded}`,
       fail_url: `${baseUrl}/addtocart`,
     });
 
