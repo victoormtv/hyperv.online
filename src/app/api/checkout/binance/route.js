@@ -1,109 +1,51 @@
-import crypto from "crypto";
-
 export async function POST(req) {
   try {
     const { cart, email } = await req.json();
 
-    if (!Array.isArray(cart) || cart.length === 0) {
+    if (!Array.isArray(cart) || cart.length === 0)
       return Response.json({ error: "Carrito vacío" }, { status: 400 });
-    }
 
-    if (!email || !email.includes("@")) {
-      return Response.json({ error: "Email inválido" }, { status: 400 });
-    }
+    const total = cart
+      .reduce((sum, i) => {
+        return (
+          sum + (Number(i?.product?.price) || 0) * (Number(i?.quantity) || 1)
+        );
+      }, 0)
+      .toFixed(2);
 
-    const apiKey = process.env.BINANCE_API_KEY?.trim();
-    const secret = process.env.BINANCE_SECRET?.trim();
     const baseUrl = (
       process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
     ).trim();
 
-    if (!apiKey || !secret) {
-      return Response.json(
-        { error: "Faltan BINANCE_API_KEY o BINANCE_SECRET" },
-        { status: 500 },
-      );
-    }
-
-    const total = Number(
-      cart
-        .reduce((sum, i) => {
-          const price = Number(i?.product?.price) || 0;
-          const quantity = Number(i?.quantity) || 1;
-          return sum + price * quantity;
-        }, 0)
-        .toFixed(2),
-    );
-
-    const merchantTradeNo = `HV${Date.now()}`;
-    const timestamp = Date.now();
-    const nonce = crypto.randomBytes(16).toString("hex");
-
-    const body = {
-      env: { terminalType: "WEB" },
-      merchantTradeNo,
-      orderAmount: total,
-      currency: "USDT",
-      description: "HyperV Community Products",
-      goods: {
-        goodsType: "02",
-        goodsCategory: "Z000",
-        referenceGoodsId: "HYPERV_ORDER",
-        goodsName: "HyperV Community Products",
-        goodsDetail: cart.map((i) => i?.product?.name || "Producto").join(", "),
+    const res = await fetch("https://api.nowpayments.io/v1/invoice", {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.NOWPAYMENTS_API_KEY,
+        "Content-Type": "application/json",
       },
-      returnUrl: `${baseUrl}/success`,
-      cancelUrl: `${baseUrl}/addtocart`,
-      buyer: { buyerEmail: email },
-    };
-
-    const bodyStr = JSON.stringify(body);
-    const payload = `${timestamp}\n${nonce}\n${bodyStr}\n`;
-
-    const signature = crypto
-      .createHmac("sha512", secret)
-      .update(payload)
-      .digest("hex")
-      .toUpperCase();
-
-    const res = await fetch(
-      "https://bpay.binanceapi.com/binancepay/openapi/v2/order",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "BinancePay-Timestamp": timestamp.toString(),
-          "BinancePay-Nonce": nonce,
-          "BinancePay-Certificate-SN": apiKey,
-          "BinancePay-Signature": signature,
-        },
-        body: bodyStr,
-        cache: "no-store",
-      },
-    );
+      body: JSON.stringify({
+        price_amount: total,
+        price_currency: "usd",
+        pay_currency: "usdtbsc", // USDT en BEP20 (Binance Smart Chain)
+        order_id: `HV${Date.now()}`,
+        order_description: "HyperV Community Products",
+        ipn_callback_url: `${baseUrl}/api/webhooks/nowpayments`,
+        success_url: `${baseUrl}/success`,
+        cancel_url: `${baseUrl}/addtocart`,
+      }),
+    });
 
     const data = await res.json();
 
-    if (data?.status === "SUCCESS") {
-      return Response.json({
-        checkoutUrl: data?.data?.checkoutUrl,
-        prepayId: data?.data?.prepayId,
-      });
-    }
+    if (!res.ok || !data?.invoice_url)
+      return Response.json(
+        { error: data?.message || "Error creando pago" },
+        { status: 400 },
+      );
 
-    return Response.json(
-      {
-        error: data?.errorMessage || "Error en Binance Pay",
-        code: data?.code || null,
-        details: data,
-      },
-      { status: 400 },
-    );
+    return Response.json({ checkoutUrl: data.invoice_url });
   } catch (error) {
-    console.error("Binance Pay error:", error);
-    return Response.json(
-      { error: error?.message || "Error de conexión con Binance Pay" },
-      { status: 500 },
-    );
+    console.error("NOWPayments error:", error);
+    return Response.json({ error: error?.message }, { status: 500 });
   }
 }
