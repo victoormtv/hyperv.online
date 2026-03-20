@@ -51,6 +51,10 @@
 }
 
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+
   * {
     @apply border-border;
     font-family: var(--font-outfit), sans-serif;
@@ -64,6 +68,7 @@
     background-size: 60px 60px;
     background-attachment: fixed;
     overscroll-behavior: none;
+    overflow-x: hidden;
     @apply text-foreground;
   }
 
@@ -88,7 +93,7 @@
     pointer-events: none;
     z-index: 0;
     min-height: 100vh;
-    min-width: 100vw;
+    /* Eliminado min-width: 100vw — causaba scroll horizontal */
   }
 }
 
@@ -146,7 +151,6 @@
     display: none;
   }
 
-  /* Grid background with radial vignette */
   .grid-bg {
     position: relative;
     background-color: #050608;
