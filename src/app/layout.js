@@ -2,6 +2,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 import { LanguageProvider } from "@/context/LanguageContext";
+import PromoPopup from "@/components/ui/PromoPopup";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
         <LanguageProvider>
           <ReduxProvider>
             {children}
+            <PromoPopup />
           </ReduxProvider>
         </LanguageProvider>
       </body>
