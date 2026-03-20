@@ -1,3 +1,4 @@
+// app/api/orders/process/route.js
 import { NextResponse } from "next/server";
 import prisma from "@/utils/connection";
 import { generateKeyAuthLicense } from "@/lib/keyauth";
@@ -5,7 +6,12 @@ import { sendLicenseEmail } from "@/lib/email";
 
 export async function POST(req) {
   try {
-    const { cart, email, paymentMethod, paymentId } = await req.json();
+    const body = await req.json();
+    const { cart, email } = body;
+
+    console.log("=== PROCESS ORDER ===");
+    console.log("email:", email);
+    console.log("cart items:", cart?.length);
 
     if (!cart || !email) {
       return NextResponse.json({ error: "Faltan datos" }, { status: 400 });
@@ -16,27 +22,35 @@ export async function POST(req) {
     for (const item of cart) {
       const productName = item.product?.name;
       const planLabel =
-        item.product?.plans?.[0]?.label || item.planLabel || "Mensual";
+        item.product?.planLabel || item.product?.plans?.[0]?.label || "Mensual";
       const quantity = item.quantity || 1;
+      const productId = item.product?.id;
+
+      console.log(`Procesando: ${productName} - ${planLabel}`);
 
       const keyResult = await generateKeyAuthLicense(productName, planLabel);
+      console.log("KeyAuth result:", keyResult);
 
-      const order = await prisma.order.create({
-        data: {
-          isPaid: true,
-          OrderItem: {
-            create: [
-              {
-                quantity,
-                productId: item.product.id,
+      let orderId = `ORD-${Date.now()}`;
+      if (productId) {
+        try {
+          const order = await prisma.order.create({
+            data: {
+              isPaid: true,
+              OrderItem: {
+                create: [{ quantity, productId }],
               },
-            ],
-          },
-        },
-      });
+            },
+          });
+          orderId = order.id;
+          console.log("Order created:", orderId);
+        } catch (dbErr) {
+          console.error("DB error (non-fatal):", dbErr.message);
+        }
+      }
 
       results.push({
-        orderId: order.id,
+        orderId,
         productName,
         planLabel,
         licenseKey: keyResult.key || null,
@@ -45,19 +59,26 @@ export async function POST(req) {
     }
 
     const firstResult = results[0];
-    const allKeys = results
-      .filter((r) => r.licenseKey)
-      .map((r) => `${r.productName} (${r.planLabel}): ${r.licenseKey}`)
-      .join("\n");
+    const productNames = results.map((r) => r.productName).join(" + ");
+    const planLabels = results.map((r) => r.planLabel).join(" + ");
 
-    await sendLicenseEmail({
+    const licenseKey =
+      results.length === 1
+        ? firstResult.licenseKey
+        : results
+            .filter((r) => r.licenseKey)
+            .map((r) => `${r.productName}: ${r.licenseKey}`)
+            .join("\n") || null;
+
+    console.log("Sending email to:", email);
+    const emailResult = await sendLicenseEmail({
       to: email,
-      productName: results.map((r) => r.productName).join(" + "),
-      planLabel: results.map((r) => r.planLabel).join(" + "),
-      licenseKey:
-        results.length === 1 ? firstResult.licenseKey : allKeys || null,
+      productName: productNames,
+      planLabel: planLabels,
+      licenseKey,
       orderId: firstResult.orderId,
     });
+    console.log("Email result:", emailResult);
 
     return NextResponse.json({
       success: true,
@@ -66,7 +87,7 @@ export async function POST(req) {
       email,
     });
   } catch (error) {
-    console.error("Process order error:", error);
+    console.error("Process order ERROR:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
