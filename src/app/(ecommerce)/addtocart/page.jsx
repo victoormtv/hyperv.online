@@ -6,7 +6,7 @@ import { setCart } from "@/redux/slice/cartSlice";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { siMercadopago, siPaypal, siBinance } from "simple-icons";
+import { siMercadopago, siPaypal } from "simple-icons";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 
 const SI = ({ icon, size = 24, color }) => (
@@ -22,7 +22,7 @@ const loadPayPalScript = (clientId) =>
     const existing = document.getElementById("paypal-sdk");
     if (existing) {
       existing.addEventListener("load", () => resolve(window.paypal));
-      existing.addEventListener("error", () => reject(new Error("No se pudo cargar el SDK de PayPal")));
+      existing.addEventListener("error", () => reject(new Error("No se pudo cargar PayPal")));
       return;
     }
     const s = document.createElement("script");
@@ -30,25 +30,38 @@ const loadPayPalScript = (clientId) =>
     s.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`;
     s.async = true;
     s.onload = () => resolve(window.paypal);
-    s.onerror = () => reject(new Error("No se pudo cargar el SDK de PayPal"));
+    s.onerror = () => reject(new Error("No se pudo cargar PayPal"));
     document.body.appendChild(s);
   });
+
+// ── Cryptos disponibles ───────────────────────────────
+const CRYPTOS = [
+  { id: "USDT", label: "USDT",     network: "TRC20/BEP20", color: "#26A17B", icon: "₮" },
+  { id: "BTC",  label: "Bitcoin",  network: "BTC",         color: "#F7931A", icon: "₿" },
+  { id: "ETH",  label: "Ethereum", network: "ERC20",       color: "#627EEA", icon: "Ξ" },
+  { id: "BNB",  label: "BNB",      network: "BEP20",       color: "#F0B90B", icon: "B" },
+  { id: "LTC",  label: "Litecoin", network: "LTC",         color: "#BFBBBB", icon: "Ł" },
+  { id: "TRX",  label: "TRON",     network: "TRC20",       color: "#EF0027", icon: "T" },
+  { id: "DOGE", label: "Dogecoin", network: "DOGE",        color: "#C2A633", icon: "D" },
+  { id: "USDC", label: "USDC",     network: "ERC20",       color: "#2775CA", icon: "$" },
+];
 
 const PAYMENT_METHODS = [
   { id: "mercadopago", label: "Mercado Pago", sub: "Tarjeta / Transferencia", icon: siMercadopago, color: "#00b1ea" },
   { id: "paypal",      label: "PayPal",        sub: "PayPal Balance / Card",   icon: siPaypal,      color: "#003087" },
-  { id: "binance",     label: "Binance Pay",   sub: "Crypto",                  icon: siBinance,     color: "#F0B90B" },
+  { id: "crypto",      label: "Crypto",        sub: "USDT, BTC, ETH y más",    icon: null,          color: "#F0B90B" },
 ];
 
 export default function CheckoutPage() {
   const authState = useSelector((s) => s.auth);
-  const cart = authState?.cart || [];
-  const dispatch = useDispatch();
-  const { t } = useLanguage();
+  const cart      = authState?.cart || [];
+  const dispatch  = useDispatch();
+  const { t }     = useLanguage();
 
   const [mounted,        setMounted]        = useState(false);
   const [email,          setEmail]          = useState("");
   const [method,         setMethod]         = useState("mercadopago");
+  const [cryptoCurrency, setCryptoCurrency] = useState("USDT");
   const [loading,        setLoading]        = useState(false);
   const [error,          setError]          = useState("");
   const [mpPreferenceId, setMpPreferenceId] = useState(null);
@@ -73,9 +86,9 @@ export default function CheckoutPage() {
     }));
   }, [cart]);
 
-  const total = useMemo(() => {
-    return safeCart.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
-  }, [safeCart]);
+  const total = useMemo(() =>
+    safeCart.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
+  [safeCart]);
 
   if (!mounted) return null;
 
@@ -85,123 +98,78 @@ export default function CheckoutPage() {
     return true;
   };
 
-  // ── Mercado Pago ──────────────────────────────────────────────────────────
-  // Fix: no abrir ventana vacía. Simplemente redirigir en la misma pestaña
-  // usando window.location.href una vez tengamos el init_point del backend.
   const handleMercadoPago = async () => {
     if (!validateCheckout()) return;
-    setLoading(true);
-    setError("");
-    setMpPreferenceId(null);
-
+    setLoading(true); setError(""); setMpPreferenceId(null);
     try {
       const res  = await fetch("/api/checkout/mercadopago", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ cart: safeCart, email }),
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: safeCart, email }),
       });
       const data = await res.json();
-
-      if (!res.ok) throw new Error(data?.error || "Error al crear preferencia de pago.");
-
-      if (data?.init_point) {
-        // Redirigir directo — sin ventana en blanco intermedia
-        window.location.href = data.init_point;
-      } else if (data?.preferenceId) {
-        // Fallback: mostrar el widget de Wallet embebido
-        setMpPreferenceId(data.preferenceId);
-        setLoading(false);
-      } else {
-        throw new Error("Mercado Pago no devolvió URL de pago.");
-      }
-    } catch (err) {
-      setError(err?.message || "Error de conexión con Mercado Pago.");
-      setLoading(false);
-    }
+      if (!res.ok) throw new Error(data?.error || "Error al crear preferencia.");
+      if (data?.init_point)    window.location.href = data.init_point;
+      else if (data?.preferenceId) { setMpPreferenceId(data.preferenceId); setLoading(false); }
+      else throw new Error("Mercado Pago no devolvió URL de pago.");
+    } catch (err) { setError(err?.message || "Error con Mercado Pago."); setLoading(false); }
   };
 
-  // ── PayPal ────────────────────────────────────────────────────────────────
   const handlePayPal = async () => {
     if (!validateCheckout()) return;
-    setLoading(true);
-    setError("");
-
+    setLoading(true); setError("");
     try {
       if (!process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID) throw new Error("Falta NEXT_PUBLIC_PAYPAL_CLIENT_ID");
-
       await loadPayPalScript(process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
-
       const container = document.getElementById("paypal-button-container");
-      if (!container) throw new Error("No se encontró el contenedor de PayPal.");
+      if (!container) throw new Error("No se encontró contenedor PayPal.");
       container.innerHTML = "";
-
       await window.paypal.Buttons({
         style: { layout: "vertical", color: "blue", shape: "rect", label: "pay" },
-
         createOrder: async () => {
-          const res = await fetch("/api/checkout/paypal/create", {
-            method:  "POST",
-            headers: { "Content-Type": "application/json" },
-            body:    JSON.stringify({ cart: safeCart, email }),
+          const res  = await fetch("/api/checkout/paypal/create", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cart: safeCart, email }),
           });
-          if (!res.ok) throw new Error(await res.text() || "Error al crear la orden PayPal.");
+          if (!res.ok) throw new Error(await res.text());
           const data = await res.json();
-          if (!data?.orderID) throw new Error("El backend no devolvió orderID.");
+          if (!data?.orderID) throw new Error("Backend no devolvió orderID.");
           return data.orderID;
         },
-
         onApprove: async (data) => {
-          const res = await fetch("/api/checkout/paypal/capture", {
-            method:  "POST",
-            headers: { "Content-Type": "application/json" },
-            body:    JSON.stringify({ orderID: data.orderID }),
+          const res     = await fetch("/api/checkout/paypal/capture", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderID: data.orderID }),
           });
-          if (!res.ok) throw new Error(await res.text() || "Error al capturar el pago.");
           const capture = await res.json();
           if (capture?.status !== "COMPLETED") throw new Error("No se pudo capturar el pago.");
           dispatch(setCart([]));
           window.location.href = "/success";
         },
-
-        onCancel: () => setError("El pago con PayPal fue cancelado."),
-        onError:  (err) => { console.error("PayPal SDK error:", err); setError("Error en el pago con PayPal."); },
+        onCancel: () => setError("Pago con PayPal cancelado."),
+        onError:  () => setError("Error en el pago con PayPal."),
       }).render("#paypal-button-container");
-    } catch (err) {
-      console.error("handlePayPal error:", err);
-      setError(err?.message || "Error al cargar PayPal.");
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { setError(err?.message || "Error al cargar PayPal."); }
+    finally { setLoading(false); }
   };
 
-  // ── Binance ───────────────────────────────────────────────────────────────
-  const handleBinance = async () => {
+  const handleCrypto = async () => {
     if (!validateCheckout()) return;
-    setLoading(true);
-    setError("");
-
+    setLoading(true); setError("");
     try {
-      const res  = await fetch("/api/checkout/binance", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ cart: safeCart, email }),
+      const res  = await fetch("/api/checkout/plisio", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: safeCart, email, currency: cryptoCurrency }),
       });
       const data = await res.json();
-
-      if (!res.ok)            throw new Error(data?.error || "Error al crear orden en Binance Pay.");
-      if (!data?.checkoutUrl) throw new Error("Binance no devolvió checkoutUrl.");
-
+      if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
       window.location.href = data.checkoutUrl;
-    } catch (err) {
-      setError(err?.message || "Error de conexión con Binance Pay.");
-      setLoading(false);
-    }
+    } catch (err) { setError(err?.message || "Error de conexión con Plisio."); setLoading(false); }
   };
 
   const handleSubmit = () => {
     if (method === "mercadopago") handleMercadoPago();
     else if (method === "paypal") handlePayPal();
-    else if (method === "binance") handleBinance();
+    else if (method === "crypto") handleCrypto();
   };
 
   return (
@@ -241,13 +209,11 @@ export default function CheckoutPage() {
           <div>
             <label className="text-white font-semibold text-sm mb-2 block">Email Address</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               placeholder="your.email@example.com"
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
             />
-            <p className="text-white/30 text-xs mt-2">You'll receive your purchase details and license keys at this email.</p>
+            <p className="text-white/30 text-xs mt-2">You'll receive your license keys at this email.</p>
           </div>
 
           {/* Payment method */}
@@ -255,13 +221,9 @@ export default function CheckoutPage() {
             <label className="text-white font-semibold text-sm mb-3 block">Payment Method</label>
             <div className="grid grid-cols-3 gap-3">
               {PAYMENT_METHODS.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
+                <button key={m.id} type="button"
                   onClick={() => {
-                    setMethod(m.id);
-                    setError("");
-                    setMpPreferenceId(null);
+                    setMethod(m.id); setError(""); setMpPreferenceId(null);
                     if (m.id !== "paypal") {
                       const c = document.getElementById("paypal-button-container");
                       if (c) c.innerHTML = "";
@@ -271,11 +233,13 @@ export default function CheckoutPage() {
                     method === m.id
                       ? "border-cyan-500/60 bg-cyan-500/10 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
                       : "border-white/10 bg-white/5 hover:border-white/20"
-                  }`}
-                >
+                  }`}>
                   <div className="w-11 h-11 rounded-full flex items-center justify-center"
                     style={{ background: `${m.color}22`, border: `1px solid ${m.color}44` }}>
-                    <SI icon={m.icon} size={22} color={m.color} />
+                    {m.icon
+                      ? <SI icon={m.icon} size={22} color={m.color} />
+                      : <span className="text-lg font-extrabold" style={{ color: m.color }}>₿</span>
+                    }
                   </div>
                   <div className="text-center">
                     <p className={`text-xs font-bold ${method === m.id ? "text-white" : "text-white/70"}`}>{m.label}</p>
@@ -288,17 +252,46 @@ export default function CheckoutPage() {
             {/* PayPal widget */}
             {method === "paypal" && <div id="paypal-button-container" className="mt-4" />}
 
-            {/* MP Wallet widget (fallback) */}
+            {/* MP Wallet fallback */}
             {method === "mercadopago" && mpPreferenceId && (
               <div className="mt-4">
                 <Wallet initialization={{ preferenceId: mpPreferenceId, redirectMode: "self" }} />
               </div>
             )}
 
+            {/* ── Crypto selector ── */}
+            {method === "crypto" && (
+              <div className="mt-4">
+                <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">
+                  Selecciona tu moneda
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {CRYPTOS.map((c) => (
+                    <button key={c.id} type="button" onClick={() => setCryptoCurrency(c.id)}
+                      className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all duration-200 ${
+                        cryptoCurrency === c.id
+                          ? "border-white/30 bg-white/10"
+                          : "border-white/8 bg-white/5 hover:border-white/15"
+                      }`}>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-extrabold"
+                        style={{ background: `${c.color}25`, border: `1px solid ${c.color}50`, color: c.color }}>
+                        {c.icon}
+                      </div>
+                      <p className={`text-[10px] font-bold ${cryptoCurrency === c.id ? "text-white" : "text-white/60"}`}>
+                        {c.label}
+                      </p>
+                      <p className="text-white/30 text-[9px] leading-tight text-center">{c.network}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <p className="text-white/30 text-xs mt-3">Secure payment. Prices in USD.</p>
             <p className="text-white/30 text-xs mt-1">
               Can't find your payment method? Open a ticket on our{" "}
-              <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 transition-colors">Discord</a>
+              <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer"
+                className="text-cyan-400 hover:text-cyan-300 transition-colors">Discord</a>
             </p>
           </div>
 
@@ -310,15 +303,11 @@ export default function CheckoutPage() {
             <Link href="/terms" className="text-cyan-400 hover:text-cyan-300 transition-colors">Privacy Policy</Link>.
           </p>
 
-          {/* Error */}
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">{error}</div>
           )}
 
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
+          <button onClick={handleSubmit} disabled={loading}
             style={{
               width: "100%", padding: "1.125rem",
               background: loading ? "rgba(34,211,238,0.3)" : "linear-gradient(135deg, #3b82f6, #06b6d4)",
@@ -326,8 +315,7 @@ export default function CheckoutPage() {
               fontSize: "1rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
               cursor: loading ? "not-allowed" : "pointer", transition: "all 0.3s ease",
               boxShadow: loading ? "none" : "0 4px 25px rgba(59,130,246,0.5), 0 0 40px rgba(59,130,246,0.2)",
-            }}
-          >
+            }}>
             {loading ? "Procesando..." : "Continuar al Pago"}
           </button>
         </div>
