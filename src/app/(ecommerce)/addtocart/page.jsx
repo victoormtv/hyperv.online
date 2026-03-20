@@ -37,7 +37,7 @@ const loadPayPalScript = (clientId) =>
 
 // ── Cupones válidos ───────────────────────────────────
 const COUPONS = {
-  "CRYPTO20": { discount: 0.05, label: "5% OFF",    onlyMethod: "crypto" },
+  "CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
   "HYPERV10": { discount: 0.10, label: "10% OFF",    onlyMethod: null     },
   "DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
 };
@@ -111,12 +111,16 @@ export default function CheckoutPage() {
     safeCart.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
   [safeCart]);
 
-  // Descuento solo por cupón (sin automático al seleccionar crypto)
+  // 5% automático si paga con crypto sin cupón
+  const autoCryptoDiscount = method === "crypto" ? 0.05 : 0;
+
+  // Descuento por cupón (solo si aplica al método actual)
   const couponDiscount = appliedCoupon
     ? (appliedCoupon.onlyMethod && appliedCoupon.onlyMethod !== method ? 0 : appliedCoupon.discount)
     : 0;
 
-  const finalDiscount  = couponDiscount;
+  // El mayor gana (cupón CRYPTO20 = 20% > auto 5%)
+  const finalDiscount  = Math.max(autoCryptoDiscount, couponDiscount);
   const discountAmount = subtotal * finalDiscount;
   const total          = subtotal - discountAmount;
 
@@ -261,7 +265,17 @@ export default function CheckoutPage() {
             <span className="text-white/70 text-sm">${subtotal.toFixed(2)}</span>
           </div>
 
-          {/* Descuento por cupón */}
+          {/* 5% automático si paga con crypto sin cupón */}
+          {method === "crypto" && !appliedCoupon && (
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-green-400 text-sm flex items-center gap-1.5">
+                <Tag size={13} /> 5% descuento crypto
+              </span>
+              <span className="text-green-400 text-sm font-bold">-${(subtotal * 0.05).toFixed(2)}</span>
+            </div>
+          )}
+
+          {/* Descuento por cupón (muestra 20% si es CRYPTO20, o el del cupón si es otro) */}
           {appliedCoupon && !couponMethodMismatch && couponDiscount > 0 && (
             <div className="flex items-center justify-between mb-2">
               <span className="text-green-400 text-sm flex items-center gap-1.5">
