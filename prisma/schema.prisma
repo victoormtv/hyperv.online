@@ -66,6 +66,8 @@ model Plan {
 model Order {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   isPaid      Boolean      @default(false)
+  cartData    String? // cart serializado como JSON
+  email       String? // email del comprador
   addressInfo AddressInfo?
   OrderItem   OrderItem[]
   createdAt   DateTime     @default(now())

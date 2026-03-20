@@ -17,7 +17,6 @@ export async function GET(req) {
       return Response.redirect(new URL("/success", req.url));
     }
 
-    // Recuperar orden de DB usando el external_reference (orderId)
     const order = await prisma.order.findUnique({
       where: { id: externalReference },
     });
