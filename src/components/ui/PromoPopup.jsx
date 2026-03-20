@@ -13,6 +13,16 @@ const PromoPopup = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Bloquear scroll del body mientras el popup está abierto
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [visible]);
+
   const close = () => {
     setVisible(false);
     sessionStorage.setItem("promoPopupClosed", "1");
