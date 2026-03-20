@@ -1,28 +1,49 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { X, Tag } from "lucide-react";
 
+const EXCLUDED_PATHS = ["/dashboard"];
+
 const PromoPopup = () => {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [copied,  setCopied]  = useState(false);
 
   useEffect(() => {
+    // No mostrar en rutas excluidas
+    if (EXCLUDED_PATHS.some(p => pathname?.startsWith(p))) return;
     // No mostrar si ya fue cerrado en esta sesión
     if (sessionStorage.getItem("promoPopupClosed")) return;
     const timer = setTimeout(() => setVisible(true), 3000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]);
 
   // Bloquear scroll del body mientras el popup está abierto
   useEffect(() => {
     if (visible) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
       document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.overflowX = "hidden";
     } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+      document.documentElement.style.overflowX = "";
+      if (scrollY) window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
     return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     };
@@ -46,7 +67,7 @@ const PromoPopup = () => {
       {/* Backdrop */}
       <div
         className="fixed inset-0 z-[99998] bg-black/60"
-        style={{ backdropFilter: "blur(6px)" }}
+        style={{ backdropFilter: "blur(6px)", overflowX: "hidden" }}
         onClick={close}
       />
 
