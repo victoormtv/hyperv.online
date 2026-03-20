@@ -40,7 +40,7 @@ const loadPayPalScript = (clientId) =>
 // ── Cupones válidos ───────────────────────────────────
 const COUPONS = {
   "CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
-  "HYPERV10": { discount: 0.9, label: "10% OFF",    onlyMethod: null     },
+  "HYPERV10": { discount: 0.10, label: "10% OFF",    onlyMethod: null     },
   "DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
 };
 
@@ -84,10 +84,13 @@ export default function CheckoutPage() {
   // Pago activo = cualquier método en proceso
   const paymentActive = !!(cryptoPaymentData || mpPreferenceId);
 
+  const isRedirectingRef = React.useRef(false);
+
   // Interceptar navegación cuando hay cualquier pago activo
   useEffect(() => {
     if (!paymentActive) return;
     const handleBeforeUnload = (e) => {
+      if (isRedirectingRef.current) return; // no bloquear redirecciones internas
       e.preventDefault();
       e.returnValue = "";
     };
@@ -189,6 +192,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({ cart: discountedCart, email }),
       });
       const data = await res.json();
+      isRedirectingRef.current = true;
       if (data?.success) {
         dispatch(setCart([]));
         const encoded = encodeURIComponent(JSON.stringify(data));
@@ -198,6 +202,7 @@ export default function CheckoutPage() {
         window.location.href = "/success";
       }
     } catch {
+      isRedirectingRef.current = true;
       dispatch(setCart([]));
       window.location.href = "/success";
     }
@@ -213,8 +218,10 @@ export default function CheckoutPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Error al crear preferencia.");
-      if (data?.init_point)        window.location.href = data.init_point;
-      else if (data?.preferenceId) { setMpPreferenceId(data.preferenceId); setLoading(false); }
+      if (data?.init_point) {
+        isRedirectingRef.current = true;
+        window.location.href = data.init_point;
+      } else if (data?.preferenceId) { setMpPreferenceId(data.preferenceId); setLoading(false); }
       else throw new Error("Mercado Pago no devolvió URL de pago.");
     } catch (err) { setError(err?.message || "Error con Mercado Pago."); setLoading(false); }
   };

@@ -1,3 +1,4 @@
+// app/(ecommerce)/success/page.jsx
 "use client";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -22,8 +23,10 @@ export default function SuccessPage() {
   const [copied,    setCopied]    = useState({});
 
   useEffect(() => {
+    // Limpiar carrito
     dispatch(setCart([]));
 
+    // Leer datos del query param (vienen del checkout)
     const raw = searchParams.get("data");
     if (raw) {
       try {
@@ -34,6 +37,7 @@ export default function SuccessPage() {
       } catch {}
     }
 
+    // Si no hay data en URL, mostrar pantalla genérica
     setOrderData({ generic: true });
     setLoading(false);
   }, []);
@@ -145,39 +149,54 @@ export default function SuccessPage() {
         )}
 
         {/* Actions */}
-        <div className="flex flex-col gap-3">
-          <Link
-            href="/tutorial"
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm text-white transition-all"
-            style={{
-              background: "linear-gradient(135deg, #3b82f6, #06b6d4)",
-              boxShadow: "0 4px 20px rgba(59,130,246,0.35)"
-            }}
-          >
-            <BookOpen size={16} /> Ver Tutorial de Instalación
-          </Link>
+        {(() => {
+          // Mapear nombre del producto a slug del tutorial
+          const TUTORIAL_MAP = {
+            "Panel Full":        "panel-full",
+            "Panel Secure":      "panel-secure",
+            "Panel Only Aimbot": "panel-only-aimbot",
+            "Menu Chams ESP":    "menu-chams-esp",
+          };
+          const firstProduct  = orderData?.products?.[0]?.productName;
+          const tutorialSlug  = TUTORIAL_MAP[firstProduct];
+          const tutorialUrl   = tutorialSlug ? `/tutorial/${tutorialSlug}` : "/tutorial";
 
-          <a
-            href="https://discord.com/invite/hypervgg"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all"
-            style={{
-              background: "rgba(88,101,242,0.15)",
-              border: "1px solid rgba(88,101,242,0.35)",
-              color: "#8b96f8"
-            }}
-          >
-            <MessageCircle size={16} /> Unirse al Discord
-          </a>
+          return (
+            <div className="flex flex-col gap-3">
+              <Link
+                href={tutorialUrl}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm text-white transition-all"
+                style={{
+                  background: "linear-gradient(135deg, #3b82f6, #06b6d4)",
+                  boxShadow: "0 4px 20px rgba(59,130,246,0.35)"
+                }}
+              >
+                <BookOpen size={16} /> Ver Tutorial de Instalación
+              </Link>
 
-          <Link
-            href="/products"
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm text-white/50 hover:text-white bg-white/5 border border-white/10 transition-all"
-          >
-            Seguir comprando →
-          </Link>
-        </div>
+              <a
+                href="https://discord.com/invite/hypervgg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all"
+                style={{
+                  background: "rgba(88,101,242,0.15)",
+                  border: "1px solid rgba(88,101,242,0.35)",
+                  color: "#8b96f8"
+                }}
+              >
+                <MessageCircle size={16} /> Unirse al Discord
+              </a>
+
+              <Link
+                href="/products"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm text-white/50 hover:text-white bg-white/5 border border-white/10 transition-all"
+              >
+                Seguir comprando →
+              </Link>
+            </div>
+          );
+        })()}
 
         <p className="text-center text-white/20 text-xs mt-6">
           © 2026 HyperV Community
@@ -187,6 +206,7 @@ export default function SuccessPage() {
   );
 }
 
+// Pantalla genérica si no hay datos
 function GenericSuccess() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
