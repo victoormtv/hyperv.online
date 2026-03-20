@@ -4,11 +4,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCart } from "@/redux/slice/cartSlice";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Tag, X, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { siMercadopago, siPaypal } from "simple-icons";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import PendingPaymentModal from "@/components/ui/PendingPaymentModal";
 
 const SI = ({ icon, size = 24, color }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill={color} xmlns="http://www.w3.org/2000/svg">
@@ -67,6 +69,7 @@ export default function CheckoutPage() {
   const { t }     = useLanguage();
 
   const searchParams = useSearchParams();
+  const router       = useRouter();
 
   const [mounted,        setMounted]        = useState(false);
   const [email,          setEmail]          = useState("");
@@ -74,8 +77,20 @@ export default function CheckoutPage() {
   const [cryptoCurrency, setCryptoCurrency] = useState("USDT");
   const [loading,        setLoading]        = useState(false);
   const [error,          setError]          = useState("");
-  const [mpPreferenceId,   setMpPreferenceId]   = useState(null);
+  const [mpPreferenceId,    setMpPreferenceId]    = useState(null);
   const [cryptoPaymentData, setCryptoPaymentData] = useState(null);
+  const [showPendingModal,  setShowPendingModal]  = useState(false);
+
+  // Interceptar navegación cuando hay pago crypto activo
+  useEffect(() => {
+    if (!cryptoPaymentData) return;
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [cryptoPaymentData]);
 
   // ── Cupón ─────────────────────────────────────────
   const [couponInput,   setCouponInput]   = useState("");
@@ -237,9 +252,28 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen text-white flex flex-col items-center justify-start pt-44 md:pt-48 px-4 pb-20">
       <div className="w-full max-w-2xl pt-6">
-        <Link href="/products" className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm mb-8 transition-colors">
+        {/* Pending payment modal */}
+        {showPendingModal && (
+          <PendingPaymentModal
+            paymentData={{
+              orderId:  cryptoPaymentData?.checkoutUrl?.split("/").pop(),
+              total,
+              products: safeCart.map(i => i.product.name).join(", "),
+            }}
+            onContinue={() => setShowPendingModal(false)}
+            onCancel={() => { setCryptoPaymentData(null); setShowPendingModal(false); router.push("/products"); }}
+          />
+        )}
+
+        <button
+          onClick={() => {
+            if (cryptoPaymentData) { setShowPendingModal(true); return; }
+            router.push("/products");
+          }}
+          className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm mb-8 transition-colors"
+        >
           <ArrowLeft size={16} /> Back to Store
-        </Link>
+        </button>
 
         <h1 className="text-4xl font-extrabold text-white mb-8">Checkout</h1>
 
