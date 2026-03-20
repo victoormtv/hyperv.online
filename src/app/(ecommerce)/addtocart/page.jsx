@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCart } from "@/redux/slice/cartSlice";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Tag, X, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { siMercadopago, siPaypal } from "simple-icons";
@@ -36,7 +37,7 @@ const loadPayPalScript = (clientId) =>
 
 // ── Cupones válidos ───────────────────────────────────
 const COUPONS = {
-  "CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
+  "CRYPTO20": { discount: 0.05, label: "5% OFF",    onlyMethod: "crypto" },
   "HYPERV10": { discount: 0.10, label: "10% OFF",    onlyMethod: null     },
   "DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
 };
@@ -65,6 +66,8 @@ export default function CheckoutPage() {
   const dispatch  = useDispatch();
   const { t }     = useLanguage();
 
+  const searchParams = useSearchParams();
+
   const [mounted,        setMounted]        = useState(false);
   const [email,          setEmail]          = useState("");
   const [method,         setMethod]         = useState("mercadopago");
@@ -75,13 +78,20 @@ export default function CheckoutPage() {
 
   // ── Cupón ─────────────────────────────────────────
   const [couponInput,   setCouponInput]   = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState(null); // { code, discount, label, onlyMethod }
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError,   setCouponError]   = useState("");
   const [couponSuccess, setCouponSuccess] = useState("");
 
   useEffect(() => {
     setMounted(true);
     if (process.env.NEXT_PUBLIC_MP_PUBLIC_KEY) initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY);
+    // Pre-aplicar cupón si viene del CartDrawer via ?coupon=XXXXX
+    const urlCoupon = searchParams?.get("coupon")?.toUpperCase();
+    if (urlCoupon && COUPONS[urlCoupon]) {
+      const found = COUPONS[urlCoupon];
+      setAppliedCoupon({ code: urlCoupon, ...found });
+      setCouponSuccess(`Cupón ${found.label} aplicado.`);
+    }
   }, []);
 
   const safeCart = useMemo(() => {
@@ -101,18 +111,14 @@ export default function CheckoutPage() {
     safeCart.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
   [safeCart]);
 
-  // Descuento automático 20% si método es crypto
-  const autoCryptoDiscount = method === "crypto" ? 0.20 : 0;
-
-  // Descuento por cupón (solo si aplica al método actual)
+  // Descuento solo por cupón (sin automático al seleccionar crypto)
   const couponDiscount = appliedCoupon
     ? (appliedCoupon.onlyMethod && appliedCoupon.onlyMethod !== method ? 0 : appliedCoupon.discount)
     : 0;
 
-  // El mayor descuento gana (no se acumulan)
-  const finalDiscount = Math.max(autoCryptoDiscount, couponDiscount);
+  const finalDiscount  = couponDiscount;
   const discountAmount = subtotal * finalDiscount;
-  const total = subtotal - discountAmount;
+  const total          = subtotal - discountAmount;
 
   // Aviso si cupón no aplica al método actual
   const couponMethodMismatch = appliedCoupon?.onlyMethod && appliedCoupon.onlyMethod !== method;
@@ -255,18 +261,8 @@ export default function CheckoutPage() {
             <span className="text-white/70 text-sm">${subtotal.toFixed(2)}</span>
           </div>
 
-          {/* Descuento crypto automático */}
-          {method === "crypto" && (
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-green-400 text-sm flex items-center gap-1.5">
-                <Tag size={13} /> 20% descuento crypto
-              </span>
-              <span className="text-green-400 text-sm font-bold">-${(subtotal * 0.20).toFixed(2)}</span>
-            </div>
-          )}
-
-          {/* Descuento por cupón (si es mayor que el de crypto) */}
-          {appliedCoupon && !couponMethodMismatch && couponDiscount > autoCryptoDiscount && (
+          {/* Descuento por cupón */}
+          {appliedCoupon && !couponMethodMismatch && couponDiscount > 0 && (
             <div className="flex items-center justify-between mb-2">
               <span className="text-green-400 text-sm flex items-center gap-1.5">
                 <Tag size={13} /> Cupón {appliedCoupon.code} ({appliedCoupon.label})
@@ -314,11 +310,6 @@ export default function CheckoutPage() {
           <div>
             <label className="text-white font-semibold text-sm mb-2 block">
               Cupón de descuento
-              {method === "crypto" && (
-                <span className="ml-2 text-green-400 text-xs font-normal">
-                  🎉 20% OFF automático por pagar con crypto
-                </span>
-              )}
             </label>
 
             {appliedCoupon ? (
@@ -373,21 +364,13 @@ export default function CheckoutPage() {
                       ? "border-cyan-500/60 bg-cyan-500/10 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
                       : "border-white/10 bg-white/5 hover:border-white/20"
                   }`}>
-                  <div className="relative">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center"
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center"
                       style={{ background: `${m.color}22`, border: `1px solid ${m.color}44` }}>
                       {m.icon
                         ? <SI icon={m.icon} size={22} color={m.color} />
                         : <span className="text-lg font-extrabold" style={{ color: m.color }}>₿</span>
                       }
                     </div>
-                    {/* Badge 20% OFF en crypto */}
-                    {m.id === "crypto" && (
-                      <span className="absolute -top-2 -right-3 bg-green-500 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full leading-none">
-                        -20%
-                      </span>
-                    )}
-                  </div>
                   <div className="text-center">
                     <p className={`text-xs font-bold ${method === m.id ? "text-white" : "text-white/70"}`}>{m.label}</p>
                     <p className="text-white/30 text-[10px]">{m.sub}</p>

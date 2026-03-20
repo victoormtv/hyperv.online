@@ -3,18 +3,31 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setShowCartDrawer } from "@/redux/slice/cartSlice";
-import { ShoppingCart, X } from "lucide-react";
+import { ShoppingCart, X, Tag, Check } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+
+// Mismos cupones que en checkout.tsx
+const COUPONS = {
+  "CRYPTO20":  { discount: 0.05, label: "5% OFF",  onlyMethod: "crypto" },
+  "HYPERV10":  { discount: 0.10, label: "10% OFF", onlyMethod: null     },
+  "DISCORD15": { discount: 0.15, label: "15% OFF", onlyMethod: null     },
+};
 
 const CartDrawer = () => {
   const dispatch = useDispatch();
   const { cart, showCartDrawer } = useSelector((state) => state.auth);
   const { t } = useLanguage();
   const c = t.cart;
-  const [mounted, setMounted] = useState(false);
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [drawerClosing, setDrawerClosing] = useState(false);
+
+  const [mounted,        setMounted]        = useState(false);
+  const [drawerVisible,  setDrawerVisible]  = useState(false);
+  const [drawerClosing,  setDrawerClosing]  = useState(false);
+
+  // ── Cupón ─────────────────────────────────────────
+  const [couponInput,   setCouponInput]   = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError,   setCouponError]   = useState("");
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -35,6 +48,31 @@ const CartDrawer = () => {
   };
 
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+
+  // Descuento por cupón (solo si no es exclusivo de crypto — en el drawer no sabemos el método)
+  const couponDiscount = appliedCoupon && !appliedCoupon.onlyMethod
+    ? appliedCoupon.discount
+    : 0;
+  const discountAmount = subtotal * couponDiscount;
+  const total = subtotal - discountAmount;
+
+  const applyCoupon = () => {
+    setCouponError("");
+    const code = couponInput.trim().toUpperCase();
+    const found = COUPONS[code];
+    if (!found) { setCouponError("Cupón inválido."); return; }
+    if (found.onlyMethod === "crypto") {
+      setCouponError("Este cupón solo aplica al pagar con Crypto en el checkout.");
+      return;
+    }
+    setAppliedCoupon({ code, ...found });
+    setCouponInput("");
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError("");
+  };
 
   if (!mounted || !drawerVisible) return null;
 
@@ -93,7 +131,9 @@ const CartDrawer = () => {
                     <div className="flex items-center bg-white/5 border border-white/15 rounded-xl overflow-hidden">
                       <button
                         onClick={() => {
-                          const updated = cart.map((c, idx) => idx === i && c.quantity > 1 ? { ...c, quantity: c.quantity - 1 } : c).filter((c, idx) => idx !== i || c.quantity > 0);
+                          const updated = cart
+                            .map((c, idx) => idx === i && c.quantity > 1 ? { ...c, quantity: c.quantity - 1 } : c)
+                            .filter((c, idx) => idx !== i || c.quantity > 0);
                           dispatch(setCart(updated));
                         }}
                         className="w-8 h-8 text-white/60 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-center font-bold"
@@ -116,23 +156,78 @@ const CartDrawer = () => {
         </div>
 
         {/* footer */}
-        <div className="px-7 py-7 border-t border-white/5">
-          <div className="flex gap-2 mb-4">
-            <div className="flex-1 flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/30 shrink-0">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
-              </svg>
-              <input type="text" placeholder={c.couponPlaceholder} className="bg-transparent text-white/60 text-sm placeholder-white/25 outline-none w-full" />
+        <div className="px-6 py-6 border-t border-white/5 flex flex-col gap-4">
+
+          {/* ── Cupón ── */}
+          {appliedCoupon ? (
+            <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/30 rounded-xl px-4 py-3">
+              <Check size={15} className="text-green-400 shrink-0" />
+              <span className="text-green-400 text-sm font-bold flex-1">
+                {appliedCoupon.code} — {appliedCoupon.label}
+              </span>
+              <button onClick={removeCoupon} className="text-white/30 hover:text-white transition-colors">
+                <X size={15} />
+              </button>
             </div>
-            <button className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 text-sm font-semibold hover:bg-white/10 hover:text-white transition-all">{c.apply}</button>
+          ) : (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex gap-2">
+                <div className="flex-1 flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5">
+                  <Tag size={13} className="text-white/30 shrink-0" />
+                  <input
+                    type="text"
+                    value={couponInput}
+                    onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); setCouponError(""); }}
+                    onKeyDown={(e) => e.key === "Enter" && applyCoupon()}
+                    placeholder={c.couponPlaceholder}
+                    className="bg-transparent text-white/80 text-sm placeholder-white/25 outline-none w-full uppercase"
+                  />
+                </div>
+                <button
+                  onClick={applyCoupon}
+                  className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 text-sm font-semibold hover:bg-white/10 hover:text-white transition-all"
+                >
+                  {c.apply}
+                </button>
+              </div>
+              {couponError && (
+                <p className="text-red-400 text-xs px-1">{couponError}</p>
+              )}
+            </div>
+          )}
+
+          {/* Subtotal / descuento / total */}
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-white/50 text-sm">{c.subtotal}</span>
+              <span className="text-white/70 text-sm">${subtotal.toFixed(2)}</span>
+            </div>
+
+            {couponDiscount > 0 && (
+              <div className="flex items-center justify-between">
+                <span className="text-green-400 text-sm flex items-center gap-1.5">
+                  <Tag size={12} /> {appliedCoupon.code} ({appliedCoupon.label})
+                </span>
+                <span className="text-green-400 text-sm font-bold">-${discountAmount.toFixed(2)}</span>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between pt-1 border-t border-white/5">
+              <span className="text-white font-extrabold text-sm uppercase tracking-widest">{c.subtotal === "Subtotal" ? "Total" : "Total"}</span>
+              <div className="text-right">
+                {couponDiscount > 0 && (
+                  <p className="text-white/30 text-xs line-through">${subtotal.toFixed(2)}</p>
+                )}
+                <span className="text-white font-extrabold text-xl">${total.toFixed(2)}</span>
+              </div>
+            </div>
           </div>
 
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-white/50 text-sm font-bold uppercase tracking-widest">{c.subtotal}</span>
-            <span className="text-white font-extrabold text-xl">${subtotal.toFixed(2)}</span>
-          </div>
-
-          <Link href="/addtocart" onClick={closeDrawer}>
+          {/* Checkout button */}
+          <Link
+            href={`/addtocart${appliedCoupon ? `?coupon=${appliedCoupon.code}` : ""}`}
+            onClick={closeDrawer}
+          >
             <button
               style={{
                 width: "100%", padding: "1.125rem",
