@@ -1,32 +1,42 @@
 // app/api/orders/mp-success/route.js
+import prisma from "@/utils/connection";
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
-    const cartRaw = searchParams.get("cart");
-    const email = searchParams.get("email");
-    const status = searchParams.get("status"); // MercadoPago pasa esto
+    const status = searchParams.get("status");
+    const externalReference = searchParams.get("external_reference");
 
-    // Solo procesar si el pago fue aprobado
+    console.log("MP success params:", { status, externalReference });
+
     if (status && status !== "approved") {
       return Response.redirect(new URL("/addtocart", req.url));
     }
 
-    if (!cartRaw || !email) {
+    if (!externalReference) {
       return Response.redirect(new URL("/success", req.url));
     }
 
-    const cart = JSON.parse(decodeURIComponent(cartRaw));
-    const decodedEmail = decodeURIComponent(email);
+    // Recuperar orden de DB usando el external_reference (orderId)
+    const order = await prisma.order.findUnique({
+      where: { id: externalReference },
+    });
 
+    if (!order?.cartData || !order?.email) {
+      console.error("Order not found:", externalReference);
+      return Response.redirect(new URL("/success", req.url));
+    }
+
+    const cart = JSON.parse(order.cartData);
+    const email = order.email;
     const baseUrl = (
       process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
     ).trim();
 
-    // Llamar al endpoint de proceso de orden
     const res = await fetch(`${baseUrl}/api/orders/process`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart, email: decodedEmail }),
+      body: JSON.stringify({ cart, email }),
     });
 
     const data = await res.json();

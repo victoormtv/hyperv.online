@@ -1,5 +1,6 @@
 // app/api/checkout/mercadopago/route.js
 import { MercadoPagoConfig, Preference } from "mercadopago";
+import prisma from "@/utils/connection";
 
 const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN?.trim(),
@@ -17,18 +18,31 @@ export async function POST(req) {
       currency_id: "USD",
     }));
 
-    const preference = new Preference(client);
     const baseUrl = (
       process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
     ).trim();
 
-    const cartEncoded = encodeURIComponent(JSON.stringify(cart));
-    const emailEncoded = encodeURIComponent(email || "");
+    const pendingOrder = await prisma.order.create({
+      data: {
+        isPaid: false,
+        cartData: JSON.stringify(cart),
+        email: email,
+        OrderItem: {
+          create: cart.map((item) => ({
+            quantity: item.quantity || 1,
+            productId: item.product.id,
+          })),
+        },
+      },
+    });
+
+    const preference = new Preference(client);
 
     const body = {
       items,
+      external_reference: pendingOrder.id,
       back_urls: {
-        success: `${baseUrl}/api/orders/mp-success?cart=${cartEncoded}&email=${emailEncoded}`,
+        success: `${baseUrl}/api/orders/mp-success`,
         failure: `${baseUrl}/addtocart`,
         pending: `${baseUrl}/addtocart`,
       },
@@ -39,11 +53,9 @@ export async function POST(req) {
 
     return Response.json({ preferenceId: result.id });
   } catch (error) {
+    console.error("MP error:", error);
     return Response.json(
-      {
-        error: error?.message ?? "Error al crear preferencia",
-        cause: error?.cause ?? null,
-      },
+      { error: error?.message ?? "Error al crear preferencia" },
       { status: 500 },
     );
   }
