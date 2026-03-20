@@ -17,16 +17,16 @@ const Navbar = () => {
           <Tag className="h-5 w-5 text-orange-400 shrink-0" />
 
           <p className="text-center text-sm md:text-base font-medium">
-            <span className="font-extrabold text-orange-300">¡20% de descuento</span>
-            {" "}en todos nuestros productos.{" "}
-            <span className="font-bold text-white">¡Oferta por tiempo limitado!</span>
+            <span className="font-extrabold text-orange-300">10% de descuento</span>
+            {" "}en todos nuestros productos usando el cupón{" "}
+            <span className="font-extrabold text-white bg-white/10 px-2 py-0.5 rounded-md tracking-wider">HYPERV10</span>
           </p>
 
           <a
-            href="/products"
+            href="/addtocart"
             className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm md:text-base font-bold bg-blue-600 hover:bg-blue-500 text-white transition-colors shrink-0"
           >
-            Ver Ofertas
+            Usar Cupón
             <ExternalLink className="h-4 w-4" />
           </a>
 

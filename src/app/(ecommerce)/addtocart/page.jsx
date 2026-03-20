@@ -37,9 +37,9 @@ const loadPayPalScript = (clientId) =>
 
 // ── Cupones válidos ───────────────────────────────────
 const COUPONS = {
-  "CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
+  //"CRYPTO20": { discount: 0.20, label: "20% OFF",    onlyMethod: "crypto" },
   "HYPERV10": { discount: 0.10, label: "10% OFF",    onlyMethod: null     },
-  "DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
+  //"DISCORD15": { discount: 0.15, label: "15% OFF",   onlyMethod: null     },
 };
 
 // ── Cryptos disponibles ───────────────────────────────
