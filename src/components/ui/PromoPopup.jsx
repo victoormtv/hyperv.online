@@ -47,10 +47,10 @@ const PromoPopup = () => {
 
       {/* Popup */}
       <div
-        className="fixed z-[99999] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm mx-4"
-        style={{ animation: "popupIn 0.35s cubic-bezier(0.16, 1, 0.3, 1)" }}
+        className="fixed z-[99999] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-4"
+        style={{ maxWidth: "380px", animation: "popupIn 0.35s cubic-bezier(0.16, 1, 0.3, 1)" }}
       >
-        <div className="relative bg-[#0d1117] border border-white/10 rounded-3xl p-8 text-center shadow-2xl overflow-hidden">
+        <div className="relative bg-[#0d1117] border border-white/10 rounded-3xl p-6 text-center shadow-2xl overflow-hidden">
 
           {/* Glow background */}
           <div className="absolute inset-0 pointer-events-none" style={{
@@ -66,27 +66,27 @@ const PromoPopup = () => {
           </button>
 
           {/* Icon */}
-          <div className="mx-auto mb-5 w-16 h-16 rounded-2xl flex items-center justify-center"
+          <div className="mx-auto mb-4 w-12 h-12 rounded-2xl flex items-center justify-center"
             style={{
               background: "linear-gradient(135deg, rgba(6,182,212,0.2), rgba(59,130,246,0.2))",
               border: "1px solid rgba(6,182,212,0.3)",
               boxShadow: "0 0 30px rgba(6,182,212,0.2)"
             }}>
-            <Tag size={28} className="text-cyan-400" />
+            <Tag size={22} className="text-cyan-400" />
           </div>
 
           {/* Title */}
           <h2 className="text-white font-extrabold text-2xl mb-2">
             10% OFF
           </h2>
-          <p className="text-white/50 text-sm mb-6 leading-relaxed">
+          <p className="text-white/50 text-sm mb-4 leading-relaxed">
             Obtén un 10% de descuento en todos nuestros productos
           </p>
 
           {/* Coupon box */}
           <button
             onClick={copy}
-            className="w-full rounded-2xl border-2 border-dashed px-6 py-4 transition-all duration-200 group"
+            className="w-full rounded-2xl border-2 border-dashed px-4 py-3 transition-all duration-200 group"
             style={{
               borderColor: copied ? "rgba(74,222,128,0.6)" : "rgba(6,182,212,0.4)",
               background:  copied ? "rgba(74,222,128,0.08)" : "rgba(6,182,212,0.06)",
@@ -107,7 +107,7 @@ const PromoPopup = () => {
           <a
             href="/products"
             onClick={close}
-            className="mt-4 w-full flex items-center justify-center py-3.5 rounded-xl font-bold text-sm text-white transition-all"
+            className="mt-3 w-full flex items-center justify-center py-3 rounded-xl font-bold text-sm text-white transition-all"
             style={{
               background: "linear-gradient(135deg, #3b82f6, #06b6d4)",
               boxShadow: "0 4px 20px rgba(59,130,246,0.4)"
