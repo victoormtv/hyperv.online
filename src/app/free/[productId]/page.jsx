@@ -60,7 +60,7 @@ const StepBadge = ({ n, color = ACCENT }) => (
 );
 
 const DownloadBtn = ({ href, label, color = ACCENT }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer"
+  <a href={href} target="_blank" rel="noopener noreferrer" download
     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-white text-sm font-bold transition-all duration-200 hover:brightness-110"
     style={{ background: color }}>
     <Download size={15} /> {label} <ExternalLink size={13} />
@@ -332,7 +332,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
               <StepBadge n={1} color="#6366f1" />
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
-                <DownloadBtn href="https://mega.nz/file/t4pGwaRQ#uDFuTSEL0mw5zSpnYMtj1_0FGbQB8SpcLsOdRrk4vpg" label={tx.deps.defender.downloadDcontrol} />
+                <DownloadBtn href="https://drive.google.com/uc?export=download&id=1iWyctiUPloQYxmMpbvyOznn5meXPWvuo" label={tx.deps.defender.downloadDcontrol} />
                 <p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p>
               </div>
             </div>
@@ -394,7 +394,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.mediafire.com/file/xehwqjz68lnrtvp/FreeFire-NormalV4.xapk/file" label="Free Fire Normal" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
-          <DownloadBtn href="https://www.mediafire.com/file/17ctvd6v86q1iap/FreeFire-TelaV4.xapk/file" label="Free Fire Tela" color="#06b6d4" />
+          <DownloadBtn href="https://drive.google.com/uc?export=download&id=17jiUcYmZdqEXQeZMG5BxIe6yuGYHxfc4" label="Free Fire Tela" color="#06b6d4" />
         </div>
       </Card>
       <Card className="mb-4">
