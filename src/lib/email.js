@@ -113,7 +113,7 @@ export async function sendLicenseEmail({
           <!-- Tutorial button -->
           <tr>
             <td style="padding:0 40px 28px;text-align:center;">
-              <a href="https://hyperv.online/tutorial" style="display:inline-block;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;font-weight:800;font-size:14px;text-decoration:none;padding:14px 32px;border-radius:12px;letter-spacing:0.5px;">
+              <a href="https://hyperv.online/tutorial/panel-full" style="display:inline-block;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;font-weight:800;font-size:14px;text-decoration:none;padding:14px 32px;border-radius:12px;letter-spacing:0.5px;">
                 Ver Tutorial de Instalación →
               </a>
             </td>

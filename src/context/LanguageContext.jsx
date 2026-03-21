@@ -236,8 +236,7 @@ const translations = {
         steps: [
           { t: "Run as Administrator", d: 'Right-click the file and select "Run as administrator".' },
           { t: "Wait for Initialization", d: "The loader will configure your system automatically. Wait for the process to complete." },
-          { t: "Login", d: "The browser will open automatically. Enter your license key to activate the product." },
-          { t: "Test Move", d: 'Click the "Test Move" button to verify it\'s working.' },
+          { t: "Login", d: "The browser will open automatically. Enter your license key to activate the product." }
         ],
         works: "If it works:",
         worksDesc: "The mouse will move a little bit automatically. This means everything is working!",
@@ -492,11 +491,10 @@ const translations = {
         steps: [
           { t: "Ejecutar como Administrador", d: 'Haz clic derecho en el archivo y selecciona "Ejecutar como administrador".' },
           { t: "Esperar inicialización", d: "El loader configurará tu sistema automáticamente. Espera a que el proceso termine." },
-          { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." },
-          { t: "Test Move", d: 'Haz clic en el botón "Test Move" para verificar que funciona correctamente.' },
+          { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." }
         ],
-        works: "Si funciona:",
-        worksDesc: "El ratón se moverá un poco automáticamente. ¡Eso significa que todo está funcionando!",
+        works: "Para ocultar el panel:",
+        worksDesc: "Presionar la tecla INS para mostrar y ocultar el panel",
         fails: "Si NO funciona:",
         failsDesc: 'Revisa la sección "Problemas comunes" o contacta soporte a través de Discord.',
       },

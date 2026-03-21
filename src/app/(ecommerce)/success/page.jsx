@@ -23,8 +23,10 @@ export default function SuccessPage() {
   const [copied,    setCopied]    = useState({});
 
   useEffect(() => {
+    // Limpiar carrito
     dispatch(setCart([]));
 
+    // Leer datos del query param (vienen del checkout)
     const raw = searchParams.get("data");
     if (raw) {
       try {
@@ -35,6 +37,7 @@ export default function SuccessPage() {
       } catch {}
     }
 
+    // Si no hay data en URL, mostrar pantalla genérica
     setOrderData({ generic: true });
     setLoading(false);
   }, []);
@@ -54,7 +57,7 @@ export default function SuccessPage() {
   if (orderData?.generic) return <GenericSuccess />;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-20 pt-30">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-20 pt-32">
       <div className="w-full max-w-lg">
 
         {/* Success header */}
@@ -147,15 +150,17 @@ export default function SuccessPage() {
 
         {/* Actions */}
         {(() => {
+          // Mapear nombre del producto a slug del tutorial
           const TUTORIAL_MAP = {
-            "Panel Full":        "panel-full",
-            "Panel Secure":      "panel-secure",
-            "Panel Only Aimbot": "panel-only-aimbot",
-            "Menu Chams ESP":    "menu-chams-esp",
+            "Panel Full":        "/tutorial/panel-full",
+            "Panel Secure":      "/tutorial/panel-secure",
+            "Panel Only Aimbot": "/tutorial/panel-only-aimbot",
+            "Menu Chams ESP":    "/tutorial/menu-chams-esp",
+            "Panel Free":        "/free/panel-free",
+            "Bypass Free":       "/free/bypass-free",
           };
-          const firstProduct  = orderData?.products?.[0]?.productName;
-          const tutorialSlug  = TUTORIAL_MAP[firstProduct];
-          const tutorialUrl   = tutorialSlug ? `/tutorial/${tutorialSlug}` : "/tutorial";
+          const firstProduct = orderData?.products?.[0]?.productName;
+          const tutorialUrl  = TUTORIAL_MAP[firstProduct] || "/tutorial";
 
           return (
             <div className="flex flex-col gap-3">
