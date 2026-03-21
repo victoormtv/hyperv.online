@@ -1,4 +1,3 @@
-// lib/email.js
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -47,10 +46,10 @@ export async function sendLicenseEmail({
 
           <!-- Success banner -->
           <tr>
-            <td style="padding:32px 40px 0;text-align:center;">
+            <td style="padding:20px 40px 0;text-align:center;">
               <div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:16px;padding:24px;display:inline-block;width:100%;box-sizing:border-box;">
-                <div style="width:52px;height:52px;background:rgba(74,222,128,0.15);border:1.5px solid rgba(74,222,128,0.5);border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;">
-                  <span style="color:#4ade80;font-size:22px;font-weight:900;">✓</span>
+                <div style="width:40px;height:40px;background:rgba(74,222,128,0.15);border:1.5px solid rgba(74,222,128,0.5);border-radius:50%;margin:0 auto 12px;text-align:center;line-height:40px;">
+                  <span style="color:#4ade80;font-size:18px;font-weight:900;">✓</span>
                 </div>
                 <h2 style="margin:0 0 6px;color:#fff;font-size:20px;font-weight:800;">¡Pago Confirmado!</h2>
                 <p style="margin:0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Tu pedido fue procesado exitosamente.</p>
