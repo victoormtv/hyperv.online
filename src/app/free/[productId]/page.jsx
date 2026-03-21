@@ -8,42 +8,46 @@ import {
   AlertTriangle, ChevronRight, ChevronDown, Copy,
   Check, ExternalLink, MessageCircle, Package,
   Cpu, Gamepad2, Wrench, Home, BookOpen,
-  Crosshair, Smartphone, Zap, Code2, Swords,
-  Eye, Lock, Wifi, ScanLine, Target, Layers, ChevronsUpDown, Menu, X
+  Lock, ScanLine, ChevronsUpDown, Menu, X
 } from "lucide-react";
 
 const PRODUCT_ICONS = {
-  "panel-full":             Layers,
-  "panel-secure":           Lock,
-  "panel-only-aimbot":      Target,
-  "menu-chams-esp":         Eye,
-  "bypass-apk":             Code2,
-  "bypass-uid":             ScanLine,
-  "panel-android":          Smartphone,
-  "aimbot-body-android":    Crosshair,
-  "panel-ios":              Smartphone,
-  "aimbot-body-ios":        Crosshair,
-  "aimlock":                Zap,
-  "regedit":                Settings,
-  "aimbot-color":           Swords,
-  "panel-csgo":             Shield,
-  "panel-warzone":          Wifi,
-  "menu-chams-bloodstrike": Eye,
-  "discord-tools":          MessageCircle,
+  "panel-free":  Lock,
+  "bypass-free": ScanLine,
 };
 
-const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-esp"];
-const ACCENT  = "#369876";
+const FREE_PRODUCTS = ["panel-free", "bypass-free"];
+
+// Extra issues for Panel Free (same as tutorial, no bypass error)
+const PANEL_FREE_EXTRA_ISSUES = [
+  { t: "FALLO AL RECUPERAR LA VERSIÓN", d: "Este error se produce cuando no se ha hecho una certificación.", img: "/error-recuperar-version.png", warning: "Para solucionar esto, sigue el video tutorial a continuación.", video: "https://www.youtube.com/embed/9bCIRGVBhFg" },
+  { t: "HWID RESET", d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.", warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.", img: "/hwid-reset.png" },
+  { t: "NO ACTIVE SUBSCRIPTIONS FOUND", d: "Este problema es común y suele ocurrir cuando ya ha finalizado la membresía del cliente.", warning: "Si enfrentas este problema, es posible que tu suscripción haya expirado. Si no es así, puedes contactar a un vendedor abriendo un ticket en Discord o enviando un mensaje privado para resolver la situación.", img: "/suscripcion-finalizada-bypass.png" },
+  { t: "COULDN'T RESOLVE HOST", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-host-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
+  { t: "ERROR SSL", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-ssl-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
+  { t: "¿Sigues teniendo problemas?", d: "Abre un ticket en Discord con capturas de pantalla de los errores.", link: { label: "Ir al Discord", href: "https://discord.com/invite/hypervgg" } },
+];
+
+// Extra issues for Bypass Free (includes download error)
+const BYPASS_FREE_EXTRA_ISSUES = [
+  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
+  ...PANEL_FREE_EXTRA_ISSUES,
+];
+const ACCENT = "#369876";
 
 const PRODUCT_CONFIG = {
-  "panel-full":        { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
-  "panel-secure":      { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
-  "panel-only-aimbot": { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
-  "menu-chams-esp":    { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "panel-free": {
+    loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com",
+    videoUrl:  "https://www.youtube.com/embed/TFYhmK790_E",
+  },
+  "bypass-free": {
+    loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/15BB2945DBE64C7F9E041C063881FC844",
+    videoUrl:  "https://www.youtube.com/embed/v8QQfyi8Tvs",
+  },
 };
 
 const getProductConfig = (productId) =>
-  PRODUCT_CONFIG[productId] || PRODUCT_CONFIG["panel-full"];
+  PRODUCT_CONFIG[productId] || PRODUCT_CONFIG["panel-free"];
 
 const SECTIONS = [
   { id: "general-dependencies", group: "SETUP" },
@@ -51,61 +55,6 @@ const SECTIONS = [
   { id: "download",             group: "SETUP" },
   { id: "installation",         group: "SETUP" },
   { id: "common-issues",        group: "TROUBLE" },
-];
-
-// ── Bypass products that get bypass-specific issues ──
-const BYPASS_PRODUCTS = ["bypass-apk", "bypass-uid"];
-
-// ── Extra issues for all GROUP1 products ─────────────
-const EXTRA_ISSUES = [
-  {
-    t: "FALLO AL RECUPERAR LA VERSIÓN",
-    d: "Este error se produce cuando no se ha hecho una certificación.",
-    img: "/error-recuperar-version.png",
-    warning: "Para solucionar esto, sigue el video tutorial a continuación.",
-    video: "https://www.youtube.com/embed/9bCIRGVBhFg",
-  },
-  {
-    t: "HWID RESET",
-    d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.",
-    warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.",
-    img: "/hwid-reset.png",
-  },
-  {
-    t: "NO ACTIVE SUBSCRIPTIONS FOUND",
-    d: "Este problema es común y suele ocurrir cuando ya ha finalizado la membresía del cliente.",
-    warning: "Si enfrentas este problema, es posible que tu suscripción haya expirado. Si no es así, puedes contactar a un vendedor abriendo un ticket en Discord o enviando un mensaje privado para resolver la situación.",
-    img: "/suscripcion-finalizada-bypass.png",
-  },
-  {
-    t: "COULDN'T RESOLVE HOST",
-    d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.",
-    img: "/error-host-bypass.png",
-    video: "https://www.youtube.com/embed/wdp7lZtmkhk",
-  },
-  {
-    t: "ERROR SSL",
-    d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.",
-    img: "/error-ssl-bypass.png",
-    video: "https://www.youtube.com/embed/wdp7lZtmkhk",
-  },
-  {
-    t: "¿Sigues teniendo problemas?",
-    d: "Abre un ticket en Discord con capturas de pantalla de los errores.",
-    link: { label: "Ir al Discord", href: "https://discord.com/invite/hypervgg" },
-  },
-];
-
-// ── Bypass issues (same as EXTRA_ISSUES + download error first) ───────
-const BYPASS_EXTRA_ISSUES = [
-  {
-    t: "ERROR AL DESCARGAR EL BYPASS",
-    d: "Este problema se debe a un error de conexión de RED.",
-    img: "/error-bypass.png",
-    extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.",
-    link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
-  },
-  ...EXTRA_ISSUES,
 ];
 
 // ── UI primitives ─────────────────────────────────────
@@ -149,25 +98,17 @@ const CardTitle = ({ icon: Icon, title, color = "white" }) => (
   </div>
 );
 
-// ── Enhanced Accordion with image, warning, video, link support ──────
 const Accordion = ({ title, children, img, warning, video, extra, link }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="border border-white/10 rounded-xl overflow-hidden">
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/5 transition-all text-sm font-semibold text-left">
-        <div className="flex items-center gap-2">
-          <ChevronRight size={14} className={`transition-transform shrink-0 ${open ? "rotate-90" : ""}`} />
-          <span>{title}</span>
-        </div>
+        <div className="flex items-center gap-2"><ChevronRight size={14} className={`transition-transform shrink-0 ${open ? "rotate-90" : ""}`} /><span>{title}</span></div>
       </button>
       {open && (
         <div className="px-4 pb-4 flex flex-col gap-3">
           {children && <p className="text-white/50 text-sm leading-relaxed">{children}</p>}
-          {img && (
-            <div className="rounded-xl overflow-hidden border border-white/10">
-              <img src={img} alt={title} className="w-full h-auto object-contain" />
-            </div>
-          )}
+          {img && <div className="rounded-xl overflow-hidden border border-white/10"><img src={img} alt={title} className="w-full h-auto object-contain" /></div>}
           {extra && <p className="text-white/50 text-sm leading-relaxed">{extra}</p>}
           {warning && (
             <div className="rounded-xl px-4 py-3 border flex gap-3" style={{ background: "rgba(245,158,11,0.1)", borderColor: "rgba(245,158,11,0.3)" }}>
@@ -212,7 +153,7 @@ const CopyUrl = ({ section }) => {
 // ── Sidebar ───────────────────────────────────────────
 const SidebarContent = ({
   tx, locale, productId, productName, CurrentIcon,
-  products, loadingProducts, productOpen, setProductOpen,
+  productOpen, setProductOpen,
   setupOpen, setSetupOpen, troubleOpen, setTroubleOpen,
   langOpen, setLangOpen, activeSection, handleSectionChange,
   handleChangeLang, onNavClick,
@@ -230,8 +171,10 @@ const SidebarContent = ({
         </Link>
       </div>
 
+      {/* Product selector */}
       <div className="px-3 pb-2 relative">
-        <button onClick={() => setProductOpen(!productOpen)}
+        <button
+          onClick={() => setProductOpen(!productOpen)}
           className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-white font-semibold text-sm transition-all"
           style={{ background: `${ACCENT}35`, border: `1px solid ${ACCENT}60` }}>
           <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: ACCENT }}>
@@ -245,32 +188,30 @@ const SidebarContent = ({
         </button>
 
         {productOpen && (
-          <div className="absolute left-3 right-3 top-full mt-1 rounded-xl shadow-2xl border border-white/15 z-50 overflow-y-auto hide-scrollbar" style={{ background: "#1a1d24", maxHeight: "260px" }}>
-            {loadingProducts
-              ? <div className="px-4 py-3 text-white/40 text-xs">{tx.loading}</div>
-              : products.map(p => {
-                  const slug = p.name?.toLowerCase().replace(/\s+/g, "-");
-                  const PIcon = PRODUCT_ICONS[slug] || Package;
-                  const isActive = slug === productId;
-                  return (
-                    <Link key={p.id} href={`/tutorial/${slug}`} onClick={() => { setProductOpen(false); onNavClick?.(); }}
-                      className={`flex items-center gap-2.5 px-4 py-2.5 text-xs transition-colors hover:bg-white/8 ${isActive ? "text-white font-semibold" : "text-white/65"}`}>
-                      <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
-                        style={{ background: isActive ? `${ACCENT}40` : "rgba(255,255,255,0.07)" }}>
-                        <PIcon size={11} style={{ color: isActive ? ACCENT : "rgba(255,255,255,0.5)" }} />
-                      </div>
-                      <span className="flex-1 truncate">{p.name}</span>
-                      {isActive && <Check size={11} className="text-green-400 shrink-0" />}
-                    </Link>
-                  );
-                })
-            }
+          <div className="absolute left-3 right-3 top-full mt-1 rounded-xl shadow-2xl border border-white/15 z-50 overflow-y-auto hide-scrollbar" style={{ background: "#1a1d24", maxHeight: "180px" }}>
+            {FREE_PRODUCTS.map(slug => {
+              const PIcon = PRODUCT_ICONS[slug] || Package;
+              const isActive = slug === productId;
+              const name = slug === "panel-free" ? "Panel Free" : "Bypass Free";
+              return (
+                <Link key={slug} href={`/free/${slug}`} onClick={() => { setProductOpen(false); onNavClick?.(); }}
+                  className={`flex items-center gap-2.5 px-4 py-2.5 text-xs transition-colors hover:bg-white/8 ${isActive ? "text-white font-semibold" : "text-white/65"}`}>
+                  <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+                    style={{ background: isActive ? `${ACCENT}40` : "rgba(255,255,255,0.07)" }}>
+                    <PIcon size={11} style={{ color: isActive ? ACCENT : "rgba(255,255,255,0.5)" }} />
+                  </div>
+                  <span className="flex-1 truncate">{name}</span>
+                  {isActive && <Check size={11} className="text-green-400 shrink-0" />}
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
 
       <div className="h-px bg-white/10 mx-3 mb-3" />
 
+      {/* Nav */}
       <nav className="px-3">
         <button onClick={() => setSetupOpen(!setupOpen)}
           className="w-full flex items-center justify-between px-1 py-2 mb-1 hover:text-white/80 transition-colors"
@@ -359,9 +300,10 @@ const SidebarContent = ({
   );
 };
 
-// ── Section content ───────────────────────────────────
-const Group1Content = ({ section, productName, tx, productId }) => {
+// ── Section content (Panel Free = Panel Secure content) ───────────────
+const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) => {
   const cfg = getProductConfig(productId);
+  const installSteps = customSteps || tx.install.steps;
 
   if (section === "general-dependencies") return (
     <>
@@ -494,14 +436,14 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       <Card className="mb-5">
         <CardTitle icon={Monitor} title={tx.install.videoTitle} color={ACCENT} />
         <div className="rounded-xl overflow-hidden aspect-video w-full">
-          <iframe src={cfg.videoUrl} title={`Tutorial HyperV ${productName}`}
+          <iframe src={cfg.videoUrl} title={`Tutorial ${productName}`}
             className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
         </div>
       </Card>
       <Card>
         <CardTitle icon={Settings} title={tx.install.stepsTitle} color={ACCENT} />
         <div className="flex flex-col gap-4">
-          {tx.install.steps.map((s, i) => (
+          {installSteps.map((s, i) => (
             <div key={i} className="flex gap-3">
               <StepBadge n={i + 1} color={ACCENT} />
               <div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div>
@@ -523,7 +465,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   );
 
   // common-issues
-  const allIssues = BYPASS_PRODUCTS.includes(productId) ? BYPASS_EXTRA_ISSUES : EXTRA_ISSUES;
+  const allIssues = PANEL_FREE_EXTRA_ISSUES;
 
   return (
     <>
@@ -556,36 +498,182 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   );
 };
 
-const ComingSoon = ({ productName, tx }) => (
-  <div className="flex flex-col items-center justify-center py-24 text-center">
-    <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: `${ACCENT}20`, border: `1px solid ${ACCENT}40` }}>
-      <Package size={28} style={{ color: ACCENT }} />
-    </div>
-    <h2 className="text-2xl font-extrabold text-white mb-3">{productName}</h2>
-    <p className="text-white/40 text-sm max-w-sm">
-      {tx.tutorial === "Tutorial"
-        ? "Tutorial coming soon. Contact support on Discord."
-        : "Tutorial próximamente disponible. Contacta soporte en Discord."}
-    </p>
-    <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer"
-      className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-bold bg-[#5865F2] hover:bg-[#4752c4] transition-colors">
-      <MessageCircle size={15} /> Discord <ExternalLink size={13} />
-    </a>
-  </div>
-);
+// ── Bypass Free Content ───────────────────────────────
+const BypassFreeContent = ({ section, productName, tx }) => {
+  const cfg = PRODUCT_CONFIG["bypass-free"];
 
-export default function TutorialPage() {
+  if (section === "general-dependencies") return (
+    <>
+      <CopyUrl section="general-dependencies" />
+      <div className="flex items-center gap-3 mb-2"><Package size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.deps.title}</h1></div>
+      <p className="text-white/40 text-sm mb-6">{tx.deps.subtitle}</p>
+      <WarningBox title={tx.deps.warning} desc={tx.deps.warningDesc} color="#b45309" />
+      <div className="mt-6 flex flex-col gap-5">
+        <Card>
+          <CardTitle icon={ShieldOff} title={tx.deps.defender.title} color="#ef4444" />
+          <p className="text-white/50 text-sm mb-4">{tx.deps.defender.desc}</p>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+            <div className="flex items-center gap-2 mb-4 text-white/70 text-sm font-semibold"><Settings size={15} /> {tx.deps.defender.manual}</div>
+            <div className="flex flex-col gap-4">
+              {tx.deps.defender.steps.map((s, i) => (
+                <div key={i} className="flex gap-3"><StepBadge n={i+1} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 my-4"><div className="flex-1 h-px bg-white/10" /><span className="text-sm font-bold" style={{ color: ACCENT }}>{tx.deps.defender.then}</span><div className="flex-1 h-px bg-white/10" /></div>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-4 text-white font-bold text-sm"><Check size={15} className="text-green-400" /> {tx.deps.defender.dcontrol}</div>
+            <div className="flex gap-3 mb-4"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p><DownloadBtn href="https://mega.nz/file/t4pGwaRQ#uDFuTSEL0mw5zSpnYMtj1_0FGbQB8SpcLsOdRrk4vpg" label={tx.deps.defender.downloadDcontrol} /><p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p></div></div>
+            <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.defender.runAndDisable}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.defender.runDesc}</p></div></div>
+          </div>
+        </Card>
+        <Card>
+          <CardTitle icon={Cpu} title={tx.deps.vcpp.title} color="#6366f1" />
+          <p className="text-white/50 text-sm mb-4">{tx.deps.vcpp.desc}</p>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" /></div></div>
+            <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
+          </div>
+        </Card>
+        <Card>
+          <CardTitle icon={Monitor} title={tx.deps.directx.title} color="#f59e0b" />
+          <p className="text-white/50 text-sm mb-4">{tx.deps.directx.desc}</p>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-3"><StepBadge n={1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.directx.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" color="#f59e0b" /></div></div>
+            <div className="flex gap-3"><StepBadge n={2} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{tx.deps.directx.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.directx.installDesc}</p></div></div>
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+
+  if (section === "requirements") return (
+    <>
+      <CopyUrl section="requirements" />
+      <div className="flex items-center gap-3 mb-2"><Shield size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.req.title}</h1></div>
+      <p className="text-white/40 text-sm mb-6">{tx.req.subtitle}</p>
+      <Card>
+        <CardTitle icon={Monitor} title={tx.req.sysTitle} color={ACCENT} />
+        <WarningBox title={tx.req.sysWarning} desc={`${productName} — Windows 8/10/11`} color="#b45309" />
+        <div className="mt-4 flex flex-col gap-2">
+          {tx.req.items.map(r => (<div key={r} className="flex items-center gap-2 text-white/70 text-sm"><Check size={14} style={{ color: ACCENT }} className="shrink-0" /> {r}</div>))}
+        </div>
+      </Card>
+      <Card className="mt-5">
+        <CardTitle icon={Gamepad2} title={tx.req.gameTitle} color={ACCENT} />
+        <WarningBox title={tx.req.gameWarning} desc={tx.req.gameDesc} color="#b45309" />
+        <div className="mt-4 rounded-xl overflow-hidden border border-white/10">
+          <img src="/adb.png" alt="ADB" className="w-full h-auto object-contain" />
+        </div>
+      </Card>
+    </>
+  );
+
+  if (section === "download") return (
+    <>
+      <CopyUrl section="download" />
+      <div className="flex items-center gap-3 mb-2"><Download size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.dl.title}</h1></div>
+      <p className="text-white/40 text-sm mb-6">{tx.dl.subtitle}</p>
+      <Card className="mb-4">
+        <CardTitle icon={MessageCircle} title="¿Cómo obtengo mi key?" color="#5865F2" />
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-3"><StepBadge n={1} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Únete al Discord de HyperV</p><a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-lg text-white text-sm font-bold bg-[#5865F2] hover:bg-[#4752c4] transition-colors"><MessageCircle size={14} /> discord.com/invite/hypervgg <ExternalLink size={12} /></a></div></div>
+          <div className="flex gap-3"><StepBadge n={2} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Ve a FREE PRODUCTS → canal REGISTRAR ID</p><p className="text-white/40 text-sm mt-0.5">Dirígete a la sección de FREE PRODUCTS y encontrarás el canal de REGISTRAR ID.</p></div></div>
+          <div className="flex gap-3"><StepBadge n={3} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Escribe el comando <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded text-cyan-400">/freebypass</span></p><p className="text-white/40 text-sm mt-0.5">Selecciona el comando y adjunta una captura donde sigas a @hypervgg en cualquier red social.</p></div></div>
+          <div className="flex gap-3"><StepBadge n={4} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Espera la verificación del staff (1-2 min)</p><p className="text-white/40 text-sm mt-0.5">El staff revisará tu captura y te enviará la key al privado de Discord.</p></div></div>
+        </div>
+      </Card>
+      <Card className="mb-4">
+        <CardTitle icon={Download} title="Descargar Bypass Free" color={ACCENT} />
+        <p className="text-white/50 text-sm mb-4">{tx.dl.loaderDesc}</p>
+        <DownloadBtn href={cfg.loaderUrl} label="Descargar Bypass" color={ACCENT} />
+      </Card>
+      <Card className="mb-4">
+        <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
+        <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
+        <DownloadBtn href="https://www.mediafire.com/file/17ctvd6v86q1iap/FreeFire-TelaV4.xapk/file" label="Free Fire Tela (Directo)" color="#06b6d4" />
+      </Card>
+      <Card className="mb-4">
+        <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
+        <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
+      </Card>
+      <InfoBox text={tx.dl.reminder} />
+    </>
+  );
+
+  if (section === "installation") return (
+    <>
+      <CopyUrl section="installation" />
+      <div className="flex items-center gap-3 mb-2"><Settings size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
+      <p className="text-white/40 text-sm mb-6">{tx.install.subtitle}</p>
+      <Card className="mb-5">
+        <CardTitle icon={Monitor} title={tx.install.videoTitle} color={ACCENT} />
+        <div className="rounded-xl overflow-hidden aspect-video w-full">
+          <iframe src={cfg.videoUrl} title="Tutorial Bypass Free" className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+        </div>
+      </Card>
+      <Card className="mb-4">
+        <CardTitle icon={Settings} title={tx.install.stepsTitle} color={ACCENT} />
+        <div className="flex flex-col gap-4">
+          {[
+            { t: "Abrir el emulador", d: "Abre Bluestacks 5.22 con Free Fire instalado." },
+            { t: "Ejecutar como Administrador el Bypass", d: 'Haz clic derecho en el Bypass y selecciona "Ejecutar como administrador".' },
+            { t: "Iniciar sesión", d: "Ingresa tu usuario y contraseña para loguearte en el loader." },
+          ].map((s, i) => (
+            <div key={i} className="flex gap-3"><StepBadge n={i+1} color={ACCENT} /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
+          ))}
+        </div>
+      </Card>
+      <Card>
+        <CardTitle icon={Check} title="¿Cómo registro mi key?" color="#f59e0b" />
+        <div className="flex flex-col gap-4">
+          {[
+            { t: "Abrir el emulador", d: "Abre Bluestacks 5.22 con Free Fire instalado." },
+            { t: "Ejecutar como Administrador el Bypass", d: 'Haz clic derecho y selecciona "Ejecutar como administrador".' },
+            { t: 'Pegar la key en "Enter your licence"', d: "Pega la key que te llegó al privado de Discord y presiona LOGIN. ¡Listo, ya estás registrado con tu key gratuita!" },
+          ].map((s, i) => (
+            <div key={i} className="flex gap-3"><StepBadge n={i+1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
+          ))}
+        </div>
+        <div className="mt-4 rounded-xl px-4 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
+          <Check size={16} className="text-green-400 shrink-0 mt-0.5" />
+          <p className="text-green-300/80 text-sm">¡Listo! Ya estarás registrado con tu key gratuita.</p>
+        </div>
+      </Card>
+    </>
+  );
+
+  // common-issues
+  return (
+    <>
+      <CopyUrl section="common-issues" />
+      <div className="flex items-center gap-3 mb-2"><AlertTriangle size={24} style={{ color: "#f59e0b" }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.issues.title}</h1></div>
+      <p className="text-white/40 text-sm mb-6">{tx.issues.subtitle}</p>
+      <Card className="mb-4"><CardTitle icon={AlertTriangle} title={tx.issues.ticketTitle} color="#f59e0b" /><p className="text-white/50 text-sm">{tx.issues.ticketDesc}</p></Card>
+      <Card className="mb-4">
+        <CardTitle icon={Wrench} title={tx.issues.issuesTitle} color={ACCENT} />
+        <div className="flex flex-col gap-2">{BYPASS_FREE_EXTRA_ISSUES.map((item, i) => (<Accordion key={i} title={item.t} img={item.img} warning={item.warning} video={item.video} extra={item.extra} link={item.link}>{item.d}</Accordion>))}</div>
+      </Card>
+      <Card>
+        <div className="flex items-center gap-3 mb-3"><div className="w-9 h-9 rounded-full bg-[#5865F2]/20 flex items-center justify-center shrink-0"><MessageCircle size={18} className="text-[#5865F2]" /></div><div><p className="text-white font-bold text-sm">{tx.issues.helpTitle}</p></div></div>
+        <p className="text-white/40 text-sm mb-4">{tx.issues.helpDesc}</p>
+        <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-bold bg-[#5865F2] hover:bg-[#4752c4] transition-colors">
+          <MessageCircle size={15} /> {tx.issues.joinDiscord} <ExternalLink size={13} />
+        </a>
+      </Card>
+    </>
+  );
+};
+
+// ── Main page ─────────────────────────────────────────
+export default function FreePage() {
   const params       = useParams();
   const searchParams = useSearchParams();
   const router       = useRouter();
   const { locale, changeLocale, t } = useLanguage();
 
-  const productId = params?.productId;
+  const productId = params?.productId || "panel-free";
   const tx = t.tutorial;
-
-  const [products,        setProducts]        = useState([]);
-  const [currentProduct,  setCurrentProduct]  = useState(null);
-  const [loadingProducts, setLoadingProducts] = useState(true);
 
   const urlSection = searchParams?.get("section");
   const [activeSection, setActiveSection] = useState(urlSection || "general-dependencies");
@@ -596,19 +684,6 @@ export default function TutorialPage() {
   const [drawerOpen,  setDrawerOpen]  = useState(false);
 
   const handleChangeLang = (code) => { changeLocale(code); setLangOpen(false); };
-
-  useEffect(() => {
-    fetch("/api/products")
-      .then(r => r.json())
-      .then(data => {
-        const list = Array.isArray(data) ? data : data.products || [];
-        setProducts(list);
-        const found = list.find(p => p.name?.toLowerCase().replace(/\s+/g, "-") === productId);
-        setCurrentProduct(found || null);
-        setLoadingProducts(false);
-      })
-      .catch(() => setLoadingProducts(false));
-  }, [productId]);
 
   useEffect(() => { if (urlSection) setActiveSection(urlSection); }, [urlSection]);
 
@@ -630,27 +705,58 @@ export default function TutorialPage() {
   const nextSection = SECTIONS[sectionIdx + 1];
 
   const CurrentIcon = PRODUCT_ICONS[productId] || Package;
-  const productName = currentProduct?.name || productId?.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "Producto";
-  const isGroup1    = GROUP1.includes(productId);
+  const productName = productId === "panel-free" ? "Panel Free" : "Bypass Free";
+  const isPanelFree = productId === "panel-free";
+
+  // Pasos específicos para bypass-free
+  const bypassSteps = locale === "es"
+    ? [
+        { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, MSI, etc.) antes de ejecutar el Bypass." },
+        { t: "Ejecutar como Administrador", d: "Haz clic derecho en el Bypass y selecciona \"Ejecutar como administrador\"." },
+        { t: "Login", d: "Ingresa tu usuario y contraseña para iniciar sesión en el loader." },
+      ]
+    : [
+        { t: "Open emulator", d: "Open your emulator (Bluestacks, MSI, etc.) before running the Bypass." },
+        { t: "Run as Administrator", d: "Right-click the Bypass and select \"Run as administrator\"." },
+        { t: "Login", d: "Enter your username and password to log in to the loader." },
+      ];
 
   const sidebarProps = {
     tx, locale, productId, productName, CurrentIcon,
-    products, loadingProducts, productOpen, setProductOpen,
+    productOpen, setProductOpen,
     setupOpen, setSetupOpen, troubleOpen, setTroubleOpen,
     langOpen, setLangOpen, activeSection, handleSectionChange,
     handleChangeLang,
   };
 
+  const MainContent = () => productId === "bypass-free"
+    ? <BypassFreeContent key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} />
+    : <PanelFreeContent  key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />;
+
+  const NavFooter = () => (
+    <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
+      {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
+      {nextSection ? <button onClick={() => handleSectionChange(nextSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">{tx.sections[nextSection.id]} <ChevronRight size={15} /></button> : <div />}
+    </div>
+  );
+
   return (
     <div className="text-white" style={{ background: "#0d0f12", fontFamily: "var(--font-outfit), sans-serif", minHeight: "100vh" }}>
+
+      {/* Mobile top bar */}
       <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-white/10 sticky top-0 z-40" style={{ background: "#13161c" }}>
-        <button onClick={() => setDrawerOpen(true)} className="text-white/60 hover:text-white p-1 shrink-0"><Menu size={22} /></button>
+        <button onClick={() => setDrawerOpen(true)} className="text-white/60 hover:text-white p-1 shrink-0">
+          <Menu size={22} />
+        </button>
         <div className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: ACCENT }}><CurrentIcon size={13} /></div>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: ACCENT }}>
+            <CurrentIcon size={13} />
+          </div>
           <span className="text-white font-bold text-sm truncate">{productName}</span>
         </div>
       </div>
 
+      {/* Mobile drawer */}
       <div className={`md:hidden fixed inset-0 z-50 flex transition-all duration-300 ${drawerOpen ? "visible" : "invisible"}`}>
         <div className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${drawerOpen ? "opacity-100" : "opacity-0"}`} onClick={() => setDrawerOpen(false)} />
         <div className={`relative w-[280px] h-full flex flex-col overflow-y-auto hide-scrollbar transition-transform duration-300 ease-out ${drawerOpen ? "translate-x-0" : "-translate-x-full"}`} style={{ background: "#13161c" }}>
@@ -662,40 +768,29 @@ export default function TutorialPage() {
         </div>
       </div>
 
+      {/* Desktop layout */}
       <div className="hidden md:flex" style={{ height: "100vh", overflow: "hidden" }}>
         <aside className="w-[260px] shrink-0 border-r border-white/10 flex flex-col h-full overflow-y-auto hide-scrollbar" style={{ background: "#13161c" }}>
           <SidebarContent {...sidebarProps} />
         </aside>
         <main className="flex-1 flex flex-col h-full overflow-y-auto hide-scrollbar">
           <div className="flex-1 px-10 py-8 max-w-3xl mx-auto w-full">
-            {isGroup1
-              ? <Group1Content key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />
-              : <ComingSoon productName={productName} tx={tx} />
-            }
+            <MainContent />
           </div>
-          {isGroup1 && (
-            <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
-              {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
-              {nextSection ? <button onClick={() => handleSectionChange(nextSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">{tx.sections[nextSection.id]} <ChevronRight size={15} /></button> : <div />}
-            </div>
-          )}
+          <NavFooter />
           <div className="text-center py-4 text-white/20 text-sm border-t border-white/5">© 2026 HyperV Community</div>
         </main>
       </div>
 
+      {/* Mobile main */}
       <div className="md:hidden flex flex-col min-h-[calc(100vh-53px)]">
         <div className="flex-1 px-4 py-6 w-full max-w-2xl mx-auto">
-          {isGroup1
-            ? <Group1Content key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />
-            : <ComingSoon productName={productName} tx={tx} />
-          }
+          <MainContent />
         </div>
-        {isGroup1 && (
-          <div className="px-4 py-5 border-t border-white/10 flex items-center justify-between">
-            {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
-            {nextSection ? <button onClick={() => handleSectionChange(nextSection.id)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">{tx.sections[nextSection.id]} <ChevronRight size={15} /></button> : <div />}
-          </div>
-        )}
+        <div className="px-4 py-5 border-t border-white/10 flex items-center justify-between">
+          {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
+          {nextSection ? <button onClick={() => handleSectionChange(nextSection.id)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors">{tx.sections[nextSection.id]} <ChevronRight size={15} /></button> : <div />}
+        </div>
         <div className="text-center py-4 text-white/20 text-sm border-t border-white/5">© 2026 HyperV Community</div>
       </div>
     </div>
