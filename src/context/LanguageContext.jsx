@@ -191,19 +191,12 @@ const translations = {
           runDesc: 'Open dControl and click "Disable Windows Defender". It should turn red.',
         },
         vcpp: {
-          title: "2. Visual C++ Redistributables (All-in-One)",
-          desc: "Install these to avoid DLL errors or crashes.",
+          title: "2. Visual C++ Redistributables (All-in-One) and DirectX Runtime",
+          desc: "Install these to avoid DLL errors or crashes, and required for graphics rendering and compatibility.",
           download: "Download the package",
           install: "Install",
-          installDesc: "Extract, right-click install_all.bat, and Run as Admin. Restart PC after.",
-        },
-        directx: {
-          title: "3. DirectX Runtime",
-          desc: "Required for graphics rendering and compatibility.",
-          download: "Download",
-          install: "Install",
-          installDesc: 'Run the installer. Uncheck "Bing Bar" during installation.',
-        },
+          installDesc: "Extract, right-click install_all.bat, and Run as Admin. Restart PC after. Run the installer. Uncheck Bing Bar during installation.",
+        }
       },
       req: {
         title: "Requirements",
@@ -446,19 +439,12 @@ const translations = {
           runDesc: 'Abre dControl y presiona "Disable Windows Defender". Debería ponerse en rojo.',
         },
         vcpp: {
-          title: "2. Visual C++ Redistributables (All-in-One)",
-          desc: "Instala estos para evitar errores DLL o crashes.",
+          title: "2. Visual C++ Redistributables (All-in-One) and DirectX Runtime",
+          desc: "Instala estos para evitar errores DLL o crashes. Necesario para renderizado gráfico y compatibilidad.",
           download: "Descargar el paquete",
           install: "Instalar",
-          installDesc: "Extrae el archivo, haz clic derecho en install_all.bat y ejecuta como Administrador. Reinicia el PC.",
-        },
-        directx: {
-          title: "3. DirectX Runtime",
-          desc: "Necesario para renderizado gráfico y compatibilidad.",
-          download: "Descargar",
-          install: "Instalar",
-          installDesc: 'Ejecuta el instalador. Desmarca "Bing Bar" durante la instalación.',
-        },
+          installDesc: "Extrae el archivo, haz clic derecho en install_all.bat y ejecuta como Administrador. Reinicia el PC. Ejecuta el instalador. Desmarca Bing Bar durante la instalación.",
+        }
       },
       req: {
         title: "Requisitos",

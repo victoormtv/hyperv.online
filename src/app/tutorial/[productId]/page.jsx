@@ -411,14 +411,6 @@ const Group1Content = ({ section, productName, tx, productId }) => {
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
-        <Card>
-          <CardTitle icon={Monitor} title={tx.deps.directx.title} color="#f59e0b" />
-          <p className="text-white/50 text-sm mb-4">{tx.deps.directx.desc}</p>
-          <div className="flex flex-col gap-4">
-            <div className="flex gap-3"><StepBadge n={1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.directx.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" color="#f59e0b" /></div></div>
-            <div className="flex gap-3"><StepBadge n={2} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{tx.deps.directx.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.directx.installDesc}</p></div></div>
-          </div>
-        </Card>
       </div>
     </>
   );
