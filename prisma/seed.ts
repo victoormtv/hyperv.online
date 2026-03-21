@@ -40,6 +40,13 @@ async function main() {
     });
   }
 
+  let freeProducts = await prisma.category.findFirst({ where: { name: "Free Products" } });
+  if (!freeProducts) {
+    freeProducts = await prisma.category.create({
+      data: { name: "Free Products", image: "/images/categories/free-fire.jpg" },
+    });
+  }
+
   let discord = await prisma.category.findFirst({ where: { name: "Discord" } });
   if (!discord) {
     discord = await prisma.category.create({
@@ -83,6 +90,20 @@ async function main() {
           { label: "Mensual",    price: 22.99 },
           { label: "Trimestral", price: 31.99 },
           { label: "Anual",      price: 39.99 },
+        ],
+      },
+    },
+    {
+      category: freeProducts,
+      data: {
+        name: "Panel Free",
+        description: "Versión gratuita del Panel — 3 días de prueba",
+        features: ["Aimbots external", "Chams", "Fix Lag", "Prueba gratuita por 3 días"],
+        isBest: false,
+        status: "UNDETECTED",
+        images: ["/panel-free.png"],
+        plans: [
+          { label: "3 Días Gratis", price: 0 },
         ],
       },
     },
@@ -150,6 +171,20 @@ async function main() {
           { label: "Mensual",    price: 29.99 },
           { label: "Trimestral", price: 44.99 },
           { label: "Anual",      price: 59.99 },
+        ],
+      },
+    },
+    {
+      category: freeProducts,
+      data: {
+        name: "Bypass Free",
+        description: "Versión gratuita del Bypass— 3 días de prueba. Contacta soporte en Discord para recibir tu key.",
+        features: ["Indetectable", "Activacion Rapida", "Sin riesgo de black/ban", "Prueba gratuita por 3 días", "Key entregada por Discord"],
+        isBest: false,
+        status: "UNDETECTED",
+        images: ["/bypass-free.png"],
+        plans: [
+          { label: "3 Días Gratis", price: 0 },
         ],
       },
     },
@@ -386,6 +421,12 @@ async function main() {
   // INSERTAR TODOS LOS PRODUCTOS
   // ========================================
   for (const { category, data } of allProducts) {
+    const existing = await prisma.product.findFirst({ where: { name: data.name } });
+    if (existing) {
+      console.log(`⏭️  [${category.name}] ${data.name} ya existe, saltando...`);
+      continue;
+    }
+
     const { plans, ...productData } = data;
     const product = await prisma.product.create({
       data: {

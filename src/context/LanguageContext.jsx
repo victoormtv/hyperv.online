@@ -293,7 +293,7 @@ const translations = {
 
     profile: [
       {
-        badge: "✦ Status: Indetectable",
+        badge: "Status: Indetectable",
         heading: "Domina todo el lobby",
         subheading: "HyperV",
         text: "Descubre productos premium con entrega rápida, actualizaciones constantes y soporte dedicado. Calidad en la que puedes confiar.",
@@ -301,7 +301,7 @@ const translations = {
         ctaSecondary: "Únete en Discord",
       },
       {
-        badge: "✦ OFERTAS",
+        badge: "OFERTAS",
         heading: "Ofertas Exclusivas",
         subheading: "Todos los Días",
         text: "Tu destino final para productos premium, en cualquier momento y en cualquier lugar. Calidad inigualable a precios inmejorables.",
@@ -309,7 +309,7 @@ const translations = {
         ctaSecondary: "Ver Todos los Productos",
       },
       {
-        badge: "✦ BEST SELLERS",
+        badge: "BEST SELLERS",
         heading: "Top Picks",
         subheading: "Just For You",
         text: "Explora nuestra selección de productos más vendidos con estilo y comodidad inigualables.",
