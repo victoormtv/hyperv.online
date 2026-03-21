@@ -479,7 +479,7 @@ export default function CheckoutPage() {
               cursor: loading ? "not-allowed" : "pointer", transition: "all 0.3s ease",
               boxShadow: loading ? "none" : "0 4px 25px rgba(59,130,246,0.5), 0 0 40px rgba(59,130,246,0.2)",
             }}>
-            {loading ? "Procesando..." : total === 0 ? "🎉 Obtener Gratis" : `Pagar $${total.toFixed(2)}`}
+            {loading ? "Procesando..." : total === 0 ? "Obtener Gratis" : `Pagar $${total.toFixed(2)}`}
           </button>
         </div>
       </div>

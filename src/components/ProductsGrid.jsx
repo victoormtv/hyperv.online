@@ -5,7 +5,7 @@ import { Star, Zap, ShieldCheck, Gift } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const GOLD_BEST  = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
-const FREE_PRODUCTS = ["Panel Free", "Bypass UID Free"];
+const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
 
 const ProductCard = ({ product }) => {
   const { t } = useLanguage();

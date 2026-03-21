@@ -5,11 +5,26 @@ import React from "react";
 
 const Products = async ({ searchParams }) => {
   let products;
+
   if (searchParams?.cat) {
-    products = await prisma.product.findMany({
-      where: { categoryId: searchParams.cat },
-      include: { Category: true },
+    // Buscar por ID de categoría O por nombre de categoría
+    const categoryByName = await prisma.category.findFirst({
+      where: { name: { equals: searchParams.cat, mode: "insensitive" } },
     });
+
+    if (categoryByName) {
+      // Filtrar por nombre de categoría (ej: "Free Products")
+      products = await prisma.product.findMany({
+        where: { categoryId: categoryByName.id },
+        include: { Category: true },
+      });
+    } else {
+      // Filtrar por ID de categoría (comportamiento original)
+      products = await prisma.product.findMany({
+        where: { categoryId: searchParams.cat },
+        include: { Category: true },
+      });
+    }
   } else {
     products = await prisma.product.findMany({
       orderBy: { name: "asc" },

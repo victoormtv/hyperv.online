@@ -54,7 +54,7 @@ export default function SuccessPage() {
   if (orderData?.generic) return <GenericSuccess />;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-20 pt-32">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-20 pt-30">
       <div className="w-full max-w-lg">
 
         {/* Success header */}
