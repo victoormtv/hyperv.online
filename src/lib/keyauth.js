@@ -4,6 +4,7 @@ import axios from "axios";
 const LEVEL_MAP = {
   "Panel Full": 2,
   "Panel Secure": 4,
+  "Panel Free": 4, // mismas funciones que Panel Secure
   "Panel Only Aimbot": 7,
   "Menu Chams ESP": 6,
 };
@@ -11,6 +12,7 @@ const LEVEL_MAP = {
 const EXPIRY_MAP = {
   "24 Horas": 1,
   "1 Día": 1,
+  "3 Días Gratis": 3,
   Semanal: 7,
   "14 Días": 14,
   "15 Días": 15,
@@ -29,7 +31,7 @@ export async function generateKeyAuthLicense(productName, planLabel) {
     return {
       success: true,
       key: null,
-      message: "Producto sin sistema de licencias",
+      message: "Producto sin sistema de licencias automático",
     };
   }
 

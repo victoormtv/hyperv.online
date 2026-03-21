@@ -23,10 +23,8 @@ export default function SuccessPage() {
   const [copied,    setCopied]    = useState({});
 
   useEffect(() => {
-    // Limpiar carrito
     dispatch(setCart([]));
 
-    // Leer datos del query param (vienen del checkout)
     const raw = searchParams.get("data");
     if (raw) {
       try {
@@ -37,7 +35,6 @@ export default function SuccessPage() {
       } catch {}
     }
 
-    // Si no hay data en URL, mostrar pantalla genérica
     setOrderData({ generic: true });
     setLoading(false);
   }, []);
@@ -150,7 +147,6 @@ export default function SuccessPage() {
 
         {/* Actions */}
         {(() => {
-          // Mapear nombre del producto a slug del tutorial
           const TUTORIAL_MAP = {
             "Panel Full":        "panel-full",
             "Panel Secure":      "panel-secure",
