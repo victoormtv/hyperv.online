@@ -19,6 +19,18 @@ const translations = {
     fashsalesViewAll: "View all products →",
     fashsalesMoreFeatures: (n) => `+${n} more features`,
 
+    freeProducts: {
+      badge: "Free Products",
+      heading: "Try for",
+      headingHighlight: "Free",
+      subtitle: "Start without paying anything — 3 days completely free.",
+      price: "Price",
+      free: "FREE",
+      getBtn: "Get →",
+      viewAll: "View all free products",
+      undetected: "Undetected",
+    },
+
     feedbacksBadge: "COMMUNITY FEEDBACK",
     feedbacksHeading: "What our players say",
     feedbacksSubtitle: "Real feedback from our Discord community.",
@@ -141,7 +153,6 @@ const translations = {
       ],
     },
 
-    // ── Tutorial page translations ──────────────────────
     tutorial: {
       backToSite: "Back to Site",
       setupGuide: "Setup Guide",
@@ -270,6 +281,18 @@ const translations = {
     fashsalesViewAll: "Ver todos los productos →",
     fashsalesMoreFeatures: (n) => `+${n} características más`,
 
+    freeProducts: {
+      badge: "Productos Gratuitos",
+      heading: "Prueba",
+      headingHighlight: "Gratis",
+      subtitle: "Empieza sin pagar nada — 3 días de prueba completamente gratis.",
+      price: "Precio",
+      free: "FREE",
+      getBtn: "Obtener →",
+      viewAll: "Ver todos los productos gratis",
+      undetected: "Indetectable",
+    },
+
     feedbacksBadge: "OPINIONES DE LA COMUNIDAD",
     feedbacksHeading: "Lo que dicen nuestros jugadores",
     feedbacksSubtitle: "Opiniones reales de nuestra comunidad de Discord.",
@@ -392,7 +415,6 @@ const translations = {
       ],
     },
 
-    // ── Tutorial page translations ──────────────────────
     tutorial: {
       backToSite: "Volver al sitio",
       setupGuide: "Guía de Configuración",

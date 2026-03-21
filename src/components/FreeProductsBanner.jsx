@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { Gift, ShieldCheck, Zap } from "lucide-react";
+import { Gift, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
 
 const FreeProductsBanner = ({ products }) => {
   const { t } = useLanguage();
+  const fp = t.freeProducts;
 
   const freeProducts = (products || []).filter(p => {
     const product = p?.product || p;
@@ -22,15 +23,13 @@ const FreeProductsBanner = ({ products }) => {
       {/* Header */}
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
-          <Gift size={13} /> Productos Gratuitos
+          <Gift size={13} /> {fp.badge}
         </div>
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-          Prueba{" "}
-          <span className="text-yellow-400">Gratis</span>
+          {fp.heading}{" "}
+          <span className="text-yellow-400">{fp.headingHighlight}</span>
         </h2>
-        <p className="text-white/40 text-sm">
-          Empieza sin pagar nada — 3 días de prueba completamente gratis.
-        </p>
+        <p className="text-white/40 text-sm">{fp.subtitle}</p>
       </div>
 
       {/* Cards */}
@@ -45,7 +44,7 @@ const FreeProductsBanner = ({ products }) => {
             >
               {/* FREE badge */}
               <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-yellow-400 text-black text-[10px] font-extrabold px-2.5 py-1 rounded-full">
-                <Gift size={10} fill="black" /> FREE
+                <Gift size={10} fill="black" /> {fp.free}
               </div>
 
               {/* Image */}
@@ -59,10 +58,10 @@ const FreeProductsBanner = ({ products }) => {
                 <div className="absolute top-3 left-3 flex gap-1.5 z-10">
                   <span className="flex items-center gap-1 bg-green-500/20 border border-green-500/40 text-green-400 text-[10px] font-semibold px-2 py-0.5 rounded-full">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    {t.badges?.[0] ?? "UNDETECTED"}
+                    {fp.undetected}
                   </span>
                   <span className="flex items-center gap-1 bg-yellow-400/20 border border-yellow-400/40 text-yellow-400 text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                    <Gift size={9} /> FREE
+                    <Gift size={9} /> {fp.free}
                   </span>
                 </div>
               </div>
@@ -89,12 +88,12 @@ const FreeProductsBanner = ({ products }) => {
 
                 <div className="flex items-center justify-between pt-3 border-t border-yellow-400/15 mt-auto">
                   <div>
-                    <p className="text-white/30 text-[10px] uppercase tracking-wider">Precio</p>
-                    <p className="text-yellow-400 font-extrabold text-xl">FREE</p>
+                    <p className="text-white/30 text-[10px] uppercase tracking-wider">{fp.price}</p>
+                    <p className="text-yellow-400 font-extrabold text-xl">{fp.free}</p>
                   </div>
                   <Link href={`/products/${product?.id}`}>
                     <button className="flex items-center gap-1.5 px-5 py-2 rounded-lg text-xs font-extrabold bg-yellow-400 hover:bg-yellow-300 text-black transition-all duration-200 hover:scale-105 active:scale-95">
-                      <Gift size={12} /> Obtener →
+                      <Gift size={12} /> {fp.getBtn}
                     </button>
                   </Link>
                 </div>
@@ -110,10 +109,9 @@ const FreeProductsBanner = ({ products }) => {
           href="/products?cat=Free Products"
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-yellow-400/30 text-yellow-400/80 text-sm font-semibold hover:border-yellow-400 hover:text-yellow-400 transition-all duration-200"
         >
-          <Gift size={14} /> Ver todos los productos gratis
+          <Gift size={14} /> {fp.viewAll}
         </Link>
       </div>
-
     </section>
   );
 };
