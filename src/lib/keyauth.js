@@ -4,7 +4,6 @@ import axios from "axios";
 const LEVEL_MAP = {
   "Panel Full": 2,
   "Panel Secure": 4,
-  "Panel Free": 4, // mismas funciones que Panel Secure
   "Panel Only Aimbot": 7,
   "Menu Chams ESP": 6,
 };

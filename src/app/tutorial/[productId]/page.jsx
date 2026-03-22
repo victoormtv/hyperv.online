@@ -36,10 +36,10 @@ const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-e
 const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
-  "panel-full":        { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
-  "panel-secure":      { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
-  "panel-only-aimbot": { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
-  "menu-chams-esp":    { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Complex.rar",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
+  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
+  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
+  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
 };
 
 const getProductConfig = (productId) =>
@@ -393,8 +393,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
               <StepBadge n={1} color="#6366f1" />
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
-                <DownloadBtn href="https://mega.nz/file/t4pGwaRQ#uDFuTSEL0mw5zSpnYMtj1_0FGbQB8SpcLsOdRrk4vpg" label={tx.deps.defender.downloadDcontrol} />
-                <p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p>
+                <DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
               </div>
             </div>
             <div className="flex gap-3">
@@ -407,7 +406,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           <CardTitle icon={Cpu} title={tx.deps.vcpp.title} color="#6366f1" />
           <p className="text-white/50 text-sm mb-4">{tx.deps.vcpp.desc}</p>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" /></div></div>
+            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" /></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>

@@ -6,7 +6,7 @@ import { setCart } from "@/redux/slice/cartSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, Tag, X, Check } from "lucide-react";
+import { ArrowLeft, Tag, X, Check, Gift } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { siMercadopago, siPaypal } from "simple-icons";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
@@ -60,11 +60,14 @@ const PAYMENT_METHODS = [
   { id: "crypto",      label: "Crypto",       sub: "USDT · BTC · ETH y más", icon: null,          color: "#F0B90B" },
 ];
 
+const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
+
 export default function CheckoutPage() {
   const authState = useSelector((s) => s.auth);
   const cart      = authState?.cart || [];
   const dispatch  = useDispatch();
   const { t }     = useLanguage();
+  const c         = t.checkout;
 
   const searchParams = useSearchParams();
   const router       = useRouter();
@@ -124,6 +127,8 @@ export default function CheckoutPage() {
   const subtotal = useMemo(() =>
     safeCart.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
   [safeCart]);
+
+  const isFreeCart = subtotal === 0 || safeCart.every(i => FREE_PRODUCTS.includes(i.product.name));
 
   const autoCryptoDiscount  = method === "crypto" ? 0.05 : 0;
   const couponDiscount      = appliedCoupon
@@ -270,6 +275,19 @@ export default function CheckoutPage() {
     else if (method === "crypto") handleCrypto();
   };
 
+  // Button style: golden for free, blue for paid
+  const submitBtnStyle = loading
+    ? { background: "rgba(34,211,238,0.3)", boxShadow: "none" }
+    : isFreeCart
+      ? { background: "linear-gradient(135deg, #f59e0b, #fbbf24)", boxShadow: "0 4px 25px rgba(251,191,36,0.5), 0 0 40px rgba(251,191,36,0.2)" }
+      : { background: "linear-gradient(135deg, #3b82f6, #06b6d4)", boxShadow: "0 4px 25px rgba(59,130,246,0.5), 0 0 40px rgba(59,130,246,0.2)" };
+
+  const submitBtnLabel = loading
+    ? c.processing
+    : total === 0
+      ? c.getFree
+      : `${c.pay} $${total.toFixed(2)}`;
+
   return (
     <div className="min-h-screen text-white flex flex-col items-center justify-start pt-44 md:pt-48 px-4 pb-20">
       <div className="w-full max-w-2xl pt-6">
@@ -295,14 +313,14 @@ export default function CheckoutPage() {
           onClick={() => { if (paymentActive) { setShowPendingModal(true); return; } router.push("/products"); }}
           className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm mb-8 transition-colors"
         >
-          <ArrowLeft size={16} /> Back to Store
+          <ArrowLeft size={16} /> {c.backToStore}
         </button>
 
-        <h1 className="text-4xl font-extrabold text-white mb-8">Checkout</h1>
+        <h1 className="text-4xl font-extrabold text-white mb-8">{c.title}</h1>
 
         {/* Order summary */}
         <div className="bg-white/[0.04] border border-white/10 rounded-2xl px-6 py-5 mb-6">
-          <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-3">Resumen de orden</p>
+          <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-3">{c.orderSummary}</p>
           {safeCart.map((item, i) => (
             <div key={i}>
               <div className="flex items-center justify-between py-3">
@@ -310,19 +328,21 @@ export default function CheckoutPage() {
                   <p className="text-white font-bold text-sm uppercase tracking-wide">{item.product.name}</p>
                   <p className="text-white/40 text-xs mt-0.5">{item.product.plans?.[0]?.label ?? "Standard"} × {item.quantity}</p>
                 </div>
-                <span className="text-white/80 font-bold">${(item.product.price * item.quantity).toFixed(2)}</span>
+                <span className={item.product.price === 0 ? "text-yellow-400 font-extrabold" : "text-white/80 font-bold"}>
+                  {item.product.price === 0 ? "FREE" : `$${(item.product.price * item.quantity).toFixed(2)}`}
+                </span>
               </div>
               {i < safeCart.length - 1 && <div className="h-px bg-white/5" />}
             </div>
           ))}
           <div className="h-px bg-white/10 my-3" />
           <div className="flex items-center justify-between mb-2">
-            <span className="text-white/50 text-sm">Subtotal</span>
+            <span className="text-white/50 text-sm">{c.subtotal}</span>
             <span className="text-white/70 text-sm">${subtotal.toFixed(2)}</span>
           </div>
           {method === "crypto" && !appliedCoupon && (
             <div className="flex items-center justify-between mb-2">
-              <span className="text-green-400 text-sm flex items-center gap-1.5"><Tag size={13} /> 5% descuento crypto</span>
+              <span className="text-green-400 text-sm flex items-center gap-1.5"><Tag size={13} /> {c.cryptoDiscount}</span>
               <span className="text-green-400 text-sm font-bold">-${(subtotal * 0.05).toFixed(2)}</span>
             </div>
           )}
@@ -334,15 +354,17 @@ export default function CheckoutPage() {
           )}
           {couponMethodMismatch && (
             <div className="flex items-center gap-2 mb-2 text-yellow-400/80 text-xs">
-              <Tag size={12} /> Cupón solo válido para pago con {appliedCoupon.onlyMethod}
+              <Tag size={12} /> {c.couponOnly} {appliedCoupon.onlyMethod}
             </div>
           )}
           <div className="h-px bg-white/10 my-3" />
           <div className="flex items-center justify-between">
-            <span className="text-white font-extrabold text-lg">Total</span>
+            <span className="text-white font-extrabold text-lg">{c.total}</span>
             <div className="text-right">
               {finalDiscount > 0 && <p className="text-white/30 text-xs line-through">${subtotal.toFixed(2)}</p>}
-              <span className="text-white font-extrabold text-2xl">${total.toFixed(2)}</span>
+              <span className={total === 0 ? "text-yellow-400 font-extrabold text-2xl" : "text-white font-extrabold text-2xl"}>
+                {total === 0 ? "FREE" : `$${total.toFixed(2)}`}
+              </span>
             </div>
           </div>
         </div>
@@ -352,18 +374,18 @@ export default function CheckoutPage() {
 
           {/* Email */}
           <div>
-            <label className="text-white font-semibold text-sm mb-2 block">Email Address</label>
+            <label className="text-white font-semibold text-sm mb-2 block">{c.emailLabel}</label>
             <input
               type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              placeholder="your.email@example.com"
+              placeholder={c.emailPlaceholder}
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
             />
-            <p className="text-white/30 text-xs mt-2">You'll receive your license keys at this email.</p>
+            <p className="text-white/30 text-xs mt-2">{c.emailSub}</p>
           </div>
 
           {/* Cupón */}
           <div>
-            <label className="text-white font-semibold text-sm mb-2 block">Cupón de descuento</label>
+            <label className="text-white font-semibold text-sm mb-2 block">{c.couponLabel}</label>
             {appliedCoupon ? (
               <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/30 rounded-xl px-4 py-3">
                 <Check size={16} className="text-green-400 shrink-0" />
@@ -376,11 +398,30 @@ export default function CheckoutPage() {
                   type="text" value={couponInput}
                   onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); setCouponError(""); }}
                   onKeyDown={(e) => e.key === "Enter" && applyCoupon()}
-                  placeholder="Ej: HYPERV10"
+                  placeholder={c.couponPlaceholder}
                   className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors uppercase"
                 />
-                <button onClick={applyCoupon} className="px-5 py-3 rounded-xl text-sm font-bold text-white transition-all" style={{ background: "linear-gradient(135deg, #3b82f6, #06b6d4)" }}>
-                  Aplicar
+                <button
+                  onClick={applyCoupon}
+                  className="px-5 py-3 rounded-xl text-sm font-bold transition-all"
+                  style={{ background: isFreeCart ? "linear-gradient(135deg, #f59e0b, #fbbf24)" : "linear-gradient(135deg, #3b82f6, #06b6d4)", color: isFreeCart ? "#000" : "#fff", position: "relative", overflow: "hidden", transition: "all 0.3s ease" }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = isFreeCart
+                      ? "0 6px 25px rgba(251,191,36,0.65), 0 0 40px rgba(251,191,36,0.25)"
+                      : "0 6px 25px rgba(59,130,246,0.65), 0 0 40px rgba(59,130,246,0.25)";
+                    const s = e.currentTarget.querySelector(".shimmer-apply");
+                    if (s) { s.style.transform = "translateX(200%) skewX(-20deg)"; s.style.opacity = "1"; }
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                    const s = e.currentTarget.querySelector(".shimmer-apply");
+                    if (s) { s.style.transform = "translateX(-100%) skewX(-20deg)"; s.style.opacity = "0"; }
+                  }}
+                >
+                  <span className="shimmer-apply" style={{ position:"absolute", top:0, left:"-60%", width:"50%", height:"100%", background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)", transform:"translateX(-100%) skewX(-20deg)", opacity:0, transition:"transform 0.9s ease, opacity 0.1s ease", pointerEvents:"none" }} />
+                  {c.couponApply}
                 </button>
               </div>
             )}
@@ -391,13 +432,13 @@ export default function CheckoutPage() {
           {/* Payment method — solo si total > 0 */}
           {total > 0 && (
             <div>
-              <label className="text-white font-semibold text-sm mb-3 block">Payment Method</label>
+              <label className="text-white font-semibold text-sm mb-3 block">{c.paymentMethod}</label>
               <div className="grid grid-cols-3 gap-3">
                 {PAYMENT_METHODS.map((m) => (
                   <button key={m.id} type="button"
                     onClick={() => {
                       setMethod(m.id); setError(""); setMpPreferenceId(null);
-                      if (m.id !== "paypal") { const c = document.getElementById("paypal-button-container"); if (c) c.innerHTML = ""; }
+                      if (m.id !== "paypal") { const ct = document.getElementById("paypal-button-container"); if (ct) ct.innerHTML = ""; }
                     }}
                     className={`flex flex-col items-center gap-3 p-4 rounded-xl border transition-all duration-200 ${
                       method === m.id
@@ -421,21 +462,21 @@ export default function CheckoutPage() {
                 <div className="mt-4">
                   <Wallet initialization={{ preferenceId: mpPreferenceId, redirectMode: "self" }} />
                   <button onClick={() => setShowPendingModal(true)} className="mt-2 w-full py-2.5 rounded-xl border border-red-500/30 bg-red-500/8 text-red-400/60 hover:text-red-400 text-xs font-semibold transition-colors">
-                    Cancelar pago
+                    {c.cancelPayment}
                   </button>
                 </div>
               )}
 
               {method === "crypto" && (
                 <div className="mt-4">
-                  <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">Selecciona tu moneda</p>
+                  <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-3">{c.selectCrypto}</p>
                   <div className="grid grid-cols-4 gap-2">
-                    {CRYPTOS.map((c) => (
-                      <button key={c.id} type="button" onClick={() => setCryptoCurrency(c.id)}
-                        className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all duration-200 ${cryptoCurrency === c.id ? "border-white/30 bg-white/10" : "border-white/8 bg-white/5 hover:border-white/15"}`}>
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-extrabold" style={{ background: `${c.color}25`, border: `1px solid ${c.color}50`, color: c.color }}>{c.icon}</div>
-                        <p className={`text-[10px] font-bold ${cryptoCurrency === c.id ? "text-white" : "text-white/60"}`}>{c.label}</p>
-                        <p className="text-white/30 text-[9px] leading-tight text-center">{c.network}</p>
+                    {CRYPTOS.map((cr) => (
+                      <button key={cr.id} type="button" onClick={() => setCryptoCurrency(cr.id)}
+                        className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all duration-200 ${cryptoCurrency === cr.id ? "border-white/30 bg-white/10" : "border-white/8 bg-white/5 hover:border-white/15"}`}>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-extrabold" style={{ background: `${cr.color}25`, border: `1px solid ${cr.color}50`, color: cr.color }}>{cr.icon}</div>
+                        <p className={`text-[10px] font-bold ${cryptoCurrency === cr.id ? "text-white" : "text-white/60"}`}>{cr.label}</p>
+                        <p className="text-white/30 text-[9px] leading-tight text-center">{cr.network}</p>
                       </button>
                     ))}
                   </div>
@@ -446,40 +487,63 @@ export default function CheckoutPage() {
                 <div className="mt-4 rounded-2xl overflow-hidden border border-white/10">
                   <iframe src={cryptoPaymentData.checkoutUrl} className="w-full" style={{ height: "580px", border: "none" }} allow="clipboard-write" />
                   <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 bg-white/[0.02]">
-                    <a href={cryptoPaymentData.checkoutUrl} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white text-xs flex items-center gap-1.5 transition-colors">Abrir en nueva pestaña ↗</a>
-                    <button onClick={() => setShowPendingModal(true)} className="text-red-400/60 hover:text-red-400 text-xs transition-colors">Cancelar</button>
+                    <a href={cryptoPaymentData.checkoutUrl} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white text-xs flex items-center gap-1.5 transition-colors">{c.openNewTab}</a>
+                    <button onClick={() => setShowPendingModal(true)} className="text-red-400/60 hover:text-red-400 text-xs transition-colors">{c.cancel}</button>
                   </div>
                 </div>
               )}
 
-              <p className="text-white/30 text-xs mt-3">Secure payment. Prices in USD.</p>
+              <p className="text-white/30 text-xs mt-3">{c.securePayment}</p>
               <p className="text-white/30 text-xs mt-1">
-                Can't find your payment method?{" "}
-                <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 transition-colors">Open a ticket on Discord</a>
+                {c.cantFind}{" "}
+                <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 transition-colors">{c.discordTicket}</a>
               </p>
             </div>
           )}
 
           {/* Terms */}
           <p className="text-white/25 text-xs border border-white/5 rounded-lg px-4 py-3 bg-white/[0.02]">
-            By proceeding, you agree to our{" "}
-            <Link href="/terms" className="text-cyan-400 hover:text-cyan-300 transition-colors">Terms of Service</Link>{" "}
+            {c.terms}{" "}
+            <Link href="/terms" className="text-cyan-400 hover:text-cyan-300 transition-colors">{c.termsLink}</Link>{" "}
             and{" "}
-            <Link href="/terms" className="text-cyan-400 hover:text-cyan-300 transition-colors">Privacy Policy</Link>.
+            <Link href="/terms" className="text-cyan-400 hover:text-cyan-300 transition-colors">{c.privacyLink}</Link>.
           </p>
 
           {error && <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">{error}</div>}
 
-          <button onClick={handleSubmit} disabled={loading}
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
             style={{
               width: "100%", padding: "1.125rem",
-              background: loading ? "rgba(34,211,238,0.3)" : "linear-gradient(135deg, #3b82f6, #06b6d4)",
-              color: "#fff", border: "none", borderRadius: "14px",
-              fontSize: "1rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
+              ...submitBtnStyle,
+              color: isFreeCart ? "#000" : "#fff",
+              border: "none", borderRadius: "14px",
+              fontSize: "1rem", fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
               cursor: loading ? "not-allowed" : "pointer", transition: "all 0.3s ease",
-              boxShadow: loading ? "none" : "0 4px 25px rgba(59,130,246,0.5), 0 0 40px rgba(59,130,246,0.2)",
-            }}>
-            {loading ? "Procesando..." : total === 0 ? "Obtener Gratis" : `Pagar $${total.toFixed(2)}`}
+              position: "relative", overflow: "hidden",
+            }}
+            onMouseEnter={e => {
+              if (loading) return;
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow = isFreeCart
+                ? "0 8px 35px rgba(251,191,36,0.75), 0 0 60px rgba(251,191,36,0.35)"
+                : "0 8px 35px rgba(59,130,246,0.75), 0 0 60px rgba(59,130,246,0.35)";
+              const s = e.currentTarget.querySelector(".shimmer-btn");
+              if (s) { s.style.transform = "translateX(200%) skewX(-20deg)"; s.style.opacity = "1"; }
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = isFreeCart
+                ? "0 4px 25px rgba(251,191,36,0.5), 0 0 40px rgba(251,191,36,0.2)"
+                : "0 4px 25px rgba(59,130,246,0.5), 0 0 40px rgba(59,130,246,0.2)";
+              const s = e.currentTarget.querySelector(".shimmer-btn");
+              if (s) { s.style.transform = "translateX(-100%) skewX(-20deg)"; s.style.opacity = "0"; }
+            }}
+          >
+            <span className="shimmer-btn" style={{ position:"absolute", top:0, left:"-60%", width:"50%", height:"100%", background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)", transform:"translateX(-100%) skewX(-20deg)", opacity:0, transition:"transform 0.9s ease, opacity 0.1s ease", pointerEvents:"none" }} />
+            {total === 0 && !loading && <Gift size={16} style={{ display: "inline", marginRight: "8px", verticalAlign: "middle" }} />}
+            {submitBtnLabel}
           </button>
         </div>
       </div>

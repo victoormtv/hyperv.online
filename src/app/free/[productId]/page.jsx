@@ -8,12 +8,12 @@ import {
   AlertTriangle, ChevronRight, ChevronDown, Copy,
   Check, ExternalLink, MessageCircle, Package,
   Cpu, Gamepad2, Wrench, Home, BookOpen,
-  Lock, ScanLine, ChevronsUpDown, Menu, X
+  Lock, ScanLine, ChevronsUpDown, Menu, X, Gift
 } from "lucide-react";
 
 const PRODUCT_ICONS = {
-  "panel-free":  Lock,
-  "bypass-free": ScanLine,
+  "panel-free":  Gift,
+  "bypass-free": Gift,
 };
 
 const FREE_PRODUCTS = ["panel-free", "bypass-free"];
@@ -21,8 +21,11 @@ const FREE_PRODUCTS = ["panel-free", "bypass-free"];
 // Extra issues for Panel Free (same as tutorial, no bypass error)
 const PANEL_FREE_EXTRA_ISSUES = [
   { t: "FALLO AL RECUPERAR LA VERSIÓN", d: "Este error se produce cuando no se ha hecho una certificación.", img: "/error-recuperar-version.png", warning: "Para solucionar esto, sigue el video tutorial a continuación.", video: "https://www.youtube.com/embed/9bCIRGVBhFg" },
+  { t: "HWID RESET", d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.", warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.", img: "/hwid-reset-bypass.png" },
+  { t: "NO ACTIVE SUBSCRIPTIONS FOUND", d: "Este problema es común y suele ocurrir cuando ya ha finalizado la membresía del cliente.", warning: "Si enfrentas este problema, es posible que tu suscripción haya expirado. Si no es así, puedes contactar a un vendedor abriendo un ticket en Discord o enviando un mensaje privado para resolver la situación.", img: "/suscripcion-finalizada-bypass.png" },
   { t: "COULDN'T RESOLVE HOST", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-host-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
   { t: "ERROR SSL", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-ssl-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
+  { t: "¿Sigues teniendo problemas?", d: "Abre un ticket en Discord con capturas de pantalla de los errores.", link: { label: "Ir al Discord", href: "https://discord.com/invite/hypervgg" } },
 ];
 
 // Extra issues for Bypass Free (includes download error)
@@ -30,15 +33,15 @@ const BYPASS_FREE_EXTRA_ISSUES = [
   { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
-const ACCENT = "#369876";
+const ACCENT = "#f59e0b";
 
 const PRODUCT_CONFIG = {
   "panel-free": {
-    loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com",
+    loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe",
     videoUrl:  "https://www.youtube.com/embed/TFYhmK790_E",
   },
   "bypass-free": {
-    loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/15BB2945DBE64C7F9E041C063881FC844",
+    loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar",
     videoUrl:  "https://www.youtube.com/embed/v8QQfyi8Tvs",
   },
 };
@@ -60,7 +63,7 @@ const StepBadge = ({ n, color = ACCENT }) => (
 );
 
 const DownloadBtn = ({ href, label, color = ACCENT }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" download
+  <a href={href} target="_blank" rel="noopener noreferrer"
     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-white text-sm font-bold transition-all duration-200 hover:brightness-110"
     style={{ background: color }}>
     <Download size={15} /> {label} <ExternalLink size={13} />
@@ -333,7 +336,6 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
                 <DownloadBtn href="https://drive.google.com/uc?export=download&id=1iWyctiUPloQYxmMpbvyOznn5meXPWvuo" label={tx.deps.defender.downloadDcontrol} />
-                <p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -346,8 +348,16 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
           <CardTitle icon={Cpu} title={tx.deps.vcpp.title} color="#6366f1" />
           <p className="text-white/50 text-sm mb-4">{tx.deps.vcpp.desc}</p>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" /></div></div>
+            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" /></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
+          </div>
+        </Card>
+        <Card>
+          <CardTitle icon={Monitor} title={tx.deps.directx.title} color="#f59e0b" />
+          <p className="text-white/50 text-sm mb-4">{tx.deps.directx.desc}</p>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-3"><StepBadge n={1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.directx.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" color="#f59e0b" /></div></div>
+            <div className="flex gap-3"><StepBadge n={2} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{tx.deps.directx.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.directx.installDesc}</p></div></div>
           </div>
         </Card>
       </div>
@@ -400,17 +410,17 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.14" color="#8b5cf6" />
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="MSI 5.12" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="MSI 5.12" color="#8b5cf6" />
         </div>
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4" label="UltraViewer" color="#f59e0b" />
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="AnyDesk" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/UltraViewer_setup_6.6.124_es.exe" label="UltraViewer" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/AnyDesk.exe" label="AnyDesk" color="#f59e0b" />
         </div>
       </Card>
       <InfoBox text={tx.dl.reminder} />
@@ -512,7 +522,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
           <div className="flex items-center gap-2 my-4"><div className="flex-1 h-px bg-white/10" /><span className="text-sm font-bold" style={{ color: ACCENT }}>{tx.deps.defender.then}</span><div className="flex-1 h-px bg-white/10" /></div>
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-4 text-white font-bold text-sm"><Check size={15} className="text-green-400" /> {tx.deps.defender.dcontrol}</div>
-            <div className="flex gap-3 mb-4"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p><DownloadBtn href="https://mega.nz/file/t4pGwaRQ#uDFuTSEL0mw5zSpnYMtj1_0FGbQB8SpcLsOdRrk4vpg" label={tx.deps.defender.downloadDcontrol} /><p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p></div></div>
+            <div className="flex gap-3 mb-4"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p><DownloadBtn href="https://drive.google.com/uc?export=download&id=1iWyctiUPloQYxmMpbvyOznn5meXPWvuo" label={tx.deps.defender.downloadDcontrol} /><p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.defender.runAndDisable}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.defender.runDesc}</p></div></div>
           </div>
         </Card>
@@ -520,8 +530,16 @@ const BypassFreeContent = ({ section, productName, tx }) => {
           <CardTitle icon={Cpu} title={tx.deps.vcpp.title} color="#6366f1" />
           <p className="text-white/50 text-sm mb-4">{tx.deps.vcpp.desc}</p>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" /></div></div>
+            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" /></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
+          </div>
+        </Card>
+        <Card>
+          <CardTitle icon={Monitor} title={tx.deps.directx.title} color="#f59e0b" />
+          <p className="text-white/50 text-sm mb-4">{tx.deps.directx.desc}</p>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-3"><StepBadge n={1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.directx.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" color="#f59e0b" /></div></div>
+            <div className="flex gap-3"><StepBadge n={2} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{tx.deps.directx.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.directx.installDesc}</p></div></div>
           </div>
         </Card>
       </div>
@@ -576,7 +594,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
-        <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
+        <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
       </Card>
       <InfoBox text={tx.dl.reminder} />
     </>
