@@ -191,7 +191,7 @@ const translations = {
           runDesc: 'Open dControl and click "Disable Windows Defender". It should turn red.',
         },
         vcpp: {
-          title: "2. Visual C++ Redistributables (All-in-One) and DirectX Runtime",
+          title: "1. Visual C++ Redistributables (All-in-One) and DirectX Runtime",
           desc: "Install these to avoid DLL errors or crashes and Required for graphics rendering and compatibility.",
           download: "Download the package",
           install: "Install",
