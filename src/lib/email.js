@@ -31,7 +31,7 @@ export async function sendLicenseEmail({
               <!-- Grid SVG de fondo -->
               <div style="position:absolute;inset:0;opacity:0.18;background-image:linear-gradient(rgba(6,182,212,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,0.4) 1px,transparent 1px);background-size:32px 32px;"></div>
               <!-- Glow central -->
-              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:120px;background:radial-gradient(ellipse,rgba(6,182,212,0.18) 0%,transparent 70%);pointer-events:none;"></div>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;background:radial-gradient(ellipse,rgba(6,182,212,0.18) 0%,transparent 70%);pointer-events:none;"></div>
               <!-- Logo + favicon -->
               <div style="position:relative;display:inline-flex;align-items:center;gap:12px;justify-content:center;">
                 <img src="https://hyperv.online/logo.png" width="36" height="36" alt="HyperV" style="border-radius:8px;display:block;" />
@@ -109,7 +109,7 @@ export async function sendLicenseEmail({
                 <tr>
                   <td style="padding:20px 24px;text-align:center;">
                     <p style="margin:0 0 6px;color:rgba(99,102,241,0.9);font-size:13px;font-weight:700;">📦 Entrega Manual</p>
-                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Un miembro del equipo de HyperV te contactará por Discord para entregarte tu producto.</p>
+                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Ingresa a nuestro servidor de Discord y reclama tu Key Gratis</p>
                   </td>
                 </tr>
               </table>
