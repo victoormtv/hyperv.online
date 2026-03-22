@@ -1,3 +1,4 @@
+// lib/email.js
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -10,6 +11,17 @@ export async function sendLicenseEmail({
   orderId,
 }) {
   const hasKey = !!licenseKey;
+
+  const TUTORIAL_MAP = {
+    "Panel Full": "https://hyperv.online/tutorial/panel-full",
+    "Panel Secure": "https://hyperv.online/tutorial/panel-secure",
+    "Panel Only Aimbot": "https://hyperv.online/tutorial/panel-only-aimbot",
+    "Menu Chams ESP": "https://hyperv.online/tutorial/menu-chams-esp",
+    "Panel Free": "https://hyperv.online/free/panel-free",
+    "Bypass Free": "https://hyperv.online/free/bypass-free",
+  };
+  const tutorialUrl =
+    TUTORIAL_MAP[productName] || "https://hyperv.online/tutorial";
 
   const html = `
 <!DOCTYPE html>
@@ -31,7 +43,7 @@ export async function sendLicenseEmail({
               <!-- Grid SVG de fondo -->
               <div style="position:absolute;inset:0;opacity:0.18;background-image:linear-gradient(rgba(6,182,212,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,0.4) 1px,transparent 1px);background-size:32px 32px;"></div>
               <!-- Glow central -->
-              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;background:radial-gradient(ellipse,rgba(6,182,212,0.18) 0%,transparent 70%);pointer-events:none;"></div>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:120px;background:radial-gradient(ellipse,rgba(6,182,212,0.18) 0%,transparent 70%);pointer-events:none;"></div>
               <!-- Logo + favicon -->
               <div style="position:relative;display:inline-flex;align-items:center;gap:12px;justify-content:center;">
                 <img src="https://hyperv.online/logo.png" width="36" height="36" alt="HyperV" style="border-radius:8px;display:block;" />
@@ -109,7 +121,7 @@ export async function sendLicenseEmail({
                 <tr>
                   <td style="padding:20px 24px;text-align:center;">
                     <p style="margin:0 0 6px;color:rgba(99,102,241,0.9);font-size:13px;font-weight:700;">📦 Entrega Manual</p>
-                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Ingresa a nuestro servidor de Discord y reclama tu Key Gratis</p>
+                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Un miembro del equipo de HyperV te contactará por Discord para entregarte tu producto.</p>
                   </td>
                 </tr>
               </table>
@@ -121,7 +133,7 @@ export async function sendLicenseEmail({
           <!-- Tutorial button -->
           <tr>
             <td style="padding:0 40px 16px;text-align:center;">
-              <a href="https://hyperv.online/tutorial/panel-full"
+              <a href="${tutorialUrl}"
                 style="display:inline-block;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;font-weight:800;font-size:14px;text-decoration:none;padding:14px 36px;border-radius:12px;letter-spacing:0.5px;box-shadow:0 4px 20px rgba(6,182,212,0.3);">
                 Ver Tutorial de Instalación →
               </a>
