@@ -407,7 +407,6 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.realhostx.com/Cloud/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
           <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
-          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="MSI 5.12" color="#8b5cf6" />
         </div>
       </Card>
       <Card className="mb-4">
@@ -705,12 +704,12 @@ export default function FreePage() {
   // Pasos específicos para bypass-free
   const bypassSteps = locale === "es"
     ? [
-        { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, MSI, etc.) antes de ejecutar el Bypass." },
+        { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, etc.) antes de ejecutar el Bypass." },
         { t: "Ejecutar como Administrador", d: "Haz clic derecho en el Bypass y selecciona \"Ejecutar como administrador\"." },
         { t: "Login", d: "Ingresa tu usuario y contraseña para iniciar sesión en el loader." },
       ]
     : [
-        { t: "Open emulator", d: "Open your emulator (Bluestacks, MSI, etc.) before running the Bypass." },
+        { t: "Open emulator", d: "Open your emulator (Bluestacks, etc.) before running the Bypass." },
         { t: "Run as Administrator", d: "Right-click the Bypass and select \"Run as administrator\"." },
         { t: "Login", d: "Enter your username and password to log in to the loader." },
       ];

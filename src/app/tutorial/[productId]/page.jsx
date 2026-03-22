@@ -462,7 +462,6 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.14" color="#8b5cf6" />
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="MSI 5.12" color="#8b5cf6" />
         </div>
       </Card>
       <Card className="mb-4">
