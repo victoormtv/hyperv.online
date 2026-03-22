@@ -18,17 +18,12 @@ const PRODUCT_ICONS = {
 
 const FREE_PRODUCTS = ["panel-free", "bypass-free"];
 
-// Extra issues for Panel Free (same as tutorial, no bypass error)
 const PANEL_FREE_EXTRA_ISSUES = [
   { t: "FALLO AL RECUPERAR LA VERSIÓN", d: "Este error se produce cuando no se ha hecho una certificación.", img: "/error-recuperar-version.png", warning: "Para solucionar esto, sigue el video tutorial a continuación.", video: "https://www.youtube.com/embed/9bCIRGVBhFg" },
-  { t: "HWID RESET", d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.", warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.", img: "/hwid-reset-bypass.png" },
-  { t: "NO ACTIVE SUBSCRIPTIONS FOUND", d: "Este problema es común y suele ocurrir cuando ya ha finalizado la membresía del cliente.", warning: "Si enfrentas este problema, es posible que tu suscripción haya expirado. Si no es así, puedes contactar a un vendedor abriendo un ticket en Discord o enviando un mensaje privado para resolver la situación.", img: "/suscripcion-finalizada-bypass.png" },
   { t: "COULDN'T RESOLVE HOST", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-host-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
   { t: "ERROR SSL", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-ssl-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
-  { t: "¿Sigues teniendo problemas?", d: "Abre un ticket en Discord con capturas de pantalla de los errores.", link: { label: "Ir al Discord", href: "https://discord.com/invite/hypervgg" } },
 ];
 
-// Extra issues for Bypass Free (includes download error)
 const BYPASS_FREE_EXTRA_ISSUES = [
   { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
   ...PANEL_FREE_EXTRA_ISSUES,

@@ -191,19 +191,12 @@ const translations = {
           runDesc: 'Open dControl and click "Disable Windows Defender". It should turn red.',
         },
         vcpp: {
-          title: "2. Visual C++ Redistributables (All-in-One)",
-          desc: "Install these to avoid DLL errors or crashes.",
+          title: "2. Visual C++ Redistributables (All-in-One) and DirectX Runtime",
+          desc: "Install these to avoid DLL errors or crashes and Required for graphics rendering and compatibility.",
           download: "Download the package",
           install: "Install",
-          installDesc: "Extract, right-click install_all.bat, and Run as Admin. Restart PC after.",
-        },
-        directx: {
-          title: "3. DirectX Runtime",
-          desc: "Required for graphics rendering and compatibility.",
-          download: "Download",
-          install: "Install",
-          installDesc: 'Run the installer. Uncheck "Bing Bar" during installation.',
-        },
+          installDesc: "Extract, right-click install_all.bat, and Run as Admin. Restart PC after. Run the installer. Uncheck Bing Bar during installation.",
+        }
       },
       req: {
         title: "Requirements",
@@ -237,7 +230,6 @@ const translations = {
           { t: "Run as Administrator", d: 'Right-click the file and select "Run as administrator".' },
           { t: "Wait for Initialization", d: "The loader will configure your system automatically. Wait for the process to complete." },
           { t: "Login", d: "The browser will open automatically. Enter your license key to activate the product." },
-          { t: "Test Move", d: 'Click the "Test Move" button to verify it\'s working.' },
         ],
         works: "If it works:",
         worksDesc: "The mouse will move a little bit automatically. This means everything is working!",
@@ -523,18 +515,11 @@ const translations = {
           runDesc: 'Abre dControl y presiona "Disable Windows Defender". Debería ponerse en rojo.',
         },
         vcpp: {
-          title: "2. Visual C++ Redistributables (All-in-One)",
-          desc: "Instala estos para evitar errores DLL o crashes.",
+          title: "2. Visual C++ Redistributables (All-in-One) and DirectX Runtime",
+          desc: "Instala estos para evitar errores DLL o crashes. Necesario para renderizado gráfico y compatibilidad.",
           download: "Descargar el paquete",
           install: "Instalar",
-          installDesc: "Extrae el archivo, haz clic derecho en install_all.bat y ejecuta como Administrador. Reinicia el PC.",
-        },
-        directx: {
-          title: "3. DirectX Runtime",
-          desc: "Necesario para renderizado gráfico y compatibilidad.",
-          download: "Descargar",
-          install: "Instalar",
-          installDesc: 'Ejecuta el instalador. Desmarca "Bing Bar" durante la instalación.',
+          installDesc: "Extrae el archivo, haz clic derecho en install_all.bat y ejecuta como Administrador. Ejecuta el instalador. Desmarca Bing Bar durante la instalación. Reinicia el PC. ",
         },
       },
       req: {
@@ -568,8 +553,7 @@ const translations = {
         steps: [
           { t: "Ejecutar como Administrador", d: 'Haz clic derecho en el archivo y selecciona "Ejecutar como administrador".' },
           { t: "Esperar inicialización", d: "El loader configurará tu sistema automáticamente. Espera a que el proceso termine." },
-          { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." },
-          { t: "Test Move", d: 'Haz clic en el botón "Test Move" para verificar que funciona correctamente.' },
+          { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." }
         ],
         works: "Si funciona:",
         worksDesc: "El ratón se moverá un poco automáticamente. ¡Eso significa que todo está funcionando!",
