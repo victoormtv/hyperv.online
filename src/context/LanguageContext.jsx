@@ -231,8 +231,6 @@ const translations = {
           { t: "Wait for Initialization", d: "The loader will configure your system automatically. Wait for the process to complete." },
           { t: "Login", d: "The browser will open automatically. Enter your license key to activate the product." },
         ],
-        works: "If it works:",
-        worksDesc: "The mouse will move a little bit automatically. This means everything is working!",
         fails: "If it does NOT work:",
         failsDesc: 'Check the "Common Issues" section or contact support through Discord.',
       },
@@ -555,8 +553,6 @@ const translations = {
           { t: "Esperar inicialización", d: "El loader configurará tu sistema automáticamente. Espera a que el proceso termine." },
           { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." }
         ],
-        works: "Si funciona:",
-        worksDesc: "El ratón se moverá un poco automáticamente. ¡Eso significa que todo está funcionando!",
         fails: "Si NO funciona:",
         failsDesc: 'Revisa la sección "Problemas comunes" o contacta soporte a través de Discord.',
       },
