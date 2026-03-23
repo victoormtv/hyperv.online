@@ -28,9 +28,15 @@ const PANEL_FREE_EXTRA_ISSUES = [
   { t: "¿Sigues teniendo problemas?", d: "Abre un ticket en Discord con capturas de pantalla de los errores.", link: { label: "Ir al Discord", href: "https://discord.com/invite/hypervgg" } },
 ];
 
+// Panel Free issues with WARP
+const PANEL_FREE_WARP_ISSUES = [
+  { t: "ERROR DE RED / WARP", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
+  ...PANEL_FREE_EXTRA_ISSUES,
+];
+
 // Extra issues for Bypass Free (includes download error)
 const BYPASS_FREE_EXTRA_ISSUES = [
-  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
+  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
 const ACCENT = "#f59e0b";
@@ -352,6 +358,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
+
       </div>
     </>
   );
@@ -404,6 +411,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.realhostx.com/Cloud/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
           <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="MSI 5.12" color="#8b5cf6" />
         </div>
       </Card>
       <Card className="mb-4">
@@ -525,6 +533,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
+
       </div>
     </>
   );
