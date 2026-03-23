@@ -89,12 +89,7 @@ const EXTRA_ISSUES = [
     d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.",
     img: "/error-ssl-bypass.png",
     video: "https://www.youtube.com/embed/wdp7lZtmkhk",
-  },
-  {
-    t: "¿Sigues teniendo problemas?",
-    d: "Abre un ticket en Discord con capturas de pantalla de los errores.",
-    link: { label: "Ir al Discord", href: "https://discord.com/invite/hypervgg" },
-  },
+  }
 ];
 
 // ── Bypass issues (same as EXTRA_ISSUES + download error first) ───────
