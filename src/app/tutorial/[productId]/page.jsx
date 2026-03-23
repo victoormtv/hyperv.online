@@ -67,7 +67,7 @@ const EXTRA_ISSUES = [
     t: "HWID RESET",
     d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.",
     warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.",
-    img: "/hwid-reset-bypass.png",
+    img: "/hwid-reset.png",
   },
   {
     t: "NO ACTIVE SUBSCRIPTIONS FOUND",
