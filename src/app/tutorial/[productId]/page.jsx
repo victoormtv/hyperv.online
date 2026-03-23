@@ -389,7 +389,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
               <StepBadge n={1} color="#6366f1" />
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
-                <DownloadBtn href="https://drive.google.com/uc?export=download&id=1iWyctiUPloQYxmMpbvyOznn5meXPWvuo" label={tx.deps.defender.downloadDcontrol} />
+                <DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
                 <p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p>
               </div>
             </div>
