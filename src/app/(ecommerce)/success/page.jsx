@@ -162,7 +162,7 @@ export default function SuccessPage() {
             </p>
             <div className="rounded-2xl overflow-hidden border border-white/10 aspect-video w-full">
               <iframe
-                src="https://www.youtube.com/embed/OU2PX_3Ori0"
+                src="https://www.youtube.com/embed/J0iK-45e0So"
                 title={s.tutorialBadge}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

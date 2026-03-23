@@ -300,7 +300,7 @@ const translations = {
       termsLink: "Terms of Service",
       privacyLink: "Privacy Policy",
       processing: "Processing...",
-      getFree: "🎉 Get for Free",
+      getFree: "Get for Free",
       pay: "Pay",
       cancelPayment: "Cancel payment",
       openNewTab: "Open in new tab ↗",
