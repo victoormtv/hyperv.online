@@ -18,14 +18,19 @@ const PRODUCT_ICONS = {
 
 const FREE_PRODUCTS = ["panel-free", "bypass-free"];
 
+// Extra issues for Panel Free (same as tutorial, no bypass error)
 const PANEL_FREE_EXTRA_ISSUES = [
   { t: "FALLO AL RECUPERAR LA VERSIÓN", d: "Este error se produce cuando no se ha hecho una certificación.", img: "/error-recuperar-version.png", warning: "Para solucionar esto, sigue el video tutorial a continuación.", video: "https://www.youtube.com/embed/9bCIRGVBhFg" },
+  { t: "HWID RESET", d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.", warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.", img: "/hwid-reset-bypass.png" },
+  { t: "NO ACTIVE SUBSCRIPTIONS FOUND", d: "Este problema es común y suele ocurrir cuando ya ha finalizado la membresía del cliente.", warning: "Si enfrentas este problema, es posible que tu suscripción haya expirado. Si no es así, puedes contactar a un vendedor abriendo un ticket en Discord o enviando un mensaje privado para resolver la situación.", img: "/suscripcion-finalizada-bypass.png" },
   { t: "COULDN'T RESOLVE HOST", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-host-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
   { t: "ERROR SSL", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-ssl-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
+  { t: "¿Sigues teniendo problemas?", d: "Abre un ticket en Discord con capturas de pantalla de los errores.", link: { label: "Ir al Discord", href: "https://discord.com/invite/hypervgg" } },
 ];
 
+// Extra issues for Bypass Free (includes download error)
 const BYPASS_FREE_EXTRA_ISSUES = [
-  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
+  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
 const ACCENT = "#f59e0b";
@@ -330,7 +335,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
               <StepBadge n={1} color="#6366f1" />
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
-                <DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
+                <DownloadBtn href="https://drive.google.com/uc?export=download&id=1iWyctiUPloQYxmMpbvyOznn5meXPWvuo" label={tx.deps.defender.downloadDcontrol} />
               </div>
             </div>
             <div className="flex gap-3">
@@ -391,7 +396,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.mediafire.com/file/xehwqjz68lnrtvp/FreeFire-NormalV4.xapk/file" label="Free Fire Normal" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
-          <DownloadBtn href="https://drive.google.com/uc?export=download&id=17jiUcYmZdqEXQeZMG5BxIe6yuGYHxfc4" label="Free Fire Tela" color="#06b6d4" />
+          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
         </div>
       </Card>
       <Card className="mb-4">
@@ -436,6 +441,10 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
           ))}
         </div>
         <div className="mt-5 flex flex-col gap-3">
+          <div className="rounded-xl px-4 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
+            <Check size={16} className="text-green-400 shrink-0 mt-0.5" />
+            <div><p className="text-green-400 font-bold text-sm">{tx.install.works}</p><p className="text-green-300/70 text-sm">{tx.install.worksDesc}</p></div>
+          </div>
           <div className="rounded-xl px-4 py-4 border border-red-500/30 bg-red-500/10 flex gap-3">
             <AlertTriangle size={16} className="text-red-400 shrink-0 mt-0.5" />
             <div><p className="text-red-400 font-bold text-sm">{tx.install.fails}</p><p className="text-red-300/70 text-sm">{tx.install.failsDesc}</p></div>
@@ -446,7 +455,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
   );
 
   // common-issues
-  const allIssues = PANEL_FREE_EXTRA_ISSUES;
+  const allIssues = PANEL_FREE_WARP_ISSUES;
 
   return (
     <>
@@ -504,7 +513,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
           <div className="flex items-center gap-2 my-4"><div className="flex-1 h-px bg-white/10" /><span className="text-sm font-bold" style={{ color: ACCENT }}>{tx.deps.defender.then}</span><div className="flex-1 h-px bg-white/10" /></div>
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-4 text-white font-bold text-sm"><Check size={15} className="text-green-400" /> {tx.deps.defender.dcontrol}</div>
-            <div className="flex gap-3 mb-4"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p><DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} /></div></div>
+            <div className="flex gap-3 mb-4"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p><DownloadBtn href="https://drive.google.com/uc?export=download&id=1iWyctiUPloQYxmMpbvyOznn5meXPWvuo" label={tx.deps.defender.downloadDcontrol} /><p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.defender.runAndDisable}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.defender.runDesc}</p></div></div>
           </div>
         </Card>
@@ -564,7 +573,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <Card className="mb-4">
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
-        <DownloadBtn href="https://www.mediafire.com/file/17ctvd6v86q1iap/FreeFire-TelaV4.xapk/file" label="Free Fire Tela (Directo)" color="#06b6d4" />
+        <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela (Directo)" color="#06b6d4" />
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
@@ -684,12 +693,12 @@ export default function FreePage() {
   // Pasos específicos para bypass-free
   const bypassSteps = locale === "es"
     ? [
-        { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, etc.) antes de ejecutar el Bypass." },
+        { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, MSI, etc.) antes de ejecutar el Bypass." },
         { t: "Ejecutar como Administrador", d: "Haz clic derecho en el Bypass y selecciona \"Ejecutar como administrador\"." },
         { t: "Login", d: "Ingresa tu usuario y contraseña para iniciar sesión en el loader." },
       ]
     : [
-        { t: "Open emulator", d: "Open your emulator (Bluestacks, etc.) before running the Bypass." },
+        { t: "Open emulator", d: "Open your emulator (Bluestacks, MSI, etc.) before running the Bypass." },
         { t: "Run as Administrator", d: "Right-click the Bypass and select \"Run as administrator\"." },
         { t: "Login", d: "Enter your username and password to log in to the loader." },
       ];

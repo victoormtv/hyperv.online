@@ -36,10 +36,10 @@ const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-e
 const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
-  "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Complex.rar",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
-  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
-  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
-  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "panel-full":        { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
+  "panel-secure":      { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
+  "panel-only-aimbot": { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
+  "menu-chams-esp":    { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
 };
 
 const getProductConfig = (productId) =>
@@ -57,6 +57,7 @@ const SECTIONS = [
 const BYPASS_PRODUCTS = ["bypass-apk", "bypass-uid"];
 
 // ── Extra issues for all GROUP1 products ─────────────
+// Note: WARP issue is prepended dynamically via getGroupIssues()
 const EXTRA_ISSUES = [
   {
     t: "FALLO AL RECUPERAR LA VERSIÓN",
@@ -69,7 +70,7 @@ const EXTRA_ISSUES = [
     t: "HWID RESET",
     d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.",
     warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.",
-    img: "/hwid-reset.png",
+    img: "/hwid-reset-bypass.png",
   },
   {
     t: "NO ACTIVE SUBSCRIPTIONS FOUND",
@@ -102,7 +103,7 @@ const BYPASS_EXTRA_ISSUES = [
     t: "ERROR AL DESCARGAR EL BYPASS",
     d: "Este problema se debe a un error de conexión de RED.",
     img: "/error-bypass.png",
-    extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.",
+    extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.",
     link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
   },
   ...EXTRA_ISSUES,
@@ -393,7 +394,8 @@ const Group1Content = ({ section, productName, tx, productId }) => {
               <StepBadge n={1} color="#6366f1" />
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
-                <DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
+                <DownloadBtn href="https://drive.google.com/uc?export=download&id=1iWyctiUPloQYxmMpbvyOznn5meXPWvuo" label={tx.deps.defender.downloadDcontrol} />
+                <p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -406,7 +408,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           <CardTitle icon={Cpu} title={tx.deps.vcpp.title} color="#6366f1" />
           <p className="text-white/50 text-sm mb-4">{tx.deps.vcpp.desc}</p>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" /></div></div>
+            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" /></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
@@ -454,7 +456,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.mediafire.com/file/xehwqjz68lnrtvp/FreeFire-NormalV4.xapk/file" label="Free Fire Normal" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
-          <DownloadBtn href="https://www.mediafire.com/file/17ctvd6v86q1iap/FreeFire-TelaV4.xapk/file" label="Free Fire Tela" color="#06b6d4" />
+          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
         </div>
       </Card>
       <Card className="mb-4">
@@ -462,7 +464,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.14" color="#8b5cf6" />
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
-        </div>
+         </div>
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
@@ -499,6 +501,10 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           ))}
         </div>
         <div className="mt-5 flex flex-col gap-3">
+          <div className="rounded-xl px-4 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
+            <Check size={16} className="text-green-400 shrink-0 mt-0.5" />
+            <div><p className="text-green-400 font-bold text-sm">{tx.install.works}</p><p className="text-green-300/70 text-sm">{tx.install.worksDesc}</p></div>
+          </div>
           <div className="rounded-xl px-4 py-4 border border-red-500/30 bg-red-500/10 flex gap-3">
             <AlertTriangle size={16} className="text-red-400 shrink-0 mt-0.5" />
             <div><p className="text-red-400 font-bold text-sm">{tx.install.fails}</p><p className="text-red-300/70 text-sm">{tx.install.failsDesc}</p></div>
@@ -509,7 +515,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   );
 
   // common-issues
-  const allIssues = BYPASS_PRODUCTS.includes(productId) ? BYPASS_EXTRA_ISSUES : EXTRA_ISSUES;
+  const allIssues = BYPASS_PRODUCTS.includes(productId) ? getBYPASS_EXTRA_ISSUES(productId) : getGroupIssues(productId);
 
   return (
     <>

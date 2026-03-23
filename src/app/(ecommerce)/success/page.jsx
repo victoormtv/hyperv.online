@@ -165,7 +165,7 @@ export default function SuccessPage() {
                 src="https://www.youtube.com/embed/J0iK-45e0So"
                 title={s.tutorialBadge}
                 className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-medsia; gyroscope; picture-in-picture"
                 allowFullScreen
               />
             </div>
