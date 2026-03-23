@@ -53,11 +53,8 @@ const SECTIONS = [
   { id: "common-issues",        group: "TROUBLE" },
 ];
 
-// ── Bypass products that get bypass-specific issues ──
 const BYPASS_PRODUCTS = ["bypass-apk", "bypass-uid"];
 
-// ── Extra issues for all GROUP1 products ─────────────
-// Note: WARP issue is prepended dynamically via getGroupIssues()
 const EXTRA_ISSUES = [
   {
     t: "FALLO AL RECUPERAR LA VERSIÓN",
@@ -92,17 +89,44 @@ const EXTRA_ISSUES = [
   }
 ];
 
+// ── Helper: get WARP extra text based on product ─────
+function getWarpText(productId) {
+  if (productId === "menu-chams-esp" || productId === "menu-chams-bloodstrike") {
+    return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el menú.";
+  }
+  if (["bypass-apk", "bypass-uid"].includes(productId)) {
+    return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.";
+  }
+  return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.";
+}
+
+// ── Group1 issues: WARP + common issues ──────────────
+function getGroupIssues(productId) {
+  return [
+    {
+      t: "ERROR DE RED / WARP",
+      d: "Este problema se debe a un error de conexión de RED.",
+      img: "/error-bypass.png",
+      extra: getWarpText(productId),
+      link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
+    },
+    ...EXTRA_ISSUES,
+  ];
+}
+
 // ── Bypass issues (same as EXTRA_ISSUES + download error first) ───────
-const BYPASS_EXTRA_ISSUES = [
-  {
-    t: "ERROR AL DESCARGAR EL BYPASS",
-    d: "Este problema se debe a un error de conexión de RED.",
-    img: "/error-bypass.png",
-    extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.",
-    link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
-  },
-  ...EXTRA_ISSUES,
-];
+function getBYPASS_EXTRA_ISSUES(productId) {
+  return [
+    {
+      t: "ERROR AL DESCARGAR EL BYPASS",
+      d: "Este problema se debe a un error de conexión de RED.",
+      img: "/error-bypass.png",
+      extra: getWarpText(productId),
+      link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
+    },
+    ...EXTRA_ISSUES,
+  ];
+}
 
 // ── UI primitives ─────────────────────────────────────
 const StepBadge = ({ n, color = ACCENT }) => (
@@ -406,6 +430,14 @@ const Group1Content = ({ section, productName, tx, productId }) => {
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
+        <Card>
+          <CardTitle icon={Monitor} title={tx.deps.directx.title} color="#f59e0b" />
+          <p className="text-white/50 text-sm mb-4">{tx.deps.directx.desc}</p>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-3"><StepBadge n={1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.directx.download}</p><DownloadBtn href="https://mega.nz/file/N1xTTARA#WxtglCiFrvoyQVmDc2Ib-oWtIOu7kbhloiK825_cPQg" label="Download Here" color="#f59e0b" /></div></div>
+            <div className="flex gap-3"><StepBadge n={2} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{tx.deps.directx.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.directx.installDesc}</p></div></div>
+          </div>
+        </Card>
       </div>
     </>
   );
@@ -458,7 +490,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.14" color="#8b5cf6" />
           <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
-         </div>
+        </div>
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
