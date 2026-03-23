@@ -102,7 +102,7 @@ const BYPASS_EXTRA_ISSUES = [
     t: "ERROR AL DESCARGAR EL BYPASS",
     d: "Este problema se debe a un error de conexión de RED.",
     img: "/error-bypass.png",
-    extra: "Para solucionar esto tendrás que descargar la herramienta WARP, la encontrarás en el link debajo.",
+    extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.",
     link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
   },
   ...EXTRA_ISSUES,
