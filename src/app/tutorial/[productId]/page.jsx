@@ -390,7 +390,6 @@ const Group1Content = ({ section, productName, tx, productId }) => {
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
                 <DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
-                <p className="text-white/30 text-sm mt-2">{tx.deps.defender.password}: <span className="text-white/60 font-mono">sordum</span></p>
               </div>
             </div>
             <div className="flex gap-3">

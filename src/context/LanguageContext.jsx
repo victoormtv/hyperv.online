@@ -525,7 +525,7 @@ const translations = {
         subtitle: "Siga los pasos a continuación para configurarlo",
         sysTitle: "Configuración del Sistema",
         sysWarning: "Requisitos del Sistema",
-        items: ["Windows 8 / 10 / 11", "HVCI ON & OFF", "Todos los ratones compatibles", "Emuladores: Bluestacks 5.14, 5.22"],
+        items: ["Windows 8 / 10 / 11", "HVCI ON & OFF", "Emuladores: Bluestacks 5.14, 5.22"],
         gameTitle: "Configuración del Juego",
         gameWarning: "Modo ADB Requerido",
         gameDesc: "El emulador debe tener el ADB activado para que el producto funcione correctamente.",
