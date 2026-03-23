@@ -436,10 +436,6 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
           ))}
         </div>
         <div className="mt-5 flex flex-col gap-3">
-          <div className="rounded-xl px-4 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
-            <Check size={16} className="text-green-400 shrink-0 mt-0.5" />
-            <div><p className="text-green-400 font-bold text-sm">{tx.install.works}</p><p className="text-green-300/70 text-sm">{tx.install.worksDesc}</p></div>
-          </div>
           <div className="rounded-xl px-4 py-4 border border-red-500/30 bg-red-500/10 flex gap-3">
             <AlertTriangle size={16} className="text-red-400 shrink-0 mt-0.5" />
             <div><p className="text-red-400 font-bold text-sm">{tx.install.fails}</p><p className="text-red-300/70 text-sm">{tx.install.failsDesc}</p></div>
