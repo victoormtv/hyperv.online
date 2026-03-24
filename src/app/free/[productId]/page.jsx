@@ -47,7 +47,7 @@ const PRODUCT_CONFIG = {
   },
   "bypass-free": {
     loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar",
-    videoUrl:  "https://www.youtube.com/embed/v8QQfyi8Tvs",
+    videoUrl:  "https://www.youtube.com/embed/OU2PX_3Ori0",
   },
 };
 
@@ -550,6 +550,10 @@ const BypassFreeContent = ({ section, productName, tx }) => {
         <WarningBox title={tx.req.gameWarning} desc={tx.req.gameDesc} color="#b45309" />
         <div className="mt-4 rounded-xl overflow-hidden border border-white/10">
           <img src="/adb.png" alt="ADB" className="w-full h-auto object-contain" />
+          <div className="mt-4 flex flex-col gap-2">
+            <p className="text-white font-semibold text-sm">Perfil de Emulador</p>
+            <img src="/bypass-perfil.png" alt="Profile" className="w-full h-auto object-contain" />
+          </div>
         </div>
       </Card>
     </>
