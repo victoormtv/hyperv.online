@@ -1,21 +1,18 @@
 "use client";
 import React, { useState } from "react";
-import { Zap, Shield, Headphones, ShoppingCart, Gift, AlertTriangle } from "lucide-react";
+import { Zap, Shield, Headphones, ShoppingCart, Gift } from "lucide-react";
 import AddToCart from "@/components/AddToCart";
 
 const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
-const OUT_OF_STOCK_PRODUCTS = ["Aimbot Body iOS"];
-const CONSULT_PRODUCTS = ["Boost Rank"];
 
 const PlanSelector = ({ plans, product, isGoldBest }) => {
   const [selected, setSelected] = useState(plans?.[0]?.id ?? null);
 
   const selectedPlan = plans?.find(p => p.id === selected) || plans?.[0];
 
-  const isFree       = FREE_PRODUCTS.includes(product?.name) || (selectedPlan?.price === 0 && !CONSULT_PRODUCTS.includes(product?.name));
-  const isOutOfStock = OUT_OF_STOCK_PRODUCTS.includes(product?.name) || product?.status === "UPDATING";
-  const isConsult    = CONSULT_PRODUCTS.includes(product?.name);
+  const isFree = FREE_PRODUCTS.includes(product?.name) || selectedPlan?.price === 0;
 
+  // Producto enriquecido con el plan seleccionado
   const productWithPlan = {
     ...product,
     price:     selectedPlan?.price ?? product?.price,
@@ -23,7 +20,9 @@ const PlanSelector = ({ plans, product, isGoldBest }) => {
     planId:    selectedPlan?.id    ?? null,
   };
 
-  const isGolden       = isFree || isGoldBest;
+  // Si es free O gold best → dorado. Si no → cyan.
+  const isGolden = isFree || isGoldBest;
+
   const accent         = isGolden ? "text-yellow-300"   : "text-cyan-400";
   const accentBg       = isGolden ? "bg-yellow-400 text-black" : "bg-cyan-500 text-black";
   const selectedBorder = isGolden
@@ -38,15 +37,10 @@ const PlanSelector = ({ plans, product, isGoldBest }) => {
   const badgeIconBg    = isGolden ? "bg-yellow-400/15" : "bg-cyan-500/15";
   const badgeIconColor = isGolden ? "text-yellow-400"  : "text-cyan-400";
 
-  const getPriceDisplay = (plan) => {
-    if (isConsult) return <span className="text-cyan-400 font-black text-base">A consultar</span>;
-    if (plan.price === 0) return <span className="text-yellow-300 font-black">FREE</span>;
-    return `$${plan.price}`;
-  };
-
   return (
     <div className="w-full lg:w-[360px] xl:w-[420px] shrink-0 flex flex-col gap-4 pb-16">
 
+      {/* choose plan card */}
       <div className={["rounded-2xl border border-white/10 bg-[#0d0f14] p-7", cardShadow].join(" ")}>
         <p className="text-white font-extrabold text-2xl mb-6">Choose Your Plan</p>
 
@@ -76,7 +70,11 @@ const PlanSelector = ({ plans, product, isGoldBest }) => {
                   )}
                 </div>
                 <span className={["font-extrabold text-lg", isSelected ? accent : "text-white/60"].join(" ")}>
-                  {getPriceDisplay(plan)}
+                  {plan.price === 0 ? (
+                    <span className="text-yellow-300 font-black">FREE</span>
+                  ) : (
+                    `$${plan.price}`
+                  )}
                 </span>
               </button>
             );
@@ -88,30 +86,8 @@ const PlanSelector = ({ plans, product, isGoldBest }) => {
           )}
         </div>
 
-        {/* out of stock banner */}
-        {isOutOfStock && (
-          <div className="flex items-start gap-3 bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 mb-6">
-            <AlertTriangle size={18} className="text-red-400 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-red-400 text-base font-extrabold">Sin Stock</p>
-              <p className="text-white/40 text-sm mt-0.5">Este producto no está disponible actualmente. Contacta soporte en Discord.</p>
-            </div>
-          </div>
-        )}
-
-        {/* consult banner */}
-        {isConsult && !isOutOfStock && (
-          <div className="flex items-start gap-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl px-5 py-4 mb-6">
-            <Headphones size={18} className="text-cyan-400 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-cyan-400 text-base font-extrabold">Precio a consultar</p>
-              <p className="text-white/40 text-sm mt-0.5">Contacta a un vendedor en Discord para obtener el precio.</p>
-            </div>
-          </div>
-        )}
-
-        {/* crypto banner */}
-        {!isFree && !isOutOfStock && !isConsult && (
+        {/* crypto banner — solo si no es free */}
+        {!isFree && (
           <div className="flex items-start gap-3 bg-[#1a1507] border border-yellow-400/20 rounded-xl px-5 py-4 mb-6">
             <Zap size={18} className="text-yellow-400 shrink-0 mt-0.5" />
             <div>
@@ -122,7 +98,7 @@ const PlanSelector = ({ plans, product, isGoldBest }) => {
         )}
 
         {/* free banner */}
-        {isFree && !isOutOfStock && (
+        {isFree && (
           <div className="flex items-start gap-3 bg-yellow-400/8 border border-yellow-400/25 rounded-xl px-5 py-4 mb-6">
             <Gift size={18} className="text-yellow-400 shrink-0 mt-0.5" />
             <div>
@@ -132,30 +108,15 @@ const PlanSelector = ({ plans, product, isGoldBest }) => {
           </div>
         )}
 
-        {/* buy button */}
-        {isOutOfStock ? (
-          <div className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-extrabold text-base cursor-not-allowed bg-white/5 border border-white/10 text-white/30">
-            <AlertTriangle size={18} strokeWidth={2.5} /> Sin Stock
+        {/* buy / get free button */}
+        <AddToCart product={productWithPlan}>
+          <div className={["w-full flex items-center justify-center gap-2 py-4 rounded-xl font-extrabold text-base cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95", buyBtn].join(" ")}>
+            {isFree
+              ? <><Gift size={18} strokeWidth={2.5} /> 🎉 Obtener Gratis →</>
+              : <><ShoppingCart size={18} strokeWidth={2.5} /> Buy Now →</>
+            }
           </div>
-        ) : isConsult ? (
-          <a
-            href="https://discord.com/invite/hypervgg"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-extrabold text-base transition-all duration-200 hover:scale-105 active:scale-95 bg-gradient-to-r from-cyan-500 to-cyan-400 text-black shadow-[0_0_24px_rgba(34,211,238,0.45)]"
-          >
-            <Headphones size={18} strokeWidth={2.5} /> Consultar en Discord →
-          </a>
-        ) : (
-          <AddToCart product={productWithPlan}>
-            <div className={["w-full flex items-center justify-center gap-2 py-4 rounded-xl font-extrabold text-base cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95", buyBtn].join(" ")}>
-              {isFree
-                ? <><Gift size={18} strokeWidth={2.5} /> Obtener Gratis →</>
-                : <><ShoppingCart size={18} strokeWidth={2.5} /> Buy Now →</>
-              }
-            </div>
-          </AddToCart>
-        )}
+        </AddToCart>
       </div>
 
       {/* trust badges */}

@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Star, Zap, ShieldCheck, Gift } from "lucide-react";
+import { Star, Zap, ShieldCheck, Gift, Headphones } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
-const GOLD_BEST  = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
-const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
+const GOLD_BEST      = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
+const FREE_PRODUCTS  = ["Panel Free", "Bypass Free"];
+const CONSULT_PRODUCTS = ["Boost Rank"];
 
 const ProductCard = ({ product }) => {
   const { t } = useLanguage();
@@ -14,6 +15,7 @@ const ProductCard = ({ product }) => {
   const extraCount      = features.length - 3;
   const isGoldBest      = GOLD_BEST.includes(product?.name);
   const isFree          = FREE_PRODUCTS.includes(product?.name);
+  const isConsult       = CONSULT_PRODUCTS.includes(product?.name);
 
   return (
     <div className={[
@@ -32,7 +34,7 @@ const ProductCard = ({ product }) => {
         </div>
       )}
 
-      {/* BEST badge — solo si no es free */}
+      {/* BEST badge */}
       {isGoldBest && !isFree && (
         <div className="absolute top-3 right-3 z-10 bg-yellow-400 text-black text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
           <Star size={10} fill="black" /> BEST
@@ -97,10 +99,19 @@ const ProductCard = ({ product }) => {
 
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
           <div>
-            <p className="text-white/30 text-[10px] uppercase tracking-wider">{isFree ? "Price" : t.fashsalesFrom ?? "From"}</p>
-            <p className={["font-bold text-lg", isFree ? "text-yellow-400" : "text-white"].join(" ")}>
-              {isFree ? "FREE" : `$${product?.price}`}
+            <p className="text-white/30 text-[10px] uppercase tracking-wider">
+              {isFree ? "Price" : isConsult ? "" : t.fashsalesFrom ?? "From"}
             </p>
+            {isFree ? (
+              <p className="font-bold text-lg text-yellow-400">FREE</p>
+            ) : isConsult ? (
+              <div className="flex items-center gap-1.5">
+                <Headphones size={13} className="text-cyan-400" />
+                <p className="font-bold text-sm text-cyan-400">A consultar</p>
+              </div>
+            ) : (
+              <p className="font-bold text-lg text-white">${product?.price}</p>
+            )}
           </div>
           <Link href={`/products/${product?.id}`}>
             <button className={[
@@ -121,7 +132,6 @@ const ProductsGrid = ({ products }) => {
   const [search,           setSearch]           = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Categorías — "Free Products" siempre primero
   const rawCategories = Array.from(new Set(products.map(p => p.category?.name).filter(Boolean)));
   const sortedCategories = [
     "Free Products",
@@ -135,7 +145,6 @@ const ProductsGrid = ({ products }) => {
       const matchCat    = selectedCategory === "all" || p.category?.name === selectedCategory;
       return matchSearch && matchCat;
     })
-    // Free products siempre primero
     .sort((a, b) => {
       const aFree = FREE_PRODUCTS.includes(a.name) ? 0 : 1;
       const bFree = FREE_PRODUCTS.includes(b.name) ? 0 : 1;
@@ -144,7 +153,6 @@ const ProductsGrid = ({ products }) => {
 
   return (
     <div className="min-h-screen px-6 md:px-24 lg:px-32 py-48 max-w-screen-2xl mx-auto">
-      {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white uppercase tracking-tight mb-3">
           {t.fashsalesTitle ?? "Our Products"}
@@ -154,7 +162,6 @@ const ProductsGrid = ({ products }) => {
         </p>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
         <input
           type="text"
@@ -163,7 +170,6 @@ const ProductsGrid = ({ products }) => {
           onChange={e => setSearch(e.target.value)}
           className="bg-white/5 border border-white/10 text-white/80 placeholder-white/25 text-sm rounded-lg px-4 py-2.5 w-full md:w-72 focus:outline-none focus:border-cyan-500/50 transition-colors"
         />
-
         <div className="flex flex-wrap gap-2">
           {categories.map(cat => (
             <button
@@ -186,7 +192,6 @@ const ProductsGrid = ({ products }) => {
         </div>
       </div>
 
-      {/* Grid */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map(product => (
