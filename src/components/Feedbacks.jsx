@@ -50,42 +50,59 @@ const ReviewCard = ({ review }) => (
 
 const Feedbacks = () => {
   const { t } = useLanguage();
-  const reviews = t.communityReviews;
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/reviews")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setReviews(data);
+      })
+      .catch((e) => console.error("Error cargando reviews:", e));
+  }, []);
 
   const trackRef = useRef(null);
-  const containerRef = useRef(null);
   const animationRef = useRef(null);
   const positionRef = useRef(0);
   const isPausedRef = useRef(false);
   const [showArrows, setShowArrows] = useState(false);
 
-  const doubled = [...reviews, ...reviews];
-  const SPEED = 0.5;
   const CARD_W = 320 + 24;
+  const doubled = reviews.length > 0 ? [...reviews, ...reviews] : [];
 
   useEffect(() => {
+    if (reviews.length === 0) return;
+
     const track = trackRef.current;
     if (!track) return;
+
     const totalWidth = reviews.length * CARD_W;
+
     const animate = () => {
       if (!isPausedRef.current) {
-        positionRef.current += SPEED;
-        if (positionRef.current >= totalWidth) positionRef.current = 0;
+        positionRef.current += 0.5;
+        if (positionRef.current >= totalWidth) {
+          positionRef.current = 0;
+        }
         track.style.transform = `translateX(-${positionRef.current}px)`;
       }
       animationRef.current = requestAnimationFrame(animate);
     };
+
     animationRef.current = requestAnimationFrame(animate);
+
     return () => cancelAnimationFrame(animationRef.current);
-  }, []);
+  }, [reviews.length]);
 
   const handlePrev = () => {
-    positionRef.current = Math.max(0, positionRef.current - CARD_W);
+    const totalWidth = reviews.length * CARD_W;
+    positionRef.current = (positionRef.current - CARD_W + totalWidth) % totalWidth;
     trackRef.current.style.transform = `translateX(-${positionRef.current}px)`;
   };
 
   const handleNext = () => {
-    positionRef.current = (positionRef.current + CARD_W) % (reviews.length * CARD_W);
+    const totalWidth = reviews.length * CARD_W;
+    positionRef.current = (positionRef.current + CARD_W) % totalWidth;
     trackRef.current.style.transform = `translateX(-${positionRef.current}px)`;
   };
 
@@ -100,33 +117,42 @@ const Feedbacks = () => {
       </div>
 
       <div
-        ref={containerRef}
         className="relative overflow-hidden"
         onMouseEnter={() => { isPausedRef.current = true; setShowArrows(true); }}
         onMouseLeave={() => { isPausedRef.current = false; setShowArrows(false); }}
       >
-        {/* fades usando transparent en vez de from-black */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-transparent/0 to-transparent z-10 pointer-events-none"
+        {/* Fade izquierda */}
+        <div
+          className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to right, rgba(3,4,5,0.95), transparent)" }}
         />
-        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+        {/* Fade derecha */}
+        <div
+          className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to left, rgba(3,4,5,0.95), transparent)" }}
         />
 
+        {/* Flecha izquierda */}
         <button
           onClick={handlePrev}
-          className={`absolute left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-transparent border border-white/10 text-white/30 flex items-center justify-center hover:text-white/60 hover:border-white/25 hover:scale-110 transition-all duration-300 [&>svg]:stroke-[1.5] ${showArrows ? "opacity-100" : "opacity-0"}`}
+          className={`absolute left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-transparent border border-white/10 text-white/30 flex items-center justify-center hover:text-white/60 hover:border-white/25 hover:scale-110 transition-all duration-300 ${showArrows ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
         </button>
 
+        {/* Flecha derecha */}
         <button
           onClick={handleNext}
-          className={`absolute right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-transparent border border-white/10 text-white/30 flex items-center justify-center hover:text-white/60 hover:border-white/25 hover:scale-110 transition-all duration-300 [&>svg]:stroke-[1.5] ${showArrows ? "opacity-100" : "opacity-0"}`}
+          className={`absolute right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-transparent border border-white/10 text-white/30 flex items-center justify-center hover:text-white/60 hover:border-white/25 hover:scale-110 transition-all duration-300 ${showArrows ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
         </button>
 
+        {/* Track de tarjetas */}
         <div
           ref={trackRef}
           className="flex py-4"
