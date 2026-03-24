@@ -32,14 +32,15 @@ const PRODUCT_ICONS = {
   "discord-tools":          MessageCircle,
 };
 
-const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-esp"];
+const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-esp", "bypass-uid"];
 const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
-  "panel-full":        { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
-  "panel-secure":      { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
-  "panel-only-aimbot": { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
-  "menu-chams-esp":    { loaderUrl: "https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14www.asuswebstorage.com", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Complex.rar",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
+  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
+  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
+  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar", videoUrl:  "https://www.youtube.com/embed/v8QQfyi8Tvs", extraContent: null,},
 };
 
 const getProductConfig = (productId) =>
@@ -108,7 +109,7 @@ function getGroupIssues(productId) {
       d: "Este problema se debe a un error de conexión de RED.",
       img: "/error-bypass.png",
       extra: getWarpText(productId),
-      link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
+      link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" },
     },
     ...EXTRA_ISSUES,
   ];
@@ -122,7 +123,7 @@ function getBYPASS_EXTRA_ISSUES(productId) {
       d: "Este problema se debe a un error de conexión de RED.",
       img: "/error-bypass.png",
       extra: getWarpText(productId),
-      link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" },
+      link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" },
     },
     ...EXTRA_ISSUES,
   ];
@@ -455,6 +456,20 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           <img src="/adb.png" alt="ADB configuration guide" className="w-full h-auto object-contain" />
         </div>
       </Card>
+
+      {productId === "bypass-uid" && (
+        <Card className="mt-5">
+          <CardTitle icon={Monitor} title="Configuración del Emulador" color={ACCENT} />
+          <WarningBox title="Configuración ADB Requerida" desc="El emulador DEBE estar configurado correctamente con ADB habilitado para que el Bypass funcione." color="#b45309" />
+          <div className="mt-4 flex flex-col gap-3">
+            {["/memu-config-1.png","/memu-config-2.png","/memu-config-3.png","/memu-config-4.png"].map((src, i) => (
+              <div key={i} className="rounded-xl overflow-hidden border border-white/10">
+                <img src={src} alt={`Memu config ${i+1}`} className="w-full h-auto object-contain" />
+              </div>
+            ))}
+          </div>
+        </Card>
+)}
     </>
   );
 
@@ -472,7 +487,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.mediafire.com/file/xehwqjz68lnrtvp/FreeFire-NormalV4.xapk/file" label="Free Fire Normal" color="#06b6d4" />
+          <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
         </div>
@@ -480,17 +495,22 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.14" color="#8b5cf6" />
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="Bluestacks 5.22" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
         </div>
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4" label="UltraViewer" color="#f59e0b" />
-          <DownloadBtn href="https://www.asuswebstorage.com/navigate/a/#/s/0BAB1D4426C74D55A0C9EA249CE188B14" label="AnyDesk" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/UltraViewer_setup_6.6.124_es.exe" label="UltraViewer" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/AnyDesk.exe" label="AnyDesk" color="#f59e0b" />
         </div>
+      </Card>
+      <Card className="mb-4">
+        <CardTitle icon={Monitor} title={tx.dl.zArchiverTitle} color="#f65c5cff" />
+        <p className="text-white/50 text-sm mb-3">{tx.dl.zArchiverDesc}</p>
+        <DownloadBtn href="https://www.realhostx.com/Garena/ZArchiver.apk" label="ZArchiver" color="#f65c5cff" />
       </Card>
       <InfoBox text={tx.dl.reminder} />
     </>

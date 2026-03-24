@@ -29,13 +29,13 @@ const PANEL_FREE_EXTRA_ISSUES = [
 
 // Panel Free issues with WARP
 const PANEL_FREE_WARP_ISSUES = [
-  { t: "ERROR DE RED / WARP", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
+  { t: "ERROR DE RED / WARP", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.", link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" } },
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
 
 // Extra issues for Bypass Free (includes download error)
 const BYPASS_FREE_EXTRA_ISSUES = [
-  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://www.asuswebstorage.com/navigate/a/#/s/58AA5A55303549DB8831FAA948E2A1DE4www.asuswebstorage.com" } },
+  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" } },
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
 const ACCENT = "#f59e0b";
@@ -400,7 +400,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.mediafire.com/file/xehwqjz68lnrtvp/FreeFire-NormalV4.xapk/file" label="Free Fire Normal" color="#06b6d4" />
+          <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
         </div>
@@ -577,7 +577,10 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <Card className="mb-4">
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
-        <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela (Directo)" color="#06b6d4" />
+        <div className="flex flex-wrap gap-2">
+          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela (Directo)" color="#06b6d4" />
+          <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
+        </div>
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
