@@ -491,7 +491,7 @@ async function main() {
         ],
         isBest: false,
         status: "UNDETECTED",
-        images: ["https://i.ibb.co/XZn91S4y/DISCORD-TOOLS-HYPER-V.png"],
+        images: ["/discord-tools.png"],
         plans: [
           { label: "6 Boosts x1 mes", price: 6.99 },
           { label: "6 Boosts x3 meses", price: 11.99 },
