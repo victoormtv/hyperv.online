@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 const GOLD_BEST      = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
 const FREE_PRODUCTS  = ["Panel Free", "Bypass Free"];
 const CONSULT_PRODUCTS = ["Boost Rank"];
+const OUT_OF_STOCK   = ["Aimbot Pecho", "Aimbot Cody", "iOS"];
 
 const ProductCard = ({ product }) => {
   const { t } = useLanguage();
@@ -16,6 +17,7 @@ const ProductCard = ({ product }) => {
   const isGoldBest      = GOLD_BEST.includes(product?.name);
   const isFree          = FREE_PRODUCTS.includes(product?.name);
   const isConsult       = CONSULT_PRODUCTS.includes(product?.name);
+  const isOutOfStock    = OUT_OF_STOCK.includes(product?.name);
 
   return (
     <div className={[
@@ -100,10 +102,15 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
           <div>
             <p className="text-white/30 text-[10px] uppercase tracking-wider">
-              {isFree ? "Price" : isConsult ? "" : t.fashsalesFrom ?? "From"}
+              {isFree ? "Price" : isConsult || isOutOfStock ? "" : t.fashsalesFrom ?? "From"}
             </p>
             {isFree ? (
               <p className="font-bold text-lg text-yellow-400">FREE</p>
+            ) : isOutOfStock ? (  // 👈 bloque nuevo
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                <p className="font-bold text-sm text-red-400">Sin stock</p>
+              </div>
             ) : isConsult ? (
               <div className="flex items-center gap-1.5">
                 <Headphones size={13} className="text-cyan-400" />
