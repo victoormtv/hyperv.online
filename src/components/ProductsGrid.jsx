@@ -7,7 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 const GOLD_BEST      = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
 const FREE_PRODUCTS  = ["Panel Free", "Bypass Free"];
 const CONSULT_PRODUCTS = ["Boost Rank"];
-const OUT_OF_STOCK   = ["Aimbot Pecho", "Aimbot Cody", "iOS"];
+const OUT_OF_STOCK   = ["Aimbot Pecho Android", "Aimbot Body iOS"];
 
 const ProductCard = ({ product }) => {
   const { t } = useLanguage();
