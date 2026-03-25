@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 const PRODUCT_ICONS = {
-  "panel-free":  Gift,
+  "panel-free": Gift,
   "bypass-free": Gift,
 };
 
@@ -43,11 +43,11 @@ const ACCENT = "#f59e0b";
 const PRODUCT_CONFIG = {
   "panel-free": {
     loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe",
-    videoUrl:  "https://www.youtube.com/embed/TFYhmK790_E",
+    videoUrl: "https://www.youtube.com/embed/TFYhmK790_E",
   },
   "bypass-free": {
     loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar",
-    videoUrl:  "https://www.youtube.com/embed/hw5R771MMgQ ",
+    videoUrl: "https://www.youtube.com/embed/hw5R771MMgQ ",
   },
 };
 
@@ -56,10 +56,10 @@ const getProductConfig = (productId) =>
 
 const SECTIONS = [
   { id: "general-dependencies", group: "SETUP" },
-  { id: "requirements",         group: "SETUP" },
-  { id: "download",             group: "SETUP" },
-  { id: "installation",         group: "SETUP" },
-  { id: "common-issues",        group: "TROUBLE" },
+  { id: "requirements", group: "SETUP" },
+  { id: "download", group: "SETUP" },
+  { id: "installation", group: "SETUP" },
+  { id: "common-issues", group: "TROUBLE" },
 ];
 
 // ── UI primitives ─────────────────────────────────────
@@ -274,7 +274,7 @@ const SidebarContent = ({
           className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110"
           style={{ background: "rgba(88,101,242,0.15)", border: "1px solid rgba(88,101,242,0.3)", color: "#8b96f8" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
           </svg>
           {tx.discordSupport}
         </a>
@@ -508,7 +508,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
             <div className="flex items-center gap-2 mb-4 text-white/70 text-sm font-semibold"><Settings size={15} /> {tx.deps.defender.manual}</div>
             <div className="flex flex-col gap-4">
               {tx.deps.defender.steps.map((s, i) => (
-                <div key={i} className="flex gap-3"><StepBadge n={i+1} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
+                <div key={i} className="flex gap-3"><StepBadge n={i + 1} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
               ))}
             </div>
           </div>
@@ -582,9 +582,8 @@ const BypassFreeContent = ({ section, productName, tx }) => {
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela (Directo)" color="#06b6d4" />
-          <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
         </div>
-      </Card>      
+      </Card>
       <Card className="mb-4">
         <CardTitle icon={Gamepad2} title={tx.dl.rootTittle} color="#30881aff" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.rootDesc}</p>
@@ -619,7 +618,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
             { t: "Ejecutar como Administrador el Bypass", d: 'Haz clic derecho en el Bypass y selecciona "Ejecutar como administrador".' },
             { t: "Iniciar sesión", d: "Ingresa tu usuario y contraseña para loguearte en el loader." },
           ].map((s, i) => (
-            <div key={i} className="flex gap-3"><StepBadge n={i+1} color={ACCENT} /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
+            <div key={i} className="flex gap-3"><StepBadge n={i + 1} color={ACCENT} /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
           ))}
         </div>
       </Card>
@@ -631,7 +630,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
             { t: "Ejecutar como Administrador el Bypass", d: 'Haz clic derecho y selecciona "Ejecutar como administrador".' },
             { t: 'Pegar la key en "Enter your licence"', d: "Pega la key que te llegó al privado de Discord y presiona LOGIN. ¡Listo, ya estás registrado con tu key gratuita!" },
           ].map((s, i) => (
-            <div key={i} className="flex gap-3"><StepBadge n={i+1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
+            <div key={i} className="flex gap-3"><StepBadge n={i + 1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
           ))}
         </div>
         <div className="mt-4 rounded-xl px-4 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
@@ -666,9 +665,9 @@ const BypassFreeContent = ({ section, productName, tx }) => {
 
 // ── Main page ─────────────────────────────────────────
 export default function FreePage() {
-  const params       = useParams();
+  const params = useParams();
   const searchParams = useSearchParams();
-  const router       = useRouter();
+  const router = useRouter();
   const { locale, changeLocale, t } = useLanguage();
 
   const productId = params?.productId || "panel-free";
@@ -677,10 +676,10 @@ export default function FreePage() {
   const urlSection = searchParams?.get("section");
   const [activeSection, setActiveSection] = useState(urlSection || "general-dependencies");
   const [productOpen, setProductOpen] = useState(false);
-  const [setupOpen,   setSetupOpen]   = useState(true);
+  const [setupOpen, setSetupOpen] = useState(true);
   const [troubleOpen, setTroubleOpen] = useState(true);
-  const [langOpen,    setLangOpen]    = useState(false);
-  const [drawerOpen,  setDrawerOpen]  = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleChangeLang = (code) => { changeLocale(code); setLangOpen(false); };
 
@@ -699,7 +698,7 @@ export default function FreePage() {
     router.replace(url.pathname + url.search, { scroll: false });
   }, [router]);
 
-  const sectionIdx  = SECTIONS.findIndex(s => s.id === activeSection);
+  const sectionIdx = SECTIONS.findIndex(s => s.id === activeSection);
   const prevSection = SECTIONS[sectionIdx - 1];
   const nextSection = SECTIONS[sectionIdx + 1];
 
@@ -710,15 +709,15 @@ export default function FreePage() {
   // Pasos específicos para bypass-free
   const bypassSteps = locale === "es"
     ? [
-        { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, MSI, etc.) antes de ejecutar el Bypass." },
-        { t: "Ejecutar como Administrador", d: "Haz clic derecho en el Bypass y selecciona \"Ejecutar como administrador\"." },
-        { t: "Login", d: "Ingresa tu usuario y contraseña para iniciar sesión en el loader." },
-      ]
+      { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, MSI, etc.) antes de ejecutar el Bypass." },
+      { t: "Ejecutar como Administrador", d: "Haz clic derecho en el Bypass y selecciona \"Ejecutar como administrador\"." },
+      { t: "Login", d: "Ingresa tu usuario y contraseña para iniciar sesión en el loader." },
+    ]
     : [
-        { t: "Open emulator", d: "Open your emulator (Bluestacks, MSI, etc.) before running the Bypass." },
-        { t: "Run as Administrator", d: "Right-click the Bypass and select \"Run as administrator\"." },
-        { t: "Login", d: "Enter your username and password to log in to the loader." },
-      ];
+      { t: "Open emulator", d: "Open your emulator (Bluestacks, MSI, etc.) before running the Bypass." },
+      { t: "Run as Administrator", d: "Right-click the Bypass and select \"Run as administrator\"." },
+      { t: "Login", d: "Enter your username and password to log in to the loader." },
+    ];
 
   const sidebarProps = {
     tx, locale, productId, productName, CurrentIcon,
@@ -730,7 +729,7 @@ export default function FreePage() {
 
   const MainContent = () => productId === "bypass-free"
     ? <BypassFreeContent key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} />
-    : <PanelFreeContent  key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />;
+    : <PanelFreeContent key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />;
 
   const NavFooter = () => (
     <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
