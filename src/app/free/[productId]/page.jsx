@@ -47,7 +47,7 @@ const PRODUCT_CONFIG = {
   },
   "bypass-free": {
     loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar",
-    videoUrl:  "https://www.youtube.com/embed/OU2PX_3Ori0",
+    videoUrl:  "https://www.youtube.com/embed/hw5R771MMgQ ",
   },
 };
 
@@ -400,11 +400,18 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
           <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
         </div>
       </Card>
+      <Card className="mb-4">
+        <CardTitle icon={Gamepad2} title={tx.dl.rootTittle} color="#06b6d4" />
+        <p className="text-white/50 text-sm mb-3">{tx.dl.rootDesc}</p>
+        <div className="flex flex-wrap gap-2">
+          <DownloadBtn href="https://www.realhostx.com/Cloud/root-checker-6-5-3.apk" label="Root Checker" color="#30881aff" />
+        </div>
+      </Card>
+
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
         <div className="flex flex-wrap gap-2">
