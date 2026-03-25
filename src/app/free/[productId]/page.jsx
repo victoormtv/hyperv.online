@@ -586,7 +586,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
         </div>
       </Card>      
       <Card className="mb-4">
-        <CardTitle icon={Gamepad2} title={tx.dl.rootTittle} color="#06b6d4" />
+        <CardTitle icon={Gamepad2} title={tx.dl.rootTittle} color="#30881aff" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.rootDesc}</p>
         <div className="flex flex-wrap gap-2">
           <DownloadBtn href="https://www.realhostx.com/Cloud/root-checker-6-5-3.apk" label="Root Checker" color="#30881aff" />
