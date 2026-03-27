@@ -276,6 +276,25 @@ async function main() {
     {
       category: freeFire,
       data: {
+        name: "Aimbot Proxy",
+        description: "Aimbot drag especializado para iOS - Apunta al cuello",
+        features: [
+          "120 FPS",
+          "Bypass Relogin",
+          "Aimdrag",
+          "No requiere E-Sign",
+          "No requiere G-BOX",
+          "No requiere PC",
+        ],
+        isBest: true,
+        status: "UNDETECTED",
+        images: ["/aimbot-proxy.png"],
+        plans: [{ label: "Semanal", price: 24.99 }, { label: "Mensual", price: 54.99 }],
+      },
+    },
+    {
+      category: freeFire,
+      data: {
         name: "Panel iOS",
         description: "Panel compatible con dispositivos iOS",
         features: [
