@@ -507,11 +507,6 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           <DownloadBtn href="https://www.realhostx.com/Cloud/AnyDesk.exe" label="AnyDesk" color="#f59e0b" />
         </div>
       </Card>
-      <Card className="mb-4">
-        <CardTitle icon={Monitor} title={tx.dl.zArchiverTitle} color="#f65c5cff" />
-        <p className="text-white/50 text-sm mb-3">{tx.dl.zArchiverDesc}</p>
-        <DownloadBtn href="https://www.realhostx.com/Garena/ZArchiver.apk" label="ZArchiver" color="#f65c5cff" />
-      </Card>
       <InfoBox text={tx.dl.reminder} />
     </>
   );
