@@ -40,6 +40,7 @@ const PRODUCT_CONFIG = {
   "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
   "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
   "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "bypass-apk":        { loaderUrl: "https://www.realhostx.com/Cloud/Bypass-APK.exe", videoUrl:  "https://www.youtube.com/embed/2rPK6u12bYg", extraContent: null,},
   "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar", videoUrlMemuFreeFire:  "https://www.youtube.com/embed/2rPK6u12bYg", videoUrlMemuBypass:  "https://www.youtube.com/embed/MkqcPCmY8l8", videoUrlBS:  "https://www.youtube.com/embed/hw5R771MMgQ",extraContent: null,},
 };
 
@@ -83,7 +84,6 @@ const EXTRA_ISSUES = [
   }
 ];
 
-// ── Helper: get WARP extra text based on product ─────
 function getWarpText(productId) {
   if (productId === "menu-chams-esp" || productId === "menu-chams-bloodstrike") {
     return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el menú.";
@@ -94,7 +94,6 @@ function getWarpText(productId) {
   return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.";
 }
 
-// ── Group1 issues: WARP + common issues ──────────────
 function getGroupIssues(productId) {
   return [
     {
@@ -108,7 +107,6 @@ function getGroupIssues(productId) {
   ];
 }
 
-// ── Bypass issues (same as EXTRA_ISSUES + download error first) ───────
 function getBYPASS_EXTRA_ISSUES(productId) {
   return [
     {
@@ -122,7 +120,6 @@ function getBYPASS_EXTRA_ISSUES(productId) {
   ];
 }
 
-// ── UI primitives ─────────────────────────────────────
 const StepBadge = ({ n, color = ACCENT }) => (
   <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-extrabold shrink-0" style={{ background: color }}>{n}</div>
 );
@@ -163,7 +160,6 @@ const CardTitle = ({ icon: Icon, title, color = "white" }) => (
   </div>
 );
 
-// ── Enhanced Accordion with image, warning, video, link support ──────
 const Accordion = ({ title, children, img, warning, video, extra, link }) => {
   const [open, setOpen] = useState(false);
   return (
@@ -223,7 +219,6 @@ const CopyUrl = ({ section }) => {
   );
 };
 
-// ── Sidebar ───────────────────────────────────────────
 const SidebarContent = ({
   tx, locale, productId, productName, CurrentIcon,
   products, loadingProducts, productOpen, setProductOpen,
@@ -325,7 +320,7 @@ const SidebarContent = ({
               const isActive = activeSection === s.id;
               return (
                 <button key={s.id} onClick={() => { handleSectionChange(s.id); onNavClick?.(); }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all mb-0.5 text-left ${isActive ? "font-semibold" : "text-white/60 hover:text-white hover:bg-white/5"}`}
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all mb.5 text-left ${isActive ? "font-semibold" : "text-white/60 hover:text-white hover:bg-white/5"}`}
                   style={isActive ? { background: "rgba(245,158,11,0.15)", color: "#f59e0b" } : {}}>
                   {tx.sections[s.id]}
                 </button>
@@ -373,7 +368,6 @@ const SidebarContent = ({
   );
 };
 
-// ── Section content ───────────────────────────────────
 const Group1Content = ({ section, productName, tx, productId }) => {
   const cfg = getProductConfig(productId);
 
@@ -431,24 +425,34 @@ const Group1Content = ({ section, productName, tx, productId }) => {
   if (section === "requirements") return (
     <>
       <CopyUrl section="requirements" />
-      <div className="flex items-center gap-3 mb-2"><Shield size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.req.title}</h1></div>
+      <div className="flex items-center gap-3 mb-2">
+        <Shield size={24} style={{ color: ACCENT }} />
+        <h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.req.title}</h1>
+      </div>
       <p className="text-white/40 text-sm mb-6">{tx.req.subtitle}</p>
+
       <Card>
         <CardTitle icon={Monitor} title={tx.req.sysTitle} color={ACCENT} />
         <WarningBox title={tx.req.sysWarning} desc={`${productName} — Windows 8/10/11, HVCI ON & OFF.`} color="#b45309" />
         <div className="mt-4 flex flex-col gap-2">
           {tx.req.items.map(r => (
-            <div key={r} className="flex items-center gap-2 text-white/70 text-sm"><Check size={14} style={{ color: ACCENT }} className="shrink-0" /> {r}</div>
+            <div key={r} className="flex items-center gap-2 text-white/70 text-sm">
+              <Check size={14} style={{ color: ACCENT }} className="shrink-0" /> {r}
+            </div>
           ))}
         </div>
       </Card>
-      <Card className="mt-5">
-        <CardTitle icon={Gamepad2} title={tx.req.gameTitle} color={ACCENT} />
-        <WarningBox title={tx.req.gameWarning} desc={tx.req.gameDesc} color="#b45309" />
-        <div className="mt-4 rounded-xl overflow-hidden border border-white/10">
-          <img src="/adb.png" alt="ADB configuration guide" className="w-full h-auto object-contain" />
-        </div>
-      </Card>
+
+      {/* adb.png solo se muestra si NO es bypass-apk */}
+      {productId !== "bypass-apk" && (
+        <Card className="mt-5">
+          <CardTitle icon={Gamepad2} title={tx.req.gameTitle} color={ACCENT} />
+          <WarningBox title={tx.req.gameWarning} desc={tx.req.gameDesc} color="#b45309" />
+          <div className="mt-4 rounded-xl overflow-hidden border border-white/10">
+            <img src="/adb.png" alt="ADB configuration guide" className="w-full h-auto object-contain" />
+          </div>
+        </Card>
+      )}
 
       {productId === "bypass-uid" && (
         <Card className="mt-5">
@@ -462,7 +466,18 @@ const Group1Content = ({ section, productName, tx, productId }) => {
             ))}
           </div>
         </Card>
-)}
+      )}
+
+      {/* ✅ bypass-apk muestra su propia imagen settings-apk.png */}
+      {productId === "bypass-apk" && (
+        <Card className="mt-5">
+          <CardTitle icon={Gamepad2} title={tx.req.gameTitle} color={ACCENT} />
+          <WarningBox title={tx.req.gameWarning} desc={tx.req.gameDesc} color="#b45309" />
+          <div className="mt-4 rounded-xl overflow-hidden border border-white/10">
+            <img src="/settings-apk.png" alt="APK settings guide" className="w-full h-auto object-contain" />
+          </div>
+        </Card>
+      )}
     </>
   );
 
@@ -476,22 +491,49 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <p className="text-white/50 text-sm mb-4">{tx.dl.loaderDesc}</p>
         <DownloadBtn href={cfg.loaderUrl} label={tx.dl.loaderBtn} color={ACCENT} />
       </Card>
-      <Card className="mb-4">
-        <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
-        <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
-        <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
-          <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
-          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
-        </div>
-      </Card>
-      <Card className="mb-4">
-        <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
-        <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Cloud/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
-          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
-        </div>
-      </Card>
+
+      {/* Free Fire — diferente para bypass-apk */}
+      {productId === "bypass-apk" ? (
+        <Card className="mb-4">
+          <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
+          <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
+          <div className="flex flex-wrap gap-2">
+            <DownloadBtn href="https://1drv.ms/u/c/d5b038515b00d0eb/IQDqHrlc4s17T7_M6gser5-yAZyHI-v0ZF9aE7Su6lO7bMs?e=GDyHKW" label="Free Fire Normal" color="#06b6d4" />
+            <DownloadBtn href="https://1drv.ms/u/c/d5b038515b00d0eb/IQCQ-jI398jZQ6Qw4ieeTpGMAcVOQx0NT0HZveAghmgETHo?e=zzCxnk" label="Free Fire MAX" color="#06b6d4" />
+          </div>
+        </Card>
+      ) : (
+        <Card className="mb-4">
+          <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
+          <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
+          <div className="flex flex-wrap gap-2">
+            <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
+            <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
+            <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
+          </div>
+        </Card>
+      )}
+
+      {/* Emuladores — diferente para bypass-apk */}
+      {productId === "bypass-apk" ? (
+        <Card className="mb-4">
+          <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
+          <div className="flex flex-wrap gap-2">
+            <DownloadBtn href="https://www.realhostx.com/Cloud/BS-5.22-P64.zip" label="Bluestacks 5.22" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/BS-5.14-P64.zip" label="Bluestacks 5.14" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/MSI-5.12-P64.zip" label="MSI 5.12" color="#8b5cf6" />
+          </div>
+        </Card>
+      ) : (
+        <Card className="mb-4">
+          <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
+          <div className="flex flex-wrap gap-2">
+            <DownloadBtn href="https://www.realhostx.com/Cloud/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+          </div>
+        </Card>
+      )}
+
       {productId === "bypass-uid" && (
         <Card className="mb-4">
           <CardTitle icon={Archive} title={tx.dl.zArchiverTitle} color="#85363dff" />
@@ -501,6 +543,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           </div>
         </Card>
       )}
+
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
@@ -518,24 +561,42 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       <CopyUrl section="installation" />
       <div className="flex items-center gap-3 mb-2"><Settings size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.install.subtitle}</p>
-      <Card className="mb-5">
-        <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
-        <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
-          <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial HyperV ${productName}`}
-            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-        </div>
-        <div className="rounded-xl overflow-hidden aspect-video w-full">
-          <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial HyperV ${productName}`}
-            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-        </div>
-      </Card>
-      <Card className="mb-5">
-        <CardTitle icon={Monitor} title={tx.install.videoTitleBS} color={ACCENT} />
-        <div className="rounded-xl overflow-hidden aspect-video w-full">
-          <iframe src={cfg.videoUrlBS} title={`Tutorial HyperV ${productName}`}
-            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-        </div>
-      </Card>
+
+      {/* bypass-uid y demás: múltiples videos */}
+      {productId !== "bypass-apk" && (
+        <>
+          <Card className="mb-5">
+            <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
+            <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
+              <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial HyperV ${productName}`}
+                className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+            </div>
+            <div className="rounded-xl overflow-hidden aspect-video w-full">
+              <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial HyperV ${productName}`}
+                className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+            </div>
+          </Card>
+          <Card className="mb-5">
+            <CardTitle icon={Monitor} title={tx.install.videoTitleBS} color={ACCENT} />
+            <div className="rounded-xl overflow-hidden aspect-video w-full">
+              <iframe src={cfg.videoUrlBS} title={`Tutorial HyperV ${productName}`}
+                className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+            </div>
+          </Card>
+        </>
+      )}
+
+      {/* Panel products: single video */}
+      {!BYPASS_PRODUCTS.includes(productId) && (
+        <Card className="mb-5">
+          <CardTitle icon={Monitor} title={tx.install.videoTitle} color={ACCENT} />
+          <div className="rounded-xl overflow-hidden aspect-video w-full">
+            <iframe src={cfg.videoUrl} title={`Tutorial HyperV ${productName}`}
+              className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          </div>
+        </Card>
+      )}
+
       <Card>
         <CardTitle icon={Settings} title={tx.install.stepsTitle} color={ACCENT} />
         <div className="flex flex-col gap-4">
@@ -556,7 +617,6 @@ const Group1Content = ({ section, productName, tx, productId }) => {
     </>
   );
 
-  // common-issues
   const allIssues = BYPASS_PRODUCTS.includes(productId) ? getBYPASS_EXTRA_ISSUES(productId) : getGroupIssues(productId);
 
   return (
