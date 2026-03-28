@@ -32,7 +32,7 @@ const PRODUCT_ICONS = {
   "discord-tools":          MessageCircle,
 };
 
-const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-esp", "bypass-uid"];
+const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-esp", "bypass-uid", "bypass-apk"];
 const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
