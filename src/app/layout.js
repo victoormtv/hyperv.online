@@ -13,6 +13,31 @@ const outfit = Outfit({
 export const metadata = {
   title: "HyperV Store",
   description: "La Mejor Desarrolladora de Software",
+  icons: {
+    icon: "/favicon.ico",
+  },
+  openGraph: {
+    title: "HyperV Store",
+    description: "La Mejor Desarrolladora de Software",
+    url: "https://hyperv.online",
+    siteName: "HyperV Store",
+    images: [
+      {
+        url: "/portada.png",
+        width: 1200,
+        height: 630,
+        alt: "HyperV Store",
+      },
+    ],
+    locale: "es_ES",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HyperV Store",
+    description: "La Mejor Desarrolladora de Software",
+    images: ["/portada.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
