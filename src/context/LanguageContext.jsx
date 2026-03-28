@@ -250,6 +250,29 @@ const translations = {
         helpDesc: "Our support team is available to help with any issues.",
         joinDiscord: "Join Discord",
       },
+      apkIssues: {
+        i1: {
+          t: "REQUEST TOO OLD OR TOO FAR",
+          d: "This happens when your system clock is out of sync with your region's time.",
+          sol: "Change the timezone to your local region's time and click Sync Now. Then restart the emulator and try again.",
+          warning: "The pictures below are just examples — don't set it to \"Seoul\"; instead, choose your own local timezone.",
+        },
+        i2: {
+          t: "VERSION PROBLEM",
+          d: "The installed emulator version is not compatible with the Bypass.",
+          sol: "Upgrade or downgrade to a version between 5.12 - 5.22.125",
+        },
+        i3: {
+          t: "INDIA SERVER",
+          d: "The emulator is connecting to India servers which blocks the Bypass.",
+          sol: "Error login 400? You need to enter free fire with bypass"
+        },
+        i4: {
+          t: "EMPTY PORT",
+          d: "The ADB port for the instance is empty.",
+          sol: "Go to the emulator settings and make sure the ADB port is set to 5555.",
+        },
+      }
     },
 
     checkout: {
@@ -577,6 +600,29 @@ const translations = {
         helpDesc: "Nuestro equipo de soporte está disponible para ayudarte con cualquier problema.",
         joinDiscord: "Join Discord",
       },
+      apkIssues: {
+        i1: {
+          t: "REQUEST TOO OLD OR TOO FAR",
+          d: "Esto ocurre cuando el reloj del sistema no está sincronizado con la hora de tu región.",
+          sol: "Cambia la zona horaria a la de tu región y haz clic en Sincronizar ahora. Luego reinicia el emulador e intenta de nuevo.",
+          warning: "Las imágenes de abajo son solo ejemplos — no lo pongas en 'Seoul'; elige tu propia zona horaria local.",
+        },
+        i2: {
+          t: "PROBLEMA DE VERSION",
+          d: "La versión del emulador instalada no es compatible con el Bypass.",
+          sol: "Actualiza o baja a una versión entre 5.12 - 5.22.125",
+        },
+        i3: {
+          t: "INDIA SERVER",
+          d: "El emulador se está conectando a servidores de India, lo cual bloquea el Bypass.",
+          sol: "¿Error al iniciar sesión 400? Necesitas entrar a Free Fire con bypass.",
+        },
+        i4: {
+          t: "PUERTO VACIO",
+          d: "El puerto ADB para la instancia está vacío.",
+          sol: "Ve a la configuración del emulador y asegúrate de que el puerto ADB esté establecido en 5555.",
+        },
+      }
     },
 
     checkout: {

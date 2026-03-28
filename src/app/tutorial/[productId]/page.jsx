@@ -107,14 +107,49 @@ function getGroupIssues(productId) {
   ];
 }
 
-function getBYPASS_EXTRA_ISSUES(productId) {
+function getBYPASSEXTRAISSUES(productId, tx) {
+  // bypass-apk
+  if (productId === "bypass-apk") {
+    return [
+      {
+        t: tx.apkIssues.i1.t,
+        d: tx.apkIssues.i1.d,
+        img: "/error-hora-apk.png",
+        warning: tx.apkIssues.i1.warning,
+        extra: tx.apkIssues.i1.sol,
+        extraImg: "/solucion-error-hora-apk.png",
+      },
+      {
+        t: tx.apkIssues.i2.t,
+        d: tx.apkIssues.i2.d,
+        img: "/version-problem-apk.png",
+        extra: tx.apkIssues.i2.sol,
+        link: { label: tx.dl.emuTitle, href: "?section=download" }
+      },
+      {
+        t: tx.apkIssues.i3.t,
+        d: tx.apkIssues.i3.d,
+        img: "/error-india-apk.png",
+        extra: tx.apkIssues.i3.sol
+      },
+      {
+        t: tx.apkIssues.i4.t,
+        d: tx.apkIssues.i4.d,
+        img: "/error-port-apk.png",
+        extra: tx.apkIssues.i4.sol,
+        extraImg: "/solucion-puerto-apk.png",
+      },
+    ];
+  }
+
+  // bypass-uid
   return [
     {
       t: "ERROR AL DESCARGAR EL BYPASS",
       d: "Este problema se debe a un error de conexión de RED.",
-      img: "/error-bypass.png",
+      img: "error-bypass.png",
       extra: getWarpText(productId),
-      link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" },
+      link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/CloudflareWARP2025.10.186.0.msi" },
     },
     ...EXTRA_ISSUES,
   ];
@@ -160,7 +195,7 @@ const CardTitle = ({ icon: Icon, title, color = "white" }) => (
   </div>
 );
 
-const Accordion = ({ title, children, img, warning, video, extra, link }) => {
+const Accordion = ({ title, children, img, warning, video, extra, link, extraImg }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="border border-white/10 rounded-xl overflow-hidden">
@@ -179,6 +214,11 @@ const Accordion = ({ title, children, img, warning, video, extra, link }) => {
             </div>
           )}
           {extra && <p className="text-white/50 text-sm leading-relaxed">{extra}</p>}
+          {extraImg && (
+            <div className="rounded-xl overflow-hidden border border-white/10">
+              <img src={extraImg} alt={`${title} solution`} className="w-full h-auto object-contain" />
+            </div>
+          )}
           {warning && (
             <div className="rounded-xl px-4 py-3 border flex gap-3" style={{ background: "rgba(245,158,11,0.1)", borderColor: "rgba(245,158,11,0.3)" }}>
               <AlertTriangle size={16} className="text-yellow-400 shrink-0 mt-0.5" />
@@ -617,7 +657,9 @@ const Group1Content = ({ section, productName, tx, productId }) => {
     </>
   );
 
-  const allIssues = BYPASS_PRODUCTS.includes(productId) ? getBYPASS_EXTRA_ISSUES(productId) : getGroupIssues(productId);
+  const allIssues = BYPASS_PRODUCTS.includes(productId)
+    ? getBYPASSEXTRAISSUES(productId, tx)
+    : getGroupIssues(productId);
 
   return (
     <>
@@ -629,7 +671,16 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <CardTitle icon={Wrench} title={tx.issues.issuesTitle} color={ACCENT} />
         <div className="flex flex-col gap-2">
           {allIssues.map((item, i) => (
-            <Accordion key={i} title={item.t} img={item.img} warning={item.warning} video={item.video} extra={item.extra} link={item.link}>
+            <Accordion
+              key={i}
+              title={item.t}
+              img={item.img}
+              warning={item.warning}
+              video={item.video}
+              extra={item.extra}
+              link={item.link}
+              extraImg={item.extraImg}
+            >
               {item.d}
             </Accordion>
           ))}
