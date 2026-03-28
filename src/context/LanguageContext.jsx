@@ -228,7 +228,8 @@ const translations = {
       install: {
         title: "Installation",
         subtitle: "Follow the steps below to set up",
-        videoTitle: "Video Tutorial",
+        videoTitleMemu: "MemuPlay Video Tutorial",
+        videoTitleBS: "BlueStacks Video Tutorial",
         stepsTitle: "Installation Steps",
         steps: [
           { t: "Run as Administrator", d: 'Right-click the file and select "Run as administrator".' },
@@ -554,7 +555,8 @@ const translations = {
       install: {
         title: "Instalación",
         subtitle: "Siga los pasos a continuación para configurarlo",
-        videoTitle: "Video Tutorial",
+        videoTitleMemu: "Video Tutorial MemuPlay",
+        videoTitleBS: "Video Tutorial BlueStacks",
         stepsTitle: "Pasos de Instalación",
         steps: [
           { t: "Ejecutar como Administrador", d: 'Haz clic derecho en el archivo y selecciona "Ejecutar como administrador".' },

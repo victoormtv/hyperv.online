@@ -40,7 +40,7 @@ const PRODUCT_CONFIG = {
   "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
   "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
   "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
-  "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar", videoUrl:  "https://www.youtube.com/embed/v8QQfyi8Tvs", extraContent: null,},
+  "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar", videoUrlMemuFreeFire:  "https://www.youtube.com/embed/2rPK6u12bYg", videoUrlMemuBypass:  "https://www.youtube.com/embed/MkqcPCmY8l8", videoUrlBS:  "https://www.youtube.com/embed/hw5R771MMgQ",extraContent: null,},
 };
 
 const getProductConfig = (productId) =>
@@ -57,13 +57,6 @@ const SECTIONS = [
 const BYPASS_PRODUCTS = ["bypass-apk", "bypass-uid"];
 
 const EXTRA_ISSUES = [
-  {
-    t: "FALLO AL RECUPERAR LA VERSIÓN",
-    d: "Este error se produce cuando no se ha hecho una certificación.",
-    img: "/error-recuperar-version.png",
-    warning: "Para solucionar esto, sigue el video tutorial a continuación.",
-    video: "https://www.youtube.com/embed/9bCIRGVBhFg",
-  },
   {
     t: "HWID RESET",
     d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.",
@@ -517,9 +510,20 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       <div className="flex items-center gap-3 mb-2"><Settings size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.install.subtitle}</p>
       <Card className="mb-5">
-        <CardTitle icon={Monitor} title={tx.install.videoTitle} color={ACCENT} />
+        <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
+        <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
+          <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial HyperV ${productName}`}
+            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+        </div>
         <div className="rounded-xl overflow-hidden aspect-video w-full">
-          <iframe src={cfg.videoUrl} title={`Tutorial HyperV ${productName}`}
+          <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial HyperV ${productName}`}
+            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+        </div>
+      </Card>
+      <Card className="mb-5">
+        <CardTitle icon={Monitor} title={tx.install.videoTitleBS} color={ACCENT} />
+        <div className="rounded-xl overflow-hidden aspect-video w-full">
+          <iframe src={cfg.videoUrlBS} title={`Tutorial HyperV ${productName}`}
             className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
         </div>
       </Card>
