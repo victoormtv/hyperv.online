@@ -9,7 +9,7 @@ import {
   Check, ExternalLink, MessageCircle, Package,
   Cpu, Gamepad2, Wrench, Home, BookOpen,
   Crosshair, Smartphone, Zap, Code2, Swords,
-  Eye, Lock, Wifi, ScanLine, Target, Layers, ChevronsUpDown, Menu, X
+  Eye, Lock, Wifi, ScanLine, Target, Layers, ChevronsUpDown, Menu, X, Archive
 } from "lucide-react";
 
 const PRODUCT_ICONS = {
@@ -492,6 +492,15 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
         </div>
       </Card>
+      {productId === "bypass-uid" && (
+        <Card className="mb-4">
+          <CardTitle icon={Archive} title={tx.dl.zArchiverTitle} color="#85363dff" />
+          <p className="text-white/50 text-sm mb-3">{tx.dl.zArchiverDesc}</p>
+          <div className="flex flex-wrap gap-2">
+            <DownloadBtn href="https://www.realhostx.com/Garena/ZArchiver.apk" label="ZArchiver" color="#85363dff" />
+          </div>
+        </Card>
+      )}
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
