@@ -86,7 +86,7 @@ const PlanSelector = ({ plans, product, isGoldBest }) => {
           <AddToCart product={productWithPlan}>
             <div className={["w-full flex items-center justify-center gap-2 py-4 rounded-xl font-extrabold text-base cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95", buyBtn].join(" ")}>
               {isFree
-                ? <><Gift size={18} strokeWidth={2.5} /> 🎉 Obtener Gratis →</>
+                ? <><Gift size={18} strokeWidth={2.5} /> Obtener Gratis →</>
                 : <><ShoppingCart size={18} strokeWidth={2.5} /> Buy Now →</>
               }
             </div>
