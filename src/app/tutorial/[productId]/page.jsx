@@ -37,9 +37,9 @@ const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
   "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Complex.rar",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
-  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
-  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
-  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
+  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
+  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
   "bypass-apk":        { loaderUrl: "https://www.realhostx.com/Cloud/Bypass-APK.exe", videoUrl:  "https://www.youtube.com/embed/2rPK6u12bYg", extraContent: null,},
   "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar", videoUrlMemuFreeFire:  "https://www.youtube.com/embed/2rPK6u12bYg", videoUrlMemuBypass:  "https://www.youtube.com/embed/MkqcPCmY8l8", videoUrlBS:  "https://www.youtube.com/embed/hw5R771MMgQ",extraContent: null,},
 };
@@ -101,7 +101,7 @@ function getGroupIssues(productId) {
       d: "Este problema se debe a un error de conexión de RED.",
       img: "/error-bypass.png",
       extra: getWarpText(productId),
-      link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" },
+      link: { label: "Descargar WARP", href: "https://one.one.one.one/" },
     },
     ...EXTRA_ISSUES,
   ];

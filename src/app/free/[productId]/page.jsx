@@ -29,20 +29,20 @@ const PANEL_FREE_EXTRA_ISSUES = [
 
 // Panel Free issues with WARP
 const PANEL_FREE_WARP_ISSUES = [
-  { t: "ERROR DE RED / WARP", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.", link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" } },
+  { t: "ERROR DE RED / WARP", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.", link: { label: "Descargar WARP", href: "https://one.one.one.one/" } },
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
 
 // Extra issues for Bypass Free (includes download error)
 const BYPASS_FREE_EXTRA_ISSUES = [
-  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/Cloudflare_WARP_2025.10.186.0.msi" } },
+  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://one.one.one.one/" } },
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
 const ACCENT = "#f59e0b";
 
 const PRODUCT_CONFIG = {
   "panel-free": {
-    loaderUrl: "https://www.realhostx.com/Cloud/Hyper V - Loader.exe",
+    loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Loader (1).exe",
     videoUrl: "https://www.youtube.com/embed/TFYhmK790_E",
   },
   "bypass-free": {
@@ -719,6 +719,20 @@ export default function FreePage() {
       { t: "Login", d: "Enter your username and password to log in to the loader." },
     ];
 
+  const panelFreeSteps = locale === "es"
+  ? [
+      { t: "Ejecutar como Administrador", d: "Haz clic derecho en el archivo y selecciona \"Ejecutar como administrador\"." },
+      { t: "Esperar inicialización", d: "El loader configurará tu sistema automáticamente. Espera a que el proceso termine." },
+      { t: "Seleccionar opción 2", d: "Seleccionen la opción 2 para escoger el panel free." },
+      { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." },
+    ]
+  : [
+      { t: "Run as Administrator", d: "Right-click the file and select \"Run as administrator\"." },
+      { t: "Wait for initialization", d: "The loader will configure your system automatically. Wait for the process to complete." } ,
+      { t: "Select option 2", d: "Select option 2 to choose Panel Free." },
+      { t: "Login", d: "The browser will open automatically. Enter your license key to activate the product." },
+    ];
+  
   const sidebarProps = {
     tx, locale, productId, productName, CurrentIcon,
     productOpen, setProductOpen,
@@ -729,8 +743,15 @@ export default function FreePage() {
 
   const MainContent = () => productId === "bypass-free"
     ? <BypassFreeContent key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} />
-    : <PanelFreeContent key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} productId={productId} />;
-
+    : <PanelFreeContent
+        key={`${activeSection}-${locale}`}
+        section={activeSection}
+        productName={productName}
+        tx={tx}
+        productId={productId}
+        customSteps={panelFreeSteps}
+      />;
+  
   const NavFooter = () => (
     <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
       {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
