@@ -106,7 +106,7 @@ const ProductCard = ({ product }) => {
             </p>
             {isFree ? (
               <p className="font-bold text-lg text-yellow-400">FREE</p>
-            ) : isOutOfStock ? (  // 👈 bloque nuevo
+            ) : isOutOfStock ? (
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
                 <p className="font-bold text-sm text-red-400">Sin stock</p>
