@@ -17,6 +17,8 @@ export async function sendLicenseEmail({
     "Panel Secure": "https://hyperv.online/tutorial/panel-secure",
     "Panel Only Aimbot": "https://hyperv.online/tutorial/panel-only-aimbot",
     "Menu Chams ESP": "https://hyperv.online/tutorial/menu-chams-esp",
+    "Bypass UID": "https://hyperv.online/tutorial/bypass-uid",
+    "Bypass APK": "https://hyperv.online/tutorial/bypass-apk",
     "Panel Free": "https://hyperv.online/free/panel-free",
     "Bypass Free": "https://hyperv.online/free/bypass-free",
   };
@@ -188,6 +190,116 @@ export async function sendLicenseEmail({
     return { success: true, id: data.id };
   } catch (err) {
     console.error("Resend error:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function sendAdminOrderNotification({
+  customerName,
+  customerEmail,
+  productName,
+  planLabel,
+  orderId,
+  total,
+  paymentMethod,
+}) {
+  const recipients = [process.env.ADMIN_EMAIL, process.env.MY_EMAIL].filter(
+    Boolean,
+  );
+
+  if (!recipients.length) {
+    return { success: false, error: "No hay correos configurados" };
+  }
+
+  const html = `
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nueva compra - HyperV</title>
+  </head>
+  <body style="margin:0;padding:0;background:#030405;font-family:Arial,sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 20px;background:#030405;">
+      <tr>
+        <td align="center">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#0a0c10;border-radius:18px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;">
+            <tr>
+              <td style="padding:30px 35px;background:linear-gradient(135deg,#0f1728,#0a1020,#0d1525);text-align:center;">
+                <h1 style="margin:0;color:#fff;font-size:24px;">Nueva compra recibida</h1>
+                <p style="margin:8px 0 0;color:rgba(255,255,255,0.45);font-size:13px;">Notificación interna para administrador</p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:24px 35px;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;">
+                  <tr>
+                    <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff;">
+                      <strong>Cliente:</strong> ${customerName || "No enviado"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff;">
+                      <strong>Email:</strong> ${customerEmail || "No enviado"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff;">
+                      <strong>Producto:</strong> ${productName || "No enviado"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff;">
+                      <strong>Plan:</strong> ${planLabel || "No enviado"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff;">
+                      <strong>Total:</strong> ${total || "No enviado"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff;">
+                      <strong>Método de pago:</strong> ${paymentMethod || "No enviado"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:14px 18px;color:#fff;">
+                      <strong>Order ID:</strong> ${orderId || "No enviado"}
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:0 35px 30px;text-align:center;">
+                <p style="margin:0;color:rgba(255,255,255,0.28);font-size:12px;">
+                  Este correo se envió automáticamente desde HyperV.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "HyperV <noreply@hyperv.online>",
+      to: recipients,
+      subject: `💸 Nueva compra: ${productName} - ${orderId}`,
+      html,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return { success: true, id: data.id };
+  } catch (err) {
+    console.error("Resend admin error:", err);
     return { success: false, error: err.message };
   }
 }
