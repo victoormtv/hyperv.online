@@ -11,9 +11,7 @@ export async function GET(req) {
 
     const cart = JSON.parse(decodeURIComponent(cartRaw));
     const decodedEmail = decodeURIComponent(email);
-    const baseUrl = (
-      process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
-    ).trim();
+    const baseUrl = process.env.NEXT_PUBLIC_URL.trim();
 
     const res = await fetch(`${baseUrl}/api/orders/process`, {
       method: "POST",

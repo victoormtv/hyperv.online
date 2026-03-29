@@ -14,7 +14,7 @@ function generateToken(length) {
 
   for (let i = 0; i < length; i++) {
     result += process.env.NEXT_PUBLIC_CHARACTERS.charAt(
-      Math.floor(Math.random() * charactorLength)
+      Math.floor(Math.random() * charactorLength),
     );
   }
 
@@ -59,7 +59,7 @@ export const register = async (formData, image) => {
     await sendEmail(
       newUser.email,
       "Email Verification",
-      `<p>Welcome to Code Scrapper, This is your email verificaiton token. Click here to verify your email! http://localhost:3000/verify/${token}</p>`
+      `<p>Welcome to Code Scrapper, This is your email verificaiton token. Click here to verify your email! https://hyperv.online/verify/${token}</p>`,
     );
     return { message: "Verify Your Email" };
   } else {
@@ -141,7 +141,7 @@ export const deleteFunction = async ({ id, table }) => {
   }
 
   revalidatePath(
-    `/dashboard/${table == "category" ? "categories" : `${table}s`}`
+    `/dashboard/${table == "category" ? "categories" : `${table}s`}`,
   );
   return { result: item };
 };
