@@ -31,11 +31,14 @@ export async function POST(req) {
       console.log("KeyAuth result:", keyResult);
 
       let orderId = `ORD-${Date.now()}`;
+
       if (productId) {
         try {
           const order = await prisma.order.create({
             data: {
               isPaid: true,
+              email,
+              cartData: JSON.stringify(cart),
               OrderItem: {
                 create: [{ quantity, productId }],
               },
@@ -70,6 +73,7 @@ export async function POST(req) {
             .join("\n") || null;
 
     console.log("Sending email to:", email);
+
     const emailResult = await sendLicenseEmail({
       to: email,
       productName: productNames,
@@ -77,6 +81,7 @@ export async function POST(req) {
       licenseKey,
       orderId: firstResult.orderId,
     });
+
     console.log("Email result:", emailResult);
 
     return NextResponse.json({

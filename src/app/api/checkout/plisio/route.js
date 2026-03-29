@@ -1,4 +1,3 @@
-// app/api/checkout/plisio/route.js
 export async function POST(req) {
   try {
     const { cart, email, currency = "USDT" } = await req.json();
@@ -67,7 +66,7 @@ export async function POST(req) {
       source_amount: total,
       email,
       callback_url: `${baseUrl}/api/orders/plisio-callback?json=true&orderData=${orderData}`,
-      success_invoice_url: `${baseUrl}/success?order=${orderNumber}`,
+      success_invoice_url: `${baseUrl}/api/orders/plisio-success?order=${orderNumber}`,
       fail_invoice_url: `${baseUrl}/addtocart`,
     });
 
