@@ -11,6 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { siMercadopago, siPaypal } from "simple-icons";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import PendingPaymentModal from "@/components/ui/PendingPaymentModal";
+import { allCountries } from "country-telephone-data";
 
 const SI = ({ icon, size = 24, color }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill={color} xmlns="http://www.w3.org/2000/svg">
@@ -72,7 +73,11 @@ export default function CheckoutPage() {
 
   const searchParams = useSearchParams();
   const router       = useRouter();
-
+  const [contactMethod,     setContactMethod]     = useState("");
+  const [discordUser,       setDiscordUser]       = useState("");
+  const [telegramUser,      setTelegramUser]      = useState("");
+  const [whatsappCode,      setWhatsappCode]      = useState("+51");
+  const [whatsappNumber,    setWhatsappNumber]    = useState("");
   const [mounted,           setMounted]           = useState(false);
   const [email,             setEmail]             = useState("");
   const [method,            setMethod]            = useState("mercadopago");
@@ -383,6 +388,97 @@ export default function CheckoutPage() {
             />
             <p className="text-white/30 text-xs mt-2">{c.emailSub}</p>
           </div>
+
+          {/* ── Medio de contacto ── */}
+          <div>
+            <label className="text-white font-semibold text-sm mb-2 block">
+              ¿Por qué medio quieres que te contactemos?
+            </label>
+            <select
+              value={contactMethod}
+              onChange={(e) => setContactMethod(e.target.value)}
+              className="w-full border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-500/50 transition-colors appearance-none"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                color: contactMethod === "" ? "rgba(255,255,255,0.25)" : "white", // 👈 esto
+              }}
+            >
+              <option value="" style={{ background: "#0d0f14", color: "rgba(255,255,255,0.25)" }}>
+                Selecciona un metodo de contacto...
+              </option>
+              <option value="discord"  style={{ background: "#0d0f14", color: "white" }}>Discord</option>
+              <option value="telegram" style={{ background: "#0d0f14", color: "white" }}>Telegram</option>
+              <option value="whatsapp" style={{ background: "#0d0f14", color: "white" }}>WhatsApp</option>
+            </select>
+
+            {/* Discord */}
+            {contactMethod === "discord" && (
+              <div className="mt-3">
+                <label className="text-white/60 text-xs mb-1.5 block">Tu usuario de Discord</label>
+                <input
+                  type="text"
+                  value={discordUser}
+                  onChange={(e) => setDiscordUser(e.target.value)}
+                  placeholder="ej: usuario#1234 o @usuario"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
+                />
+              </div>
+            )}
+
+            {/* Telegram */}
+            {contactMethod === "telegram" && (
+              <div className="mt-3">
+                <label className="text-white/60 text-xs mb-1.5 block">Tu @ de Telegram</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-sm select-none">@</span>
+                  <input
+                    type="text"
+                    value={telegramUser}
+                    onChange={(e) => setTelegramUser(e.target.value.replace("@", ""))}
+                    placeholder="tuusuario"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-8 pr-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* WhatsApp */}
+            {contactMethod === "whatsapp" && (
+              <div className="mt-3 flex flex-col gap-2">
+                <div>
+                  <label className="text-white/60 text-xs mb-1.5 block">Código de país</label>
+                  <select
+                    value={whatsappCode}
+                    onChange={(e) => setWhatsappCode(e.target.value)}
+                    className="w-full border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-cyan-500/50 transition-colors"
+                    style={{ background: "rgba(255,255,255,0.05)" }}
+                  >
+                    {allCountries.map((country) => (
+                      <option key={country.iso2} value={`+${country.dialCode}`} style={{ background: "#0d0f14" }}>
+                        {country.name} (+{country.dialCode})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-white/60 text-xs mb-1.5 block">Número de WhatsApp</label>
+                  <div className="flex gap-2">
+                    <span className="flex items-center px-3 bg-white/5 border border-white/10 rounded-xl text-white/60 text-sm select-none whitespace-nowrap">
+                      {whatsappCode}
+                    </span>
+                    <input
+                      type="tel"
+                      value={whatsappNumber}
+                      onChange={(e) => setWhatsappNumber(e.target.value.replace(/\D/g, ""))}
+                      placeholder="987654321"
+                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          {/* ── Fin medio de contacto ── */}
 
           {/* Cupón */}
           <div>

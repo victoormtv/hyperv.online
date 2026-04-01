@@ -6,7 +6,7 @@ import { sendLicenseEmail, sendAdminOrderNotification } from "@/lib/email";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { cart, email, existingOrderId, paymentProvider } = body;
+    const { cart, email, existingOrderId, paymentProvider, contactInfo } = body;
 
     if (!cart || !email) {
       return NextResponse.json({ error: "Faltan datos" }, { status: 400 });
@@ -91,6 +91,7 @@ export async function POST(req) {
       orderId: firstResult.orderId,
       total: `$${total}`,
       paymentMethod: paymentProvider || "MercadoPago",
+      contactInfo,
     });
 
     return NextResponse.json({
