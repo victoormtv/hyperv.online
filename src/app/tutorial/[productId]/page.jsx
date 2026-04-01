@@ -36,12 +36,12 @@ const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-e
 const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
-  "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatoznHyper V - Complex.rar",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
-  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/tanatoznHyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
-  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/tanatoznHyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
-  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/tanatoznHyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
-  "bypass-apk":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatoznBypass-APK.exe", videoUrl:  "https://www.youtube.com/embed/2rPK6u12bYg", extraContent: null,},
-  "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatoznHyperV-Proxy.rar", videoUrlMemuFreeFire:  "https://www.youtube.com/embed/2rPK6u12bYg", videoUrlMemuBypass:  "https://www.youtube.com/embed/MkqcPCmY8l8", videoUrlBS:  "https://www.youtube.com/embed/hw5R771MMgQ",extraContent: null,},
+  "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/Hyper V - Complex.rar",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
+  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
+  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
+  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "bypass-apk":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/Bypass-APK.exe", videoUrl:  "https://www.youtube.com/embed/2rPK6u12bYg", extraContent: null,},
+  "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Proxy.rar", videoUrlMemuFreeFire:  "https://www.youtube.com/embed/2rPK6u12bYg", videoUrlMemuBypass:  "https://www.youtube.com/embed/MkqcPCmY8l8", videoUrlBS:  "https://www.youtube.com/embed/hw5R771MMgQ",extraContent: null,},
 };
 
 const getProductConfig = (productId) =>
@@ -149,7 +149,7 @@ function getBYPASSEXTRAISSUES(productId, tx) {
       d: "Este problema se debe a un error de conexión de RED.",
       img: "error-bypass.png",
       extra: getWarpText(productId),
-      link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/tanatoznCloudflareWARP2025.10.186.0.msi" },
+      link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/tanatozn/CloudflareWARP2025.10.186.0.msi" },
     },
     ...EXTRA_ISSUES,
   ];
@@ -441,7 +441,7 @@ const Group1Content = ({ section, productName, tx, productId }) => {
               <StepBadge n={1} color="#6366f1" />
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
-                <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozndControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
+                <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
               </div>
             </div>
             <div className="flex gap-3">
@@ -559,17 +559,17 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <Card className="mb-4">
           <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
           <div className="flex flex-wrap gap-2">
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBS-5.22-P64.zip" label="Bluestacks 5.22" color="#8b5cf6" />
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBS-5.14-P64.zip" label="Bluestacks 5.14" color="#8b5cf6" />
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznMSI-5.12-P64.zip" label="MSI 5.12" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BS-5.22-P64.zip" label="Bluestacks 5.22" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BS-5.14-P64.zip" label="Bluestacks 5.14" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/MSI-5.12-P64.zip" label="MSI 5.12" color="#8b5cf6" />
           </div>
         </Card>
       ) : (
         <Card className="mb-4">
           <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
           <div className="flex flex-wrap gap-2">
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
           </div>
         </Card>
       )}
@@ -588,8 +588,8 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznUltraViewer_setup_6.6.124_es.exe" label="UltraViewer" color="#f59e0b" />
-          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznAnyDesk.exe" label="AnyDesk" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/UltraViewer_setup_6.6.124_es.exe" label="UltraViewer" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/AnyDesk.exe" label="AnyDesk" color="#f59e0b" />
         </div>
       </Card>
       <InfoBox text={tx.dl.reminder} />
