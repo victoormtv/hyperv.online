@@ -42,11 +42,11 @@ const ACCENT = "#f59e0b";
 
 const PRODUCT_CONFIG = {
   "panel-free": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Loader (1).exe",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozntanatozn/HyperV-Loader (1).exe",
     videoUrl: "https://www.youtube.com/embed/TFYhmK790_E",
   },
   "bypass-free": {
-    loaderUrl: "https://www.realhostx.com/Cloud/HyperV-Proxy.rar",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatoznHyperV-Proxy.rar",
     videoUrl: "https://www.youtube.com/embed/hw5R771MMgQ ",
   },
 };
@@ -340,7 +340,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
               <StepBadge n={1} color="#6366f1" />
               <div>
                 <p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p>
-                <DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
+                <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozndControl (1).rar" label={tx.deps.defender.downloadDcontrol} />
               </div>
             </div>
             <div className="flex gap-3">
@@ -353,7 +353,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
           <CardTitle icon={Cpu} title={tx.deps.vcpp.title} color="#6366f1" />
           <p className="text-white/50 text-sm mb-4">{tx.deps.vcpp.desc}</p>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" /></div></div>
+            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznRequerimientos.rar" label="Download Here" /></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
@@ -407,17 +407,17 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Cloud/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
-          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
-          <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="MSI 5.12" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBlueStacks_5.22.130.exe" label="MSI 5.12" color="#8b5cf6" />
         </div>
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Cloud/UltraViewer_setup_6.6.124_es.exe" label="UltraViewer" color="#f59e0b" />
-          <DownloadBtn href="https://www.realhostx.com/Cloud/AnyDesk.exe" label="AnyDesk" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznUltraViewer_setup_6.6.124_es.exe" label="UltraViewer" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznAnyDesk.exe" label="AnyDesk" color="#f59e0b" />
         </div>
       </Card>
       <InfoBox text={tx.dl.reminder} />
@@ -515,7 +515,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
           <div className="flex items-center gap-2 my-4"><div className="flex-1 h-px bg-white/10" /><span className="text-sm font-bold" style={{ color: ACCENT }}>{tx.deps.defender.then}</span><div className="flex-1 h-px bg-white/10" /></div>
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-4 text-white font-bold text-sm"><Check size={15} className="text-green-400" /> {tx.deps.defender.dcontrol}</div>
-            <div className="flex gap-3 mb-4"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p><DownloadBtn href="https://www.realhostx.com/Cloud/dControl (1).rar" label={tx.deps.defender.downloadDcontrol} /></div></div>
+            <div className="flex gap-3 mb-4"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.defender.downloadDcontrol}</p><DownloadBtn href="https://www.realhostx.com/Cloud/tanatozndControl (1).rar" label={tx.deps.defender.downloadDcontrol} /></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.defender.runAndDisable}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.defender.runDesc}</p></div></div>
           </div>
         </Card>
@@ -523,7 +523,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
           <CardTitle icon={Cpu} title={tx.deps.vcpp.title} color="#6366f1" />
           <p className="text-white/50 text-sm mb-4">{tx.deps.vcpp.desc}</p>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/Requerimientos.rar" label="Download Here" /></div></div>
+            <div className="flex gap-3"><StepBadge n={1} color="#6366f1" /><div><p className="text-white font-semibold text-sm mb-2">{tx.deps.vcpp.download}</p><DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznRequerimientos.rar" label="Download Here" /></div></div>
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
@@ -588,12 +588,12 @@ const BypassFreeContent = ({ section, productName, tx }) => {
         <CardTitle icon={Gamepad2} title={tx.dl.rootTittle} color="#30881aff" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.rootDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Cloud/root-checker-6-5-3.apk" label="Root Checker" color="#30881aff" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznroot-checker-6-5-3.apk" label="Root Checker" color="#30881aff" />
         </div>
       </Card>
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
-        <DownloadBtn href="https://www.realhostx.com/Cloud/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+        <DownloadBtn href="https://www.realhostx.com/Cloud/tanatoznBlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
       </Card>
       <InfoBox text={tx.dl.reminder} />
     </>
