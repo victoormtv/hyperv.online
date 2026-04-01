@@ -1,4 +1,3 @@
-// app/api/orders/mp-success/route.js
 import prisma from "@/utils/connection";
 
 export async function GET(req) {
@@ -35,7 +34,12 @@ export async function GET(req) {
     const res = await fetch(`${baseUrl}/api/orders/process`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart, email }),
+      body: JSON.stringify({
+        cart,
+        email,
+        existingOrderId: order.id, // ✅ evita duplicar orden
+        paymentProvider: "mercadopago", // ✅ para la notificación admin
+      }),
     });
 
     const data = await res.json();

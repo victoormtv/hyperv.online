@@ -41,6 +41,7 @@ export async function POST(req) {
     const body = {
       items,
       external_reference: pendingOrder.id,
+      auto_return: "approved",
       back_urls: {
         success: `${baseUrl}/api/orders/mp-success`,
         failure: `${baseUrl}/addtocart`,

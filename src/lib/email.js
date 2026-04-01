@@ -176,7 +176,7 @@ export async function sendLicenseEmail({
   </table>
 </body>
 </html>
-  `;
+    `;
 
   try {
     const { data, error } = await resend.emails.send({

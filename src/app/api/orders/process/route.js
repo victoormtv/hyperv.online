@@ -6,11 +6,13 @@ import { sendLicenseEmail, sendAdminOrderNotification } from "@/lib/email";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { cart, email, paymentProvider } = body;
+    const { cart, email, existingOrderId, paymentProvider } = body;
 
     console.log("=== PROCESS ORDER ===");
     console.log("email:", email);
     console.log("cart items:", cart?.length);
+    console.log("existingOrderId:", existingOrderId || "ninguno");
+    console.log("paymentProvider:", paymentProvider || "no especificado");
 
     if (!cart || !email) {
       return NextResponse.json({ error: "Faltan datos" }, { status: 400 });
@@ -30,22 +32,32 @@ export async function POST(req) {
       const keyResult = await generateKeyAuthLicense(productName, planLabel);
       console.log("KeyAuth result:", keyResult);
 
-      let orderId = `ORD-${Date.now()}`;
+      let orderId = existingOrderId || `ORD-${Date.now()}`;
 
       if (productId) {
         try {
-          const order = await prisma.order.create({
-            data: {
-              isPaid: true,
-              email,
-              cartData: JSON.stringify(cart),
-              OrderItem: {
-                create: [{ quantity, productId }],
+          let savedOrder;
+
+          if (existingOrderId) {
+            savedOrder = await prisma.order.update({
+              where: { id: existingOrderId },
+              data: { isPaid: true },
+            });
+          } else {
+            savedOrder = await prisma.order.create({
+              data: {
+                isPaid: true,
+                email,
+                cartData: JSON.stringify(cart),
+                OrderItem: {
+                  create: [{ quantity, productId }],
+                },
               },
-            },
-          });
-          orderId = order.id;
-          console.log("Order created:", orderId);
+            });
+          }
+
+          orderId = savedOrder.id;
+          console.log("Order saved:", orderId);
         } catch (dbErr) {
           console.error("DB error (non-fatal):", dbErr.message);
         }
@@ -75,8 +87,8 @@ export async function POST(req) {
     const total = cart
       .reduce((sum, item) => {
         const price = Number(item?.product?.price) || 0;
-        const quantity = Number(item?.quantity) || 1;
-        return sum + price * quantity;
+        const qty = Number(item?.quantity) || 1;
+        return sum + price * qty;
       }, 0)
       .toFixed(2);
 
