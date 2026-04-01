@@ -175,10 +175,17 @@ export default function CheckoutPage() {
   }));
 
   const processOrderAndRedirect = async () => {
+    const contactInfo = {
+      method: contactMethod,
+      ...(contactMethod === "discord"  && { discord:  discordUser }),
+      ...(contactMethod === "telegram" && { telegram: telegramUser }),
+      ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
+    };
+
     try {
-      const res  = await fetch("/api/orders/process", {
+      const res = await fetch("/api/orders/process", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart: discountedCart, email }),
+        body: JSON.stringify({ cart: discountedCart, email, contactInfo }),
       });
       const data = await res.json();
       isRedirectingRef.current = true;
@@ -208,7 +215,14 @@ export default function CheckoutPage() {
     if (!validateCheckout()) return;
     setLoading(true); setError(""); setMpPreferenceId(null);
     try {
-      const res  = await fetch("/api/checkout/mercadopago", {
+      const contactInfo = {
+        method: contactMethod,
+        ...(contactMethod === "discord"  && { discord:  discordUser }),
+        ...(contactMethod === "telegram" && { telegram: telegramUser }),
+        ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
+      };
+
+      const res = await fetch("/api/checkout/mercadopago", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: discountedCart, email, contactInfo }),
       });
@@ -261,20 +275,27 @@ export default function CheckoutPage() {
     finally { setLoading(false); }
   };
 
-  const handleCrypto = async () => {
-    if (!validateCheckout()) return;
-    setLoading(true); setError("");
-    try {
-      const res  = await fetch("/api/checkout/plisio", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency, contactInfo }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
-      setCryptoPaymentData({ checkoutUrl: data.checkoutUrl });
-    } catch (err) { setError(err?.message || "Error de conexión con Plisio."); }
-    finally { setLoading(false); }
-  };
+const handleCrypto = async () => {
+  if (!validateCheckout()) return;
+  setLoading(true); setError("");
+  try {
+    const contactInfo = {
+      method: contactMethod,
+      ...(contactMethod === "discord"  && { discord:  discordUser }),
+      ...(contactMethod === "telegram" && { telegram: telegramUser }),
+      ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
+    };
+
+    const res = await fetch("/api/checkout/plisio", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency, contactInfo }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
+    setCryptoPaymentData({ checkoutUrl: data.checkoutUrl });
+  } catch (err) { setError(err?.message || "Error de conexión con Plisio."); }
+  finally { setLoading(false); }
+};
 
   const handleSubmit = () => {
     if (total === 0) {
