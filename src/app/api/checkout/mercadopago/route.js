@@ -25,15 +25,11 @@ export async function POST(req) {
     const pendingOrder = await prisma.order.create({
       data: {
         isPaid: false,
-        cartData: JSON.stringify(cart),
-        email: email,
-        contactInfo: JSON.stringify(contactInfo),
-        OrderItem: {
-          create: cart.map((item) => ({
-            quantity: item.quantity || 1,
-            productId: item.product.id,
-          })),
-        },
+        email,
+        cartData: JSON.stringify({
+          items: cart,
+          contactInfo: contactInfo || null,
+        }),
       },
     });
 

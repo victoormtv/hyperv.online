@@ -25,7 +25,9 @@ export async function GET(req) {
       return Response.redirect(new URL("/success", req.url));
     }
 
-    const cart = JSON.parse(order.cartData);
+    const parsed = JSON.parse(order.cartData);
+    const cart = Array.isArray(parsed) ? parsed : parsed.items;
+    const contactInfo = Array.isArray(parsed) ? null : parsed.contactInfo;
     const email = order.email;
     const baseUrl = (
       process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
@@ -37,7 +39,7 @@ export async function GET(req) {
       body: JSON.stringify({
         cart,
         email,
-        contactInfo: order.contactInfo,
+        contactInfo,
         existingOrderId: order.id,
         paymentProvider: "mercadopago",
       }),
