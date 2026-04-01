@@ -83,6 +83,16 @@ export async function POST(req) {
       }, 0)
       .toFixed(2);
 
+    const emailResult = await sendLicenseEmail({
+      to: email,
+      productName: productNames,
+      planLabel: planLabels,
+      licenseKey,
+      orderId: firstResult.orderId,
+    });
+
+    console.log("Email cliente result:", emailResult);
+
     await sendAdminOrderNotification({
       customerName: email,
       customerEmail: email,
