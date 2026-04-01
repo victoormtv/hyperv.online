@@ -100,7 +100,7 @@ export async function POST(req) {
       planLabel: planLabels,
       orderId: firstResult.orderId,
       total: `$${total}`,
-      paymentMethod: paymentProvider || "MercadoPago",
+      paymentMethod: paymentProvider,
       contactInfo,
     });
 

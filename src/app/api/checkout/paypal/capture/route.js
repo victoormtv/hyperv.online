@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { sendAdminOrderNotification } from "@/lib/email";
 
 const PAYPAL_BASE =
   process.env.PAYPAL_ENV === "live"
@@ -71,24 +70,6 @@ export async function POST(req) {
         },
         { status: 500 },
       );
-    }
-
-    if (data?.status === "COMPLETED") {
-      const customerEmail = data?.payer?.email_address || "No enviado";
-      const customerName =
-        `${data?.payer?.name?.given_name || ""} ${data?.payer?.name?.surname || ""}`.trim() ||
-        "No enviado";
-      const total = data?.purchase_units?.[0]?.amount?.value || "N/A";
-
-      await sendAdminOrderNotification({
-        customerName,
-        customerEmail,
-        productName: "Ver carrito",
-        planLabel: "PayPal",
-        orderId: data?.id,
-        total: `$${total}`,
-        paymentMethod: "PayPal",
-      });
     }
 
     return NextResponse.json({

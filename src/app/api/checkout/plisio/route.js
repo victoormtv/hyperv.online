@@ -1,6 +1,6 @@
 export async function POST(req) {
   try {
-    const { cart, email, currency = "USDT" } = await req.json();
+    const { cart, email, currency = "USDT", contactInfo } = await req.json();
 
     if (!Array.isArray(cart) || cart.length === 0) {
       return Response.json({ error: "Carrito vacío" }, { status: 400 });
@@ -33,9 +33,7 @@ export async function POST(req) {
       }, 0)
       .toFixed(2);
 
-    const baseUrl = (
-      process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
-    ).trim();
+    const baseUrl = process.env.NEXT_PUBLIC_URL.trim();
     const apiKey = process.env.PLISIO_SECRET_KEY?.trim();
 
     if (!apiKey) {
@@ -54,6 +52,7 @@ export async function POST(req) {
         cart,
         total,
         currency,
+        contactInfo: contactInfo || null,
       }),
     );
 

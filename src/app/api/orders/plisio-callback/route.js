@@ -96,7 +96,7 @@ export async function POST(req) {
     }
 
     const parsed = JSON.parse(decodeURIComponent(orderDataRaw));
-    const { cart, email, orderNumber } = parsed || {};
+    const { cart, email, orderNumber, contactInfo } = parsed || {};
 
     if (!cart || !email) {
       return Response.json({ error: "orderData incompleto" }, { status: 400 });
@@ -113,6 +113,7 @@ export async function POST(req) {
         paymentTxnId: body?.txn_id || null,
         paymentOrderNumber: body?.order_number || orderNumber || null,
         rawPayment: body,
+        contactInfo: contactInfo || null, // 👈 esto
       }),
       cache: "no-store",
     });

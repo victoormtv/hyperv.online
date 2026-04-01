@@ -8,7 +8,7 @@ const client = new MercadoPagoConfig({
 
 export async function POST(req) {
   try {
-    const { cart, email } = await req.json();
+    const { cart, email, contactInfo } = await req.json();
 
     const items = cart.map((item) => ({
       id: String(item.product.id),
@@ -27,6 +27,7 @@ export async function POST(req) {
         isPaid: false,
         cartData: JSON.stringify(cart),
         email: email,
+        contactInfo: JSON.stringify(contactInfo),
         OrderItem: {
           create: cart.map((item) => ({
             quantity: item.quantity || 1,

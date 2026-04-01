@@ -37,8 +37,9 @@ export async function GET(req) {
       body: JSON.stringify({
         cart,
         email,
-        existingOrderId: order.id, // ✅ evita duplicar orden
-        paymentProvider: "mercadopago", // ✅ para la notificación admin
+        contactInfo: order.contactInfo,
+        existingOrderId: order.id,
+        paymentProvider: "mercadopago",
       }),
     });
 
