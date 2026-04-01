@@ -8,12 +8,6 @@ export async function POST(req) {
     const body = await req.json();
     const { cart, email, existingOrderId, paymentProvider } = body;
 
-    console.log("=== PROCESS ORDER ===");
-    console.log("email:", email);
-    console.log("cart items:", cart?.length);
-    console.log("existingOrderId:", existingOrderId || "ninguno");
-    console.log("paymentProvider:", paymentProvider || "no especificado");
-
     if (!cart || !email) {
       return NextResponse.json({ error: "Faltan datos" }, { status: 400 });
     }
@@ -27,10 +21,7 @@ export async function POST(req) {
       const quantity = item.quantity || 1;
       const productId = item.product?.id;
 
-      console.log(`Procesando: ${productName} - ${planLabel}`);
-
       const keyResult = await generateKeyAuthLicense(productName, planLabel);
-      console.log("KeyAuth result:", keyResult);
 
       let orderId = existingOrderId || `ORD-${Date.now()}`;
 
@@ -91,18 +82,6 @@ export async function POST(req) {
         return sum + price * qty;
       }, 0)
       .toFixed(2);
-
-    console.log("Sending email to:", email);
-
-    const emailResult = await sendLicenseEmail({
-      to: email,
-      productName: productNames,
-      planLabel: planLabels,
-      licenseKey,
-      orderId: firstResult.orderId,
-    });
-
-    console.log("Email result:", emailResult);
 
     await sendAdminOrderNotification({
       customerName: email,
