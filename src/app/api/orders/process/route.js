@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/utils/connection";
 import { generateKeyAuthLicense } from "@/lib/keyauth";
-import { sendLicenseEmail } from "@/lib/email";
+import { sendLicenseEmail, sendAdminOrderNotification } from "@/lib/email"; // 👈 agregar aquí
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { cart, email } = body;
+    const { cart, email, paymentProvider } = body; // 👈 recibir paymentProvider
 
     console.log("=== PROCESS ORDER ===");
     console.log("email:", email);
@@ -72,8 +72,18 @@ export async function POST(req) {
             .map((r) => `${r.productName}: ${r.licenseKey}`)
             .join("\n") || null;
 
+    // Total calculado desde el carrito
+    const total = cart
+      .reduce((sum, item) => {
+        const price = Number(item?.product?.price) || 0;
+        const quantity = Number(item?.quantity) || 1;
+        return sum + price * quantity;
+      }, 0)
+      .toFixed(2);
+
     console.log("Sending email to:", email);
 
+    // ✅ Correo al cliente
     const emailResult = await sendLicenseEmail({
       to: email,
       productName: productNames,
@@ -83,6 +93,16 @@ export async function POST(req) {
     });
 
     console.log("Email result:", emailResult);
+
+    await sendAdminOrderNotification({
+      customerName: email,
+      customerEmail: email,
+      productName: productNames,
+      planLabel: planLabels,
+      orderId: firstResult.orderId,
+      total: `$${total}`,
+      paymentMethod: paymentProvider || "MercadoPago",
+    });
 
     return NextResponse.json({
       success: true,

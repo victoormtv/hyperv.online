@@ -182,7 +182,7 @@ export async function sendLicenseEmail({
     const { data, error } = await resend.emails.send({
       from: "HyperV <noreply@hyperv.online>",
       to: [to],
-      subject: `✅ Tu compra de ${productName} - HyperV`,
+      subject: `Tu compra de ${productName} - HyperV`,
       html,
     });
 
@@ -291,7 +291,7 @@ export async function sendAdminOrderNotification({
     const { data, error } = await resend.emails.send({
       from: "HyperV <noreply@hyperv.online>",
       to: recipients,
-      subject: `💸 Nueva compra: ${productName} - ${orderId}`,
+      subject: `Nueva compra: ${productName} - ${orderId}`,
       html,
     });
 
