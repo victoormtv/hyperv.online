@@ -46,7 +46,7 @@ const PRODUCT_CONFIG = {
     videoUrl: "https://www.youtube.com/embed/TFYhmK790_E",
   },
   "bypass-free": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Proxy.rar",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
     videoUrl: "https://www.youtube.com/embed/hw5R771MMgQ ",
   },
 };
