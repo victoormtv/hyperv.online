@@ -197,13 +197,20 @@ export default function CheckoutPage() {
     }
   };
 
+  const contactInfo = {
+    method: contactMethod,
+    ...(contactMethod === "discord"  && { discord:  discordUser }),
+    ...(contactMethod === "telegram" && { telegram: telegramUser }),
+    ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
+  };
+
   const handleMercadoPago = async () => {
     if (!validateCheckout()) return;
     setLoading(true); setError(""); setMpPreferenceId(null);
     try {
       const res  = await fetch("/api/checkout/mercadopago", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart: discountedCart, email }),
+        body: JSON.stringify({ cart: discountedCart, email, contactInfo }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Error al crear preferencia.");
@@ -231,7 +238,7 @@ export default function CheckoutPage() {
         createOrder: async () => {
           const res  = await fetch("/api/checkout/paypal/create", {
             method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cart: discountedCart, email }),
+            body: JSON.stringify({ cart: discountedCart, email, contactInfo }),
           });
           if (!res.ok) throw new Error(await res.text());
           const data = await res.json();
@@ -260,7 +267,7 @@ export default function CheckoutPage() {
     try {
       const res  = await fetch("/api/checkout/plisio", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency }),
+        body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency, contactInfo }),
       });
       const data = await res.json();
       if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
