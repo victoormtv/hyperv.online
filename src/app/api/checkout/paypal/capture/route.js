@@ -73,7 +73,6 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Pago confirmado — notificar al admin
     if (data?.status === "COMPLETED") {
       const customerEmail = data?.payer?.email_address || "No enviado";
       const customerName =

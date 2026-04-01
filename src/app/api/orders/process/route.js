@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/utils/connection";
 import { generateKeyAuthLicense } from "@/lib/keyauth";
-import { sendLicenseEmail, sendAdminOrderNotification } from "@/lib/email"; // 👈 agregar aquí
+import { sendLicenseEmail, sendAdminOrderNotification } from "@/lib/email";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { cart, email, paymentProvider } = body; // 👈 recibir paymentProvider
+    const { cart, email, paymentProvider } = body;
 
     console.log("=== PROCESS ORDER ===");
     console.log("email:", email);
@@ -72,7 +72,6 @@ export async function POST(req) {
             .map((r) => `${r.productName}: ${r.licenseKey}`)
             .join("\n") || null;
 
-    // Total calculado desde el carrito
     const total = cart
       .reduce((sum, item) => {
         const price = Number(item?.product?.price) || 0;
@@ -83,7 +82,6 @@ export async function POST(req) {
 
     console.log("Sending email to:", email);
 
-    // ✅ Correo al cliente
     const emailResult = await sendLicenseEmail({
       to: email,
       productName: productNames,
