@@ -187,8 +187,7 @@ async function main() {
         status: "UNDETECTED",
         images: ["/bypass-apk.png"],
         plans: [
-          { label: "Semanal", price: 14.99 },
-          { label: "Mensual", price: 34.99 },
+          { label: "Semanal", price: 14.99 }
         ],
       },
     },

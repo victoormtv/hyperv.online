@@ -8,7 +8,7 @@ import {
   AlertTriangle, ChevronRight, ChevronDown, Copy,
   Check, ExternalLink, MessageCircle, Package,
   Cpu, Gamepad2, Wrench, Home, BookOpen,
-  Lock, ScanLine, ChevronsUpDown, Menu, X, Gift
+  Lock, ScanLine, ChevronsUpDown, Menu, X, Gift, Archive
 } from "lucide-react";
 
 const PRODUCT_ICONS = {
@@ -33,11 +33,19 @@ const PANEL_FREE_WARP_ISSUES = [
   ...PANEL_FREE_EXTRA_ISSUES,
 ];
 
-// Extra issues for Bypass Free (includes download error)
-const BYPASS_FREE_EXTRA_ISSUES = [
-  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://one.one.one.one/" } },
-  ...PANEL_FREE_EXTRA_ISSUES,
+// ── Bypass Free issues — igual que bypass-uid (sin FALLO AL RECUPERAR) ──
+const EXTRA_ISSUES = [
+  { t: "HWID RESET", d: "Este problema es común y suele ocurrir cuando el cliente ha formateado su computadora o intenta instalar el producto en otro equipo.", warning: "Si enfrentas este problema, lo único que debes hacer es contactar a un vendedor para restablecer tu membresía. Recuerda que el producto está diseñado para usarse en una sola PC; si lo instalas en otra computadora, perderás el acceso. Si formateas tu PC, tienes derecho a un HWID RESET completamente GRATUITO. Sin embargo, si el problema se presenta nuevamente, deberás pagar $5 para restablecer tu HWID.", img: "/hwid-reset.png" },
+  { t: "NO ACTIVE SUBSCRIPTIONS FOUND", d: "Este problema es común y suele ocurrir cuando ya ha finalizado la membresía del cliente.", warning: "Si enfrentas este problema, es posible que tu suscripción haya expirado. Si no es así, puedes contactar a un vendedor abriendo un ticket en Discord o enviando un mensaje privado para resolver la situación.", img: "/suscripcion-finalizada-bypass.png" },
+  { t: "COULDN'T RESOLVE HOST", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-host-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
+  { t: "ERROR SSL", d: "Este problema se produce debido a un error en la red, y la solución es muy sencilla.", img: "/error-ssl-bypass.png", video: "https://www.youtube.com/embed/wdp7lZtmkhk" },
 ];
+
+const BYPASS_FREE_EXTRA_ISSUES = [
+  { t: "ERROR AL DESCARGAR EL BYPASS", d: "Este problema se debe a un error de conexión de RED.", img: "/error-bypass.png", extra: "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.", link: { label: "Descargar WARP", href: "https://www.realhostx.com/Cloud/tanatozn/CloudflareWARP2025.10.186.0.msi" } },
+  ...EXTRA_ISSUES,
+];
+
 const ACCENT = "#f59e0b";
 
 const PRODUCT_CONFIG = {
@@ -47,7 +55,9 @@ const PRODUCT_CONFIG = {
   },
   "bypass-free": {
     loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
-    videoUrl: "https://www.youtube.com/embed/hw5R771MMgQ ",
+    videoUrlMemuFreeFire: "https://www.youtube.com/embed/2rPK6u12bYg",
+    videoUrlMemuBypass: "https://www.youtube.com/embed/Mkqc_PCmY8l8",
+    videoUrlBS: "https://www.youtube.com/embed/hw5R771MMgQ",
   },
 };
 
@@ -103,7 +113,7 @@ const CardTitle = ({ icon: Icon, title, color = "white" }) => (
   </div>
 );
 
-const Accordion = ({ title, children, img, warning, video, extra, link }) => {
+const Accordion = ({ title, children, img, warning, video, extra, link, extraImg }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="border border-white/10 rounded-xl overflow-hidden">
@@ -115,6 +125,11 @@ const Accordion = ({ title, children, img, warning, video, extra, link }) => {
           {children && <p className="text-white/50 text-sm leading-relaxed">{children}</p>}
           {img && <div className="rounded-xl overflow-hidden border border-white/10"><img src={img} alt={title} className="w-full h-auto object-contain" /></div>}
           {extra && <p className="text-white/50 text-sm leading-relaxed">{extra}</p>}
+          {extraImg && (
+            <div className="rounded-xl overflow-hidden border border-white/10">
+              <img src={extraImg} alt={`${title} solution`} className="w-full h-auto object-contain" />
+            </div>
+          )}
           {warning && (
             <div className="rounded-xl px-4 py-3 border flex gap-3" style={{ background: "rgba(245,158,11,0.1)", borderColor: "rgba(245,158,11,0.3)" }}>
               <AlertTriangle size={16} className="text-yellow-400 shrink-0 mt-0.5" />
@@ -241,7 +256,6 @@ const SidebarContent = ({
             })}
           </div>
         )}
-
         <button onClick={() => setTroubleOpen(!troubleOpen)}
           className="w-full flex items-center justify-between px-1 py-2 mb-1 hover:text-white/80 transition-colors"
           style={{ color: "rgba(255,255,255,0.8)" }}>
@@ -305,7 +319,7 @@ const SidebarContent = ({
   );
 };
 
-// ── Section content (Panel Free = Panel Secure content) ───────────────
+// ── Section content Panel Free ───────────────────────
 const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) => {
   const cfg = getProductConfig(productId);
   const installSteps = customSteps || tx.install.steps;
@@ -357,7 +371,6 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
-
       </div>
     </>
   );
@@ -490,7 +503,7 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
   );
 };
 
-// ── Bypass Free Content ───────────────────────────────
+// ── Bypass Free Content — idéntico a bypass-uid ───────
 const BypassFreeContent = ({ section, productName, tx }) => {
   const cfg = PRODUCT_CONFIG["bypass-free"];
 
@@ -527,7 +540,6 @@ const BypassFreeContent = ({ section, productName, tx }) => {
             <div className="flex gap-3"><StepBadge n={2} color="#6366f1" /><div><p className="text-white font-semibold text-sm">{tx.deps.vcpp.install}</p><p className="text-white/40 text-sm mt-0.5">{tx.deps.vcpp.installDesc}</p></div></div>
           </div>
         </Card>
-
       </div>
     </>
   );
@@ -548,11 +560,19 @@ const BypassFreeContent = ({ section, productName, tx }) => {
         <CardTitle icon={Gamepad2} title={tx.req.gameTitle} color={ACCENT} />
         <WarningBox title={tx.req.gameWarning} desc={tx.req.gameDesc} color="#b45309" />
         <div className="mt-4 rounded-xl overflow-hidden border border-white/10">
-          <img src="/adb.png" alt="ADB" className="w-full h-auto object-contain" />
-          <div className="mt-4 flex flex-col gap-2">
-            <p className="text-white font-semibold text-sm">Perfil de Emulador</p>
-            <img src="/bypass-perfil.png" alt="Profile" className="w-full h-auto object-contain" />
-          </div>
+          <img src="/adb.png" alt="ADB configuration guide" className="w-full h-auto object-contain" />
+        </div>
+      </Card>
+      {/* Configuración del Emulador — igual que bypass-uid */}
+      <Card className="mt-5">
+        <CardTitle icon={Monitor} title="Configuración del Emulador" color={ACCENT} />
+        <WarningBox title="Configuración ADB Requerida" desc="El emulador DEBE estar configurado correctamente con ADB habilitado para que el Bypass funcione." color="#b45309" />
+        <div className="mt-4 flex flex-col gap-3">
+          {["memu-config-1.png", "memu-config-2.png", "memu-config-3.png", "memu-config-4.png"].map((src, i) => (
+            <div key={i} className="rounded-xl overflow-hidden border border-white/10">
+              <img src={`/${src}`} alt={`Memu config ${i + 1}`} className="w-full h-auto object-contain" />
+            </div>
+          ))}
         </div>
       </Card>
     </>
@@ -563,37 +583,47 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <CopyUrl section="download" />
       <div className="flex items-center gap-3 mb-2"><Download size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.dl.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.dl.subtitle}</p>
+      {/* Loader */}
       <Card className="mb-4">
-        <CardTitle icon={MessageCircle} title="¿Cómo obtengo mi key?" color="#5865F2" />
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-3"><StepBadge n={1} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Únete al Discord de HyperV</p><a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-lg text-white text-sm font-bold bg-[#5865F2] hover:bg-[#4752c4] transition-colors"><MessageCircle size={14} /> discord.com/invite/hypervgg <ExternalLink size={12} /></a></div></div>
-          <div className="flex gap-3"><StepBadge n={2} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Ve a FREE PRODUCTS → canal REGISTRAR ID</p><p className="text-white/40 text-sm mt-0.5">Dirígete a la sección de FREE PRODUCTS y encontrarás el canal de REGISTRAR ID.</p></div></div>
-          <div className="flex gap-3"><StepBadge n={3} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Escribe el comando <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded text-cyan-400">/freebypass</span></p><p className="text-white/40 text-sm mt-0.5">Selecciona el comando y adjunta una captura donde sigas a @hypervgg en cualquier red social.</p></div></div>
-          <div className="flex gap-3"><StepBadge n={4} color="#5865F2" /><div><p className="text-white font-semibold text-sm">Espera la verificación del staff (1-2 min)</p><p className="text-white/40 text-sm mt-0.5">El staff revisará tu captura y te enviará la key al privado de Discord.</p></div></div>
-        </div>
-      </Card>
-      <Card className="mb-4">
-        <CardTitle icon={Download} title="Descargar Bypass Free" color={ACCENT} />
+        <CardTitle icon={Download} title={`${tx.dl.loaderTitle} ${productName}`} color={ACCENT} />
         <p className="text-white/50 text-sm mb-4">{tx.dl.loaderDesc}</p>
-        <DownloadBtn href={cfg.loaderUrl} label="Descargar Bypass" color={ACCENT} />
+        <DownloadBtn href={cfg.loaderUrl} label={tx.dl.loaderBtn} color={ACCENT} />
       </Card>
+      {/* Free Fire — igual que bypass-uid: Normal, Max, Tela */}
       <Card className="mb-4">
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela (Directo)" color="#06b6d4" />
+          <DownloadBtn href="https://www.realhostx.com/GarenaFreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
+          <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
+          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
         </div>
       </Card>
+      {/* ZArchiver — igual que bypass-uid */}
       <Card className="mb-4">
-        <CardTitle icon={Gamepad2} title={tx.dl.rootTittle} color="#30881aff" />
-        <p className="text-white/50 text-sm mb-3">{tx.dl.rootDesc}</p>
+        <CardTitle icon={Archive} title={tx.dl.zArchiverTitle} color="#85363d" />
+        <p className="text-white/50 text-sm mb-3">{tx.dl.zArchiverDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/root-checker-6-5-3.apk" label="Root Checker" color="#30881aff" />
+          <DownloadBtn href="https://www.realhostx.com/GarenaZArchiver.apk" label="ZArchiver" color="#85363d" />
         </div>
       </Card>
+      {/* Emuladores — igual que bypass-uid: BS 5.14, 5.22, MemuPlay */}
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
-        <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+        <div className="flex flex-wrap gap-2">
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/GarenaMemuPlay9.3.2.2.exe" label="MemuPlay 9.3.2.2" color="#8b5cf6" />
+        </div>
+      </Card>
+      {/* Remote support — igual que bypass-uid */}
+      <Card className="mb-4">
+        <CardTitle icon={Wrench} title={tx.dl.remoteTitle} color="#f59e0b" />
+        <p className="text-white/50 text-sm mb-3">{tx.dl.remoteDesc}</p>
+        <div className="flex flex-wrap gap-2">
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/UltraViewer_setup_6.6.124_es.exe" label="UltraViewer" color="#f59e0b" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/AnyDesk.exe" label="AnyDesk" color="#f59e0b" />
+        </div>
       </Card>
       <InfoBox text={tx.dl.reminder} />
     </>
@@ -604,44 +634,48 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <CopyUrl section="installation" />
       <div className="flex items-center gap-3 mb-2"><Settings size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.install.subtitle}</p>
+      {/* Video MemuPlay — igual que bypass-uid */}
       <Card className="mb-5">
-        <CardTitle icon={Monitor} title={tx.install.videoTitle} color={ACCENT} />
+        <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
+        <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
+          <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial ${productName}`}
+            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+        </div>
         <div className="rounded-xl overflow-hidden aspect-video w-full">
-          <iframe src={cfg.videoUrl} title="Tutorial Bypass Free" className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial ${productName}`}
+            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
         </div>
       </Card>
-      <Card className="mb-4">
+      {/* Video BlueStacks — igual que bypass-uid */}
+      <Card className="mb-5">
+        <CardTitle icon={Monitor} title={tx.install.videoTitleBS} color={ACCENT} />
+        <div className="rounded-xl overflow-hidden aspect-video w-full">
+          <iframe src={cfg.videoUrlBS} title={`Tutorial ${productName}`}
+            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+        </div>
+      </Card>
+      {/* Pasos — igual que bypass-uid: usa tx.install.steps */}
+      <Card>
         <CardTitle icon={Settings} title={tx.install.stepsTitle} color={ACCENT} />
         <div className="flex flex-col gap-4">
-          {[
-            { t: "Abrir el emulador", d: "Abre Bluestacks 5.22 con Free Fire instalado." },
-            { t: "Ejecutar como Administrador el Bypass", d: 'Haz clic derecho en el Bypass y selecciona "Ejecutar como administrador".' },
-            { t: "Iniciar sesión", d: "Ingresa tu usuario y contraseña para loguearte en el loader." },
-          ].map((s, i) => (
-            <div key={i} className="flex gap-3"><StepBadge n={i + 1} color={ACCENT} /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
+          {tx.install.steps.map((s, i) => (
+            <div key={i} className="flex gap-3">
+              <StepBadge n={i + 1} color={ACCENT} />
+              <div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div>
+            </div>
           ))}
         </div>
-      </Card>
-      <Card>
-        <CardTitle icon={Check} title="¿Cómo registro mi key?" color="#f59e0b" />
-        <div className="flex flex-col gap-4">
-          {[
-            { t: "Abrir el emulador", d: "Abre Bluestacks 5.22 con Free Fire instalado." },
-            { t: "Ejecutar como Administrador el Bypass", d: 'Haz clic derecho y selecciona "Ejecutar como administrador".' },
-            { t: 'Pegar la key en "Enter your licence"', d: "Pega la key que te llegó al privado de Discord y presiona LOGIN. ¡Listo, ya estás registrado con tu key gratuita!" },
-          ].map((s, i) => (
-            <div key={i} className="flex gap-3"><StepBadge n={i + 1} color="#f59e0b" /><div><p className="text-white font-semibold text-sm">{s.t}</p><p className="text-white/40 text-sm mt-0.5">{s.d}</p></div></div>
-          ))}
-        </div>
-        <div className="mt-4 rounded-xl px-4 py-4 border border-green-500/30 bg-green-500/10 flex gap-3">
-          <Check size={16} className="text-green-400 shrink-0 mt-0.5" />
-          <p className="text-green-300/80 text-sm">¡Listo! Ya estarás registrado con tu key gratuita.</p>
+        <div className="mt-5 flex flex-col gap-3">
+          <div className="rounded-xl px-4 py-4 border border-red-500/30 bg-red-500/10 flex gap-3">
+            <AlertTriangle size={16} className="text-red-400 shrink-0 mt-0.5" />
+            <div><p className="text-red-400 font-bold text-sm">{tx.install.fails}</p><p className="text-red-300/70 text-sm">{tx.install.failsDesc}</p></div>
+          </div>
         </div>
       </Card>
     </>
   );
 
-  // common-issues
+  // common-issues — igual que bypass-uid
   return (
     <>
       <CopyUrl section="common-issues" />
@@ -650,12 +684,22 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <Card className="mb-4"><CardTitle icon={AlertTriangle} title={tx.issues.ticketTitle} color="#f59e0b" /><p className="text-white/50 text-sm">{tx.issues.ticketDesc}</p></Card>
       <Card className="mb-4">
         <CardTitle icon={Wrench} title={tx.issues.issuesTitle} color={ACCENT} />
-        <div className="flex flex-col gap-2">{BYPASS_FREE_EXTRA_ISSUES.map((item, i) => (<Accordion key={i} title={item.t} img={item.img} warning={item.warning} video={item.video} extra={item.extra} link={item.link}>{item.d}</Accordion>))}</div>
+        <div className="flex flex-col gap-2">
+          {BYPASS_FREE_EXTRA_ISSUES.map((item, i) => (
+            <Accordion key={i} title={item.t} img={item.img} warning={item.warning} video={item.video} extra={item.extra} link={item.link} extraImg={item.extraImg}>
+              {item.d}
+            </Accordion>
+          ))}
+        </div>
       </Card>
       <Card>
-        <div className="flex items-center gap-3 mb-3"><div className="w-9 h-9 rounded-full bg-[#5865F2]/20 flex items-center justify-center shrink-0"><MessageCircle size={18} className="text-[#5865F2]" /></div><div><p className="text-white font-bold text-sm">{tx.issues.helpTitle}</p></div></div>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-9 h-9 rounded-full bg-[#5865F2]/20 flex items-center justify-center shrink-0"><MessageCircle size={18} className="text-[#5865F2]" /></div>
+          <div><p className="text-white font-bold text-sm">{tx.issues.helpTitle}</p><a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="text-[#5865F2] text-xs hover:underline">Join Discord</a></div>
+        </div>
         <p className="text-white/40 text-sm mb-4">{tx.issues.helpDesc}</p>
-        <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-bold bg-[#5865F2] hover:bg-[#4752c4] transition-colors">
+        <a href="https://discord.com/invite/hypervgg" target="_blank" rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-sm font-bold bg-[#5865F2] hover:bg-[#4752c4] transition-colors">
           <MessageCircle size={15} /> {tx.issues.joinDiscord} <ExternalLink size={13} />
         </a>
       </Card>
@@ -704,35 +748,21 @@ export default function FreePage() {
 
   const CurrentIcon = PRODUCT_ICONS[productId] || Package;
   const productName = productId === "panel-free" ? "Panel Free" : "Bypass Free";
-  const isPanelFree = productId === "panel-free";
-
-  // Pasos específicos para bypass-free
-  const bypassSteps = locale === "es"
-    ? [
-      { t: "Abrir emulador", d: "Abre tu emulador (Bluestacks, MSI, etc.) antes de ejecutar el Bypass." },
-      { t: "Ejecutar como Administrador", d: "Haz clic derecho en el Bypass y selecciona \"Ejecutar como administrador\"." },
-      { t: "Login", d: "Ingresa tu usuario y contraseña para iniciar sesión en el loader." },
-    ]
-    : [
-      { t: "Open emulator", d: "Open your emulator (Bluestacks, MSI, etc.) before running the Bypass." },
-      { t: "Run as Administrator", d: "Right-click the Bypass and select \"Run as administrator\"." },
-      { t: "Login", d: "Enter your username and password to log in to the loader." },
-    ];
 
   const panelFreeSteps = locale === "es"
-  ? [
+    ? [
       { t: "Ejecutar como Administrador", d: "Haz clic derecho en el archivo y selecciona \"Ejecutar como administrador\"." },
       { t: "Esperar inicialización", d: "El loader configurará tu sistema automáticamente. Espera a que el proceso termine." },
       { t: "Seleccionar opción 2", d: "Seleccionen la opción 2 para escoger el panel free." },
       { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." },
     ]
-  : [
+    : [
       { t: "Run as Administrator", d: "Right-click the file and select \"Run as administrator\"." },
-      { t: "Wait for initialization", d: "The loader will configure your system automatically. Wait for the process to complete." } ,
+      { t: "Wait for initialization", d: "The loader will configure your system automatically. Wait for the process to complete." },
       { t: "Select option 2", d: "Select option 2 to choose Panel Free." },
       { t: "Login", d: "The browser will open automatically. Enter your license key to activate the product." },
     ];
-  
+
   const sidebarProps = {
     tx, locale, productId, productName, CurrentIcon,
     productOpen, setProductOpen,
@@ -751,7 +781,7 @@ export default function FreePage() {
         productId={productId}
         customSteps={panelFreeSteps}
       />;
-  
+
   const NavFooter = () => (
     <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
       {prevSection ? <button onClick={() => handleSectionChange(prevSection.id)} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white text-sm transition-colors"><ChevronRight size={15} className="rotate-180" /> {tx.sections[prevSection.id]}</button> : <div />}
