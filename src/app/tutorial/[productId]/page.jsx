@@ -554,14 +554,23 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         </Card>
       )}
 
-      {/* Emuladores — diferente para bypass-apk */}
-      {productId === "bypass-apk" ? (
+      {/* Emuladores — diferente para bypass-apk y bypass-uid */}
+    {productId === "bypass-apk" ? (
+      <Card className="mb-4">
+        <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
+        <div className="flex flex-wrap gap-2">
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BS-5.22-P64.zip" label="Bluestacks 5.22" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BS-5.14-P64.zip" label="Bluestacks 5.14" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/MSI-5.12-P64.zip" label="MSI 5.12" color="#8b5cf6" />
+        </div>
+      </Card>
+      ) : productId === "bypass-uid" ? (
         <Card className="mb-4">
           <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
           <div className="flex flex-wrap gap-2">
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BS-5.22-P64.zip" label="Bluestacks 5.22" color="#8b5cf6" />
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BS-5.14-P64.zip" label="Bluestacks 5.14" color="#8b5cf6" />
-            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/MSI-5.12-P64.zip" label="MSI 5.12" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+            <DownloadBtn href="https://www.realhostx.com/Garena/MemuPlay_9.3.2.2.exe" label="MemuPlay 9.3.2.2" color="#8b5cf6" />
           </div>
         </Card>
       ) : (
