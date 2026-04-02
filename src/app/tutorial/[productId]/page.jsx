@@ -36,10 +36,10 @@ const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-e
 const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
-  "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/Hyper V - Complex.rar",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
-  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
-  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
-  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Loader (1).exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
+  "panel-full":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV (1).exe",                    videoUrl: "https://www.youtube.com/embed/jFsVHEAIYco" },
+  "panel-secure":      { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV (1).exe", videoUrl: "https://www.youtube.com/embed/TFYhmK790_E" },
+  "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV (1).exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
+  "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV (1).exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
   "bypass-apk":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/Bypass-APK.exe", videoUrl:  "https://www.youtube.com/embed/2rPK6u12bYg", extraContent: null,},
   "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar", videoUrlMemuFreeFire:  "https://www.youtube.com/embed/2rPK6u12bYg", videoUrlMemuBypass:  "https://www.youtube.com/embed/MkqcPCmY8l8", videoUrlBS:  "https://www.youtube.com/embed/hw5R771MMgQ",extraContent: null,},
 };

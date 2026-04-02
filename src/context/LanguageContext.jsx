@@ -584,6 +584,7 @@ const translations = {
         steps: [
           { t: "Ejecutar como Administrador", d: 'Haz clic derecho en el archivo y selecciona "Ejecutar como administrador".' },
           { t: "Esperar inicialización", d: "El loader configurará tu sistema automáticamente. Espera a que el proceso termine." },
+          { t: "Elige el producto:", d: "Seleccionas el tipo de panel que tienes y presiona Enter." },
           { t: "Login", d: "El navegador se abrirá automáticamente. Ingresa tu clave de licencia para activar el producto." }
         ],
         fails: "Si NO funciona:",
