@@ -3,6 +3,7 @@ import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 import { LanguageProvider } from "@/context/LanguageContext";
 import PromoPopup from "@/components/ui/PromoPopup";
+import { Analytics } from "@vercel/analytics/next";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -50,6 +51,7 @@ export default function RootLayout({ children }) {
             <PromoPopup />
           </ReduxProvider>
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
