@@ -1,35 +1,123 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { Star, Zap, ShieldCheck, Gift, Headphones } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
-const GOLD_BEST        = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
-const FREE_PRODUCTS    = ["Panel Free", "Bypass Free"];
+const GOLD_BEST = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
+const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
 const CONSULT_PRODUCTS = ["Boost Rank"];
-const OUT_OF_STOCK     = ["Aimbot Body Android", "Aimbot Body iOS"];
+const OUT_OF_STOCK = ["Aimbot Body Android", "Aimbot Body iOS"];
+
+const PRODUCT_TRANSLATIONS = {
+  es: {
+    names: {
+      "Panel Secure": "Panel Secure",
+      "Bypass UID": "Bypass UID",
+      "Aimbot Color": "Aimbot Color",
+      "Panel Full": "Panel Full",
+      "Panel Free": "Panel Gratis",
+      "Bypass Free": "Bypass Gratis",
+      "Boost Rank": "Subida de Rango",
+      "Aimbot Body Android": "Aimbot Body Android",
+      "Aimbot Body iOS": "Aimbot Body iOS",
+    },
+    descriptions: {
+      "Panel Free": "Versión gratuita para probar el producto",
+      "Bypass Free": "Bypass gratuito para empezar",
+      "Boost Rank": "Servicio personalizado de subida de rango",
+    },
+    categories: {
+      all: "Todos",
+      "Free Products": "Productos Gratuitos",
+    },
+    features: {
+      "Instant Delivery": "Entrega inmediata",
+      "24/7 Support": "Soporte 24/7",
+      "Undetected": "Indetectable",
+      "Secure Access": "Acceso seguro",
+    },
+    best: "Más Vendido",
+  },
+  en: {
+    names: {
+      "Panel Secure": "Panel Secure",
+      "Bypass UID": "Bypass UID",
+      "Aimbot Color": "Aimbot Color",
+      "Panel Full": "Panel Full",
+      "Panel Free": "Panel Free",
+      "Bypass Free": "Bypass Free",
+      "Boost Rank": "Boost Rank",
+      "Aimbot Body Android": "Aimbot Body Android",
+      "Aimbot Body iOS": "Aimbot Body iOS",
+    },
+    descriptions: {
+      "Panel Free": "Free version to test the product",
+      "Bypass Free": "Free bypass to get started",
+      "Boost Rank": "Custom rank boosting service",
+    },
+    categories: {
+      all: "All",
+      "Free Products": "Free Products",
+    },
+    features: {
+      "Instant Delivery": "Instant Delivery",
+      "24/7 Support": "24/7 Support",
+      "Undetected": "Undetected",
+      "Secure Access": "Secure Access",
+    },
+    best: "Best Seller",
+  },
+};
+
+const useProductI18n = (locale) => {
+  const dict = PRODUCT_TRANSLATIONS[locale] || PRODUCT_TRANSLATIONS.en;
+
+  const getProductName = (name) => dict.names?.[name] ?? name;
+  const getProductDescription = (product) =>
+    dict.descriptions?.[product?.name] ?? product?.description ?? "";
+  const getCategoryLabel = (category) => dict.categories?.[category] ?? category;
+  const getFeatureLabel = (feature) => dict.features?.[feature] ?? feature;
+  const getBestLabel = () => dict.best ?? "Best Seller";
+
+  return {
+    getProductName,
+    getProductDescription,
+    getCategoryLabel,
+    getFeatureLabel,
+    getBestLabel,
+  };
+};
 
 const ProductCard = ({ product }) => {
-  const { t } = useLanguage();
-  const features        = product?.features || [];
+  const { t, locale } = useLanguage();
+  const {
+    getProductName,
+    getProductDescription,
+    getFeatureLabel,
+    getBestLabel,
+  } = useProductI18n(locale);
+
+  const features = product?.features || [];
   const visibleFeatures = features.slice(0, 3);
-  const extraCount      = features.length - 3;
-  const isGoldBest      = GOLD_BEST.includes(product?.name);
-  const isFree          = FREE_PRODUCTS.includes(product?.name);
-  const isConsult       = CONSULT_PRODUCTS.includes(product?.name);
-  const isOutOfStock    = OUT_OF_STOCK.includes(product?.name);
+  const extraCount = features.length - 3;
+  const isGoldBest = GOLD_BEST.includes(product?.name);
+  const isFree = FREE_PRODUCTS.includes(product?.name);
+  const isConsult = CONSULT_PRODUCTS.includes(product?.name);
+  const isOutOfStock = OUT_OF_STOCK.includes(product?.name);
 
   return (
-    <div className={[
-      "relative rounded-xl flex flex-col h-full transition-all duration-300 group bg-[#07080b] hover:-translate-y-1",
-      isFree
-        ? "border border-yellow-400/60 shadow-[0_0_12px_rgba(251,191,36,0.15)] hover:shadow-[0_0_28px_rgba(251,191,36,0.45)] hover:border-yellow-300"
-        : isGoldBest
+    <div
+      className={[
+        "relative rounded-xl flex flex-col h-full transition-all duration-300 group bg-[#07080b] hover:-translate-y-1",
+        isFree
+          ? "border border-yellow-400/60 shadow-[0_0_12px_rgba(251,191,36,0.15)] hover:shadow-[0_0_28px_rgba(251,191,36,0.45)] hover:border-yellow-300"
+          : isGoldBest
           ? "border border-[#fbbf24]/50 shadow-[0_0_8px_rgba(251,191,36,0.08)] hover:shadow-[0_0_20px_rgba(251,191,36,0.35)] hover:border-yellow-300"
-          : "border border-cyan-500/20 shadow-[0_0_8px_rgba(34,211,238,0.06)] hover:shadow-[0_0_20px_rgba(34,211,238,0.30)] hover:border-cyan-400/70"
-    ].join(" ")}>
-
+          : "border border-cyan-500/20 shadow-[0_0_8px_rgba(34,211,238,0.06)] hover:shadow-[0_0_20px_rgba(34,211,238,0.30)] hover:border-cyan-400/70",
+      ].join(" ")}
+    >
       {isFree && (
         <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-yellow-400 text-black text-[10px] font-extrabold px-2.5 py-1 rounded-full">
           <Gift size={10} fill="black" /> {t.freeProducts?.free ?? "FREE"}
@@ -38,7 +126,7 @@ const ProductCard = ({ product }) => {
 
       {isGoldBest && !isFree && (
         <div className="absolute top-3 right-3 z-10 bg-yellow-400 text-black text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
-          <Star size={10} fill="black" /> BEST
+          <Star size={10} fill="black" /> {getBestLabel()}
         </div>
       )}
 
@@ -53,6 +141,7 @@ const ProductCard = ({ product }) => {
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             {t.badges?.[0] ?? "UNDETECTED"}
           </span>
+
           {isFree ? (
             <span className="flex items-center gap-1 bg-yellow-400/20 border border-yellow-400/40 text-yellow-400 text-[10px] font-semibold px-2 py-0.5 rounded-full">
               <Gift size={9} /> {t.freeProducts?.free ?? "FREE"}
@@ -67,18 +156,21 @@ const ProductCard = ({ product }) => {
 
       <div className="flex flex-col flex-1 p-5 gap-3">
         <div>
-          <h3 className={[
-            "font-extrabold text-sm uppercase tracking-wide transition-colors duration-300",
-            isFree
-              ? "text-white group-hover:text-yellow-300"
-              : isGoldBest
+          <h3
+            className={[
+              "font-extrabold text-sm uppercase tracking-wide transition-colors duration-300",
+              isFree
                 ? "text-white group-hover:text-yellow-300"
-                : "text-white group-hover:text-cyan-400"
-          ].join(" ")}>
-            {product?.name}
+                : isGoldBest
+                ? "text-white group-hover:text-yellow-300"
+                : "text-white group-hover:text-cyan-400",
+            ].join(" ")}
+          >
+            {getProductName(product?.name)}
           </h3>
+
           <p className="text-white/40 text-[10px] uppercase tracking-wider mt-0.5 line-clamp-2">
-            {product?.description}
+            {getProductDescription(product)}
           </p>
         </div>
 
@@ -86,10 +178,14 @@ const ProductCard = ({ product }) => {
           <ul className="flex flex-col gap-1.5">
             {visibleFeatures.map((f, i) => (
               <li key={i} className="flex items-center gap-2 text-white/70 text-xs">
-                <ShieldCheck size={12} className={isFree || isGoldBest ? "text-yellow-400 shrink-0" : "text-cyan-400 shrink-0"} />
-                {f}
+                <ShieldCheck
+                  size={12}
+                  className={isFree || isGoldBest ? "text-yellow-400 shrink-0" : "text-cyan-400 shrink-0"}
+                />
+                {getFeatureLabel(f)}
               </li>
             ))}
+
             {extraCount > 0 && (
               <li className="text-yellow-400/60 text-xs mt-0.5">
                 {typeof t.fashsalesMoreFeatures === "function"
@@ -103,8 +199,13 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
           <div>
             <p className="text-white/30 text-[10px] uppercase tracking-wider">
-              {isFree ? t.freeProducts?.price ?? "Price" : isConsult || isOutOfStock ? "" : t.fashsalesFrom ?? "From"}
+              {isFree
+                ? t.freeProducts?.price ?? "Price"
+                : isConsult || isOutOfStock
+                ? ""
+                : t.fashsalesFrom ?? "From"}
             </p>
+
             {isFree ? (
               <p className="font-bold text-lg text-yellow-400">{t.freeProducts?.free ?? "FREE"}</p>
             ) : isOutOfStock ? (
@@ -121,11 +222,16 @@ const ProductCard = ({ product }) => {
               <p className="font-bold text-lg text-white">${product?.price}</p>
             )}
           </div>
+
           <Link href={`/products/${product?.id}`}>
-            <button className={[
-              "flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 hover:scale-105 active:scale-95",
-              isFree || isGoldBest ? "bg-yellow-400 hover:bg-yellow-300 text-black" : "bg-cyan-500 hover:bg-cyan-400 text-black"
-            ].join(" ")}>
+            <button
+              className={[
+                "flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 hover:scale-105 active:scale-95",
+                isFree || isGoldBest
+                  ? "bg-yellow-400 hover:bg-yellow-300 text-black"
+                  : "bg-cyan-500 hover:bg-cyan-400 text-black",
+              ].join(" ")}
+            >
               {t.fashsalesView ?? "View →"}
             </button>
           </Link>
@@ -136,28 +242,44 @@ const ProductCard = ({ product }) => {
 };
 
 const ProductsGrid = ({ products }) => {
-  const { t } = useLanguage();
-  const [search,           setSearch]           = useState("");
+  const { t, locale } = useLanguage();
+  const { getCategoryLabel, getProductName, getProductDescription } = useProductI18n(locale);
+
+  const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const rawCategories = Array.from(new Set(products.map(p => p.category?.name).filter(Boolean)));
+  const rawCategories = Array.from(new Set(products.map((p) => p.category?.name).filter(Boolean)));
+
   const sortedCategories = [
     "Free Products",
-    ...rawCategories.filter(c => c !== "Free Products"),
-  ].filter(c => rawCategories.includes(c));
+    ...rawCategories.filter((c) => c !== "Free Products"),
+  ].filter((c) => rawCategories.includes(c));
+
   const categories = ["all", ...sortedCategories];
 
-  const filtered = products
-    .filter(p => {
-      const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
-      const matchCat    = selectedCategory === "all" || p.category?.name === selectedCategory;
-      return matchSearch && matchCat;
-    })
-    .sort((a, b) => {
-      const aFree = FREE_PRODUCTS.includes(a.name) ? 0 : 1;
-      const bFree = FREE_PRODUCTS.includes(b.name) ? 0 : 1;
-      return aFree - bFree;
-    });
+  const filtered = useMemo(() => {
+    return products
+      .filter((p) => {
+        const translatedName = getProductName(p.name).toLowerCase();
+        const translatedDescription = getProductDescription(p).toLowerCase();
+        const query = search.toLowerCase();
+
+        const matchSearch =
+          translatedName.includes(query) ||
+          translatedDescription.includes(query) ||
+          p.name.toLowerCase().includes(query);
+
+        const matchCat =
+          selectedCategory === "all" || p.category?.name === selectedCategory;
+
+        return matchSearch && matchCat;
+      })
+      .sort((a, b) => {
+        const aFree = FREE_PRODUCTS.includes(a.name) ? 0 : 1;
+        const bFree = FREE_PRODUCTS.includes(b.name) ? 0 : 1;
+        return aFree - bFree;
+      });
+  }, [products, search, selectedCategory, getProductName, getProductDescription]);
 
   return (
     <div className="min-h-screen px-6 md:px-24 lg:px-32 py-48 max-w-screen-2xl mx-auto">
@@ -175,11 +297,12 @@ const ProductsGrid = ({ products }) => {
           type="text"
           placeholder={t.fashsalesSearch ?? "Search products..."}
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           className="bg-white/5 border border-white/10 text-white/80 placeholder-white/25 text-sm rounded-lg px-4 py-2.5 w-full md:w-72 focus:outline-none focus:border-cyan-500/50 transition-colors"
         />
+
         <div className="flex flex-wrap gap-2">
-          {categories.map(cat => (
+          {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
@@ -190,11 +313,11 @@ const ProductsGrid = ({ products }) => {
                     ? "bg-yellow-400 text-black"
                     : "bg-cyan-500 text-black"
                   : cat === "Free Products"
-                    ? "bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 hover:border-yellow-400/60"
-                    : "bg-white/5 border border-white/10 text-white/50 hover:border-cyan-500/40 hover:text-white"
+                  ? "bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 hover:border-yellow-400/60"
+                  : "bg-white/5 border border-white/10 text-white/50 hover:border-cyan-500/40 hover:text-white",
               ].join(" ")}
             >
-              {cat === "all" ? t.fashsalesAll ?? "All" : cat}
+              {getCategoryLabel(cat)}
             </button>
           ))}
         </div>
@@ -202,14 +325,16 @@ const ProductsGrid = ({ products }) => {
 
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filtered.map(product => (
+          {filtered.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-24 text-white/30">
           <p className="text-lg font-semibold">{t.fashsalesNotFound ?? "No products found"}</p>
-          <p className="text-sm mt-1">{t.fashsalesNotFoundSub ?? "Try a different search or category"}</p>
+          <p className="text-sm mt-1">
+            {t.fashsalesNotFoundSub ?? "Try a different search or category"}
+          </p>
         </div>
       )}
     </div>
