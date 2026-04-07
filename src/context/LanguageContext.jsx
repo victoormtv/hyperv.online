@@ -276,6 +276,22 @@ const translations = {
     },
 
     productPage: {
+    bestSeller: "Best Seller",
+    undetected: "Undetected",
+    sales: "(1000+ sales)",
+    features: "Features",
+    specifications: "Specifications",
+    compatibility: "Compatibility",
+    windowsCompat: "Windows 10 & 11",
+    status: "Status",
+    undetectedStatus: "Undetected",
+    support: "Support",
+    supportValue: "24/7 Discord",
+    choosePlan: "Choose Your Plan",
+    standardPlan: "Standard",
+  },
+
+    productPage: {
       bestSeller: "Best Seller",
       undetected: "Undetected",
       sales: "(1000+ sales)",
@@ -668,6 +684,22 @@ const translations = {
         },
       }
     },
+
+    productPage: {
+    bestSeller: "Más Vendido",
+    undetected: "Indetectable",
+    sales: "(1000+ ventas)",
+    features: "Características",
+    specifications: "Especificaciones",
+    compatibility: "Compatibilidad",
+    windowsCompat: "Windows 10 & 11",
+    status: "Estado",
+    undetectedStatus: "Indetectable",
+    support: "Soporte",
+    supportValue: "24/7 Discord",
+    choosePlan: "Elige tu plan",
+    standardPlan: "Estándar",
+  },
 
     checkout: {
       back: "Volver a la tienda",
