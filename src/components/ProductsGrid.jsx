@@ -92,7 +92,9 @@ const ProductCard = ({ product }) => {
             ))}
             {extraCount > 0 && (
               <li className="text-yellow-400/60 text-xs mt-0.5">
-                {t.fashsalesMoreFeatures?.replace("{n}", extraCount) ?? `+${extraCount} more features`}
+                {typeof t.fashsalesMoreFeatures === "function"
+                  ? t.fashsalesMoreFeatures(extraCount)
+                  : `+${extraCount} more features`}
               </li>
             )}
           </ul>
