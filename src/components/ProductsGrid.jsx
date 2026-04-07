@@ -1,13 +1,14 @@
 "use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { Star, Zap, ShieldCheck, Gift, Headphones } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
-const GOLD_BEST      = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
-const FREE_PRODUCTS  = ["Panel Free", "Bypass Free"];
+const GOLD_BEST        = ["Panel Secure", "Bypass UID", "Aimbot Color", "Panel Full"];
+const FREE_PRODUCTS    = ["Panel Free", "Bypass Free"];
 const CONSULT_PRODUCTS = ["Boost Rank"];
-const OUT_OF_STOCK   = ["Aimbot Body Android", "Aimbot Body iOS"];
+const OUT_OF_STOCK     = ["Aimbot Body Android", "Aimbot Body iOS"];
 
 const ProductCard = ({ product }) => {
   const { t } = useLanguage();
@@ -29,14 +30,12 @@ const ProductCard = ({ product }) => {
           : "border border-cyan-500/20 shadow-[0_0_8px_rgba(34,211,238,0.06)] hover:shadow-[0_0_20px_rgba(34,211,238,0.30)] hover:border-cyan-400/70"
     ].join(" ")}>
 
-      {/* FREE badge */}
       {isFree && (
         <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-yellow-400 text-black text-[10px] font-extrabold px-2.5 py-1 rounded-full">
-          <Gift size={10} fill="black" /> FREE
+          <Gift size={10} fill="black" /> {t.freeProducts?.free ?? "FREE"}
         </div>
       )}
 
-      {/* BEST badge */}
       {isGoldBest && !isFree && (
         <div className="absolute top-3 right-3 z-10 bg-yellow-400 text-black text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
           <Star size={10} fill="black" /> BEST
@@ -56,7 +55,7 @@ const ProductCard = ({ product }) => {
           </span>
           {isFree ? (
             <span className="flex items-center gap-1 bg-yellow-400/20 border border-yellow-400/40 text-yellow-400 text-[10px] font-semibold px-2 py-0.5 rounded-full">
-              <Gift size={9} /> FREE
+              <Gift size={9} /> {t.freeProducts?.free ?? "FREE"}
             </span>
           ) : (
             <span className="flex items-center gap-1 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 text-[10px] font-semibold px-2 py-0.5 rounded-full">
@@ -93,7 +92,7 @@ const ProductCard = ({ product }) => {
             ))}
             {extraCount > 0 && (
               <li className="text-yellow-400/60 text-xs mt-0.5">
-                {t.fashsalesMoreFeatures?.(extraCount) ?? `+${extraCount} more features`}
+                {t.fashsalesMoreFeatures?.replace("{n}", extraCount) ?? `+${extraCount} more features`}
               </li>
             )}
           </ul>
@@ -102,19 +101,19 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
           <div>
             <p className="text-white/30 text-[10px] uppercase tracking-wider">
-              {isFree ? "Price" : isConsult || isOutOfStock ? "" : t.fashsalesFrom ?? "From"}
+              {isFree ? t.freeProducts?.price ?? "Price" : isConsult || isOutOfStock ? "" : t.fashsalesFrom ?? "From"}
             </p>
             {isFree ? (
-              <p className="font-bold text-lg text-yellow-400">FREE</p>
+              <p className="font-bold text-lg text-yellow-400">{t.freeProducts?.free ?? "FREE"}</p>
             ) : isOutOfStock ? (
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-                <p className="font-bold text-sm text-red-400">Sin stock</p>
+                <p className="font-bold text-sm text-red-400">{t.fashsalesOutOfStock ?? "Out of stock"}</p>
               </div>
             ) : isConsult ? (
               <div className="flex items-center gap-1.5">
                 <Headphones size={13} className="text-cyan-400" />
-                <p className="font-bold text-sm text-cyan-400">A consultar</p>
+                <p className="font-bold text-sm text-cyan-400">{t.fashsalesConsult ?? "Consult us"}</p>
               </div>
             ) : (
               <p className="font-bold text-lg text-white">${product?.price}</p>
@@ -172,7 +171,7 @@ const ProductsGrid = ({ products }) => {
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
         <input
           type="text"
-          placeholder="Search products..."
+          placeholder={t.fashsalesSearch ?? "Search products..."}
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="bg-white/5 border border-white/10 text-white/80 placeholder-white/25 text-sm rounded-lg px-4 py-2.5 w-full md:w-72 focus:outline-none focus:border-cyan-500/50 transition-colors"
@@ -193,7 +192,7 @@ const ProductsGrid = ({ products }) => {
                     : "bg-white/5 border border-white/10 text-white/50 hover:border-cyan-500/40 hover:text-white"
               ].join(" ")}
             >
-              {cat === "all" ? "All" : cat}
+              {cat === "all" ? t.fashsalesAll ?? "All" : cat}
             </button>
           ))}
         </div>
@@ -207,8 +206,8 @@ const ProductsGrid = ({ products }) => {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-24 text-white/30">
-          <p className="text-lg font-semibold">No products found</p>
-          <p className="text-sm mt-1">Try a different search or category</p>
+          <p className="text-lg font-semibold">{t.fashsalesNotFound ?? "No products found"}</p>
+          <p className="text-sm mt-1">{t.fashsalesNotFoundSub ?? "Try a different search or category"}</p>
         </div>
       )}
     </div>

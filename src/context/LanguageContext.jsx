@@ -275,6 +275,19 @@ const translations = {
       }
     },
 
+    productPage: {
+      bestSeller: "Best Seller",
+      undetected: "Undetected",
+      sales: "(1000+ sales)",
+      features: "Features",
+      specifications: "Specifications",
+      compatibility: "Compatibility",
+      windowsCompat: "Windows 10 & 11",
+      status: "Status",
+      undetectedStatus: "Undetected",
+      support: "Support",
+      supportValue: "24/7 Discord",
+    },
     checkout: {
       back: "Back to Store",
       title: "Checkout",
@@ -304,6 +317,13 @@ const translations = {
       cancelCrypto: "Cancel",
       openTab: "Open in new tab ↗",
     },
+    
+    fashsalesSearch: "Search products...",
+    fashsalesAll: "All",
+    fashsalesNotFound: "No products found",
+    fashsalesNotFoundSub: "Try a different search or category",
+    fashsalesOutOfStock: "Out of stock",
+    fashsalesConsult: "Consult us",
 
     checkout: {
       backToStore: "Back to Store",
@@ -502,6 +522,21 @@ const translations = {
         { n: "15", title: "Información de Contacto", intro: "Para preguntas sobre estos Términos de Servicio, contáctanos vía:", contact: { label: "Discord:", link: "discord.gg/hypervgg", href: "https://discord.gg/hypervgg" } },
       ],
     },
+    
+    // dentro de translations.es
+    productPage: {
+      bestSeller: "Más Vendido",
+      undetected: "Indetectable",
+      sales: "(1000+ ventas)",
+      features: "Características",
+      specifications: "Especificaciones",
+      compatibility: "Compatibilidad",
+      windowsCompat: "Windows 10 & 11",
+      status: "Estado",
+      undetectedStatus: "Indetectable",
+      support: "Soporte",
+      supportValue: "24/7 Discord",
+    },
 
     tutorial: {
       backToSite: "Volver al sitio",
@@ -590,6 +625,14 @@ const translations = {
         fails: "Si NO funciona:",
         failsDesc: 'Revisa la sección "Problemas comunes" o contacta soporte a través de Discord.',
       },
+
+      fashsalesSearch: "Buscar productos...",
+      fashsalesAll: "Todos",
+      fashsalesNotFound: "No se encontraron productos",
+      fashsalesNotFoundSub: "Prueba con otra búsqueda o categoría",
+      fashsalesOutOfStock: "Sin stock",
+      fashsalesConsult: "A consultar",
+      
       issues: {
         title: "Problemas Comunes",
         subtitle: "Soluciones para problemas comunes",
