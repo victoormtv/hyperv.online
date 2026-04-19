@@ -39,10 +39,13 @@ const loadPayPalScript = (clientId) =>
   });
 
 const COUPONS = {
-  "CRYPTO20":  { discount: 0.20, label: "20% OFF", onlyMethod: "crypto" },
-  "HYPERV10":  { discount: 0.10, label: "10% OFF", onlyMethod: null     },
-  "HYPERV26":  { discount: 0.90, label: "90% OFF", onlyMethod: null     },
-  "DISCORD15": { discount: 0.15, label: "15% OFF", onlyMethod: null     },
+  "HYPERV10": { type: "percent", discount: 0.10, label: "10% OFF",   onlyMethod: null },
+  "FVBRI":    { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "JOSUEX":   { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "MATTIZN":  { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "YAMI":     { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "STRIX":    { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "EMMA":     { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
 };
 
 const CRYPTOS = [
@@ -73,6 +76,7 @@ export default function CheckoutPage() {
 
   const searchParams = useSearchParams();
   const router       = useRouter();
+
   const [contactMethod,     setContactMethod]     = useState("");
   const [discordUser,       setDiscordUser]       = useState("");
   const [telegramUser,      setTelegramUser]      = useState("");
@@ -136,14 +140,27 @@ export default function CheckoutPage() {
 
   const isFreeCart = subtotal === 0 || safeCart.every(i => FREE_PRODUCTS.includes(i.product.name));
 
-  const autoCryptoDiscount  = method === "crypto" ? 0.05 : 0;
-  const couponDiscount      = appliedCoupon
-    ? (appliedCoupon.onlyMethod && appliedCoupon.onlyMethod !== method ? 0 : appliedCoupon.discount)
-    : 0;
-  const finalDiscount       = Math.max(autoCryptoDiscount, couponDiscount);
-  const discountAmount      = subtotal * finalDiscount;
-  const total               = subtotal - discountAmount;
+  const autoCryptoDiscount = method === "crypto" ? subtotal * 0.05 : 0;
+
+  const couponDiscount = (() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.onlyMethod && appliedCoupon.onlyMethod !== method) return 0;
+    if (appliedCoupon.type === "fixed") return appliedCoupon.discount;
+    return subtotal * appliedCoupon.discount;
+  })();
+
+  const discountAmount       = Math.max(autoCryptoDiscount, couponDiscount);
+  const total                = Math.max(0, subtotal - discountAmount);
+  const hasDiscount          = discountAmount > 0;
+  const discountRatio        = subtotal > 0 ? discountAmount / subtotal : 0;
   const couponMethodMismatch = appliedCoupon?.onlyMethod && appliedCoupon.onlyMethod !== method;
+
+  const buildContactInfo = () => ({
+    method: contactMethod,
+    ...(contactMethod === "discord"  && { discord:  discordUser }),
+    ...(contactMethod === "telegram" && { telegram: telegramUser }),
+    ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
+  });
 
   if (!mounted) return null;
 
@@ -169,19 +186,13 @@ export default function CheckoutPage() {
     ...i,
     product: {
       ...i.product,
-      price:     +(i.product.price * (1 - finalDiscount)).toFixed(2),
+      price:     +(i.product.price * (1 - discountRatio)).toFixed(2),
       planLabel: i.product.planLabel || i.product.plans?.[0]?.label || "Mensual",
     },
   }));
 
   const processOrderAndRedirect = async () => {
-    const contactInfo = {
-      method: contactMethod,
-      ...(contactMethod === "discord"  && { discord:  discordUser }),
-      ...(contactMethod === "telegram" && { telegram: telegramUser }),
-      ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
-    };
-
+    const contactInfo = buildContactInfo();
     try {
       const res = await fetch("/api/orders/process", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -204,24 +215,11 @@ export default function CheckoutPage() {
     }
   };
 
-  const contactInfo = {
-    method: contactMethod,
-    ...(contactMethod === "discord"  && { discord:  discordUser }),
-    ...(contactMethod === "telegram" && { telegram: telegramUser }),
-    ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
-  };
-
   const handleMercadoPago = async () => {
     if (!validateCheckout()) return;
     setLoading(true); setError(""); setMpPreferenceId(null);
     try {
-      const contactInfo = {
-        method: contactMethod,
-        ...(contactMethod === "discord"  && { discord:  discordUser }),
-        ...(contactMethod === "telegram" && { telegram: telegramUser }),
-        ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
-      };
-
+      const contactInfo = buildContactInfo(); // FIX 1
       const res = await fetch("/api/checkout/mercadopago", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: discountedCart, email, contactInfo }),
@@ -247,10 +245,11 @@ export default function CheckoutPage() {
       const container = document.getElementById("paypal-button-container");
       if (!container) throw new Error("No se encontró contenedor PayPal.");
       container.innerHTML = "";
+      const contactInfo = buildContactInfo();
       await window.paypal.Buttons({
         style: { layout: "vertical", color: "blue", shape: "rect", label: "pay" },
         createOrder: async () => {
-          const res  = await fetch("/api/checkout/paypal/create", {
+          const res = await fetch("/api/checkout/paypal/create", {
             method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ cart: discountedCart, email, contactInfo }),
           });
@@ -275,27 +274,21 @@ export default function CheckoutPage() {
     finally { setLoading(false); }
   };
 
-const handleCrypto = async () => {
-  if (!validateCheckout()) return;
-  setLoading(true); setError("");
-  try {
-    const contactInfo = {
-      method: contactMethod,
-      ...(contactMethod === "discord"  && { discord:  discordUser }),
-      ...(contactMethod === "telegram" && { telegram: telegramUser }),
-      ...(contactMethod === "whatsapp" && { whatsapp: `${whatsappCode}${whatsappNumber}` }),
-    };
-
-    const res = await fetch("/api/checkout/plisio", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency, contactInfo }),
-    });
-    const data = await res.json();
-    if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
-    setCryptoPaymentData({ checkoutUrl: data.checkoutUrl });
-  } catch (err) { setError(err?.message || "Error de conexión con Plisio."); }
-  finally { setLoading(false); }
-};
+  const handleCrypto = async () => {
+    if (!validateCheckout()) return;
+    setLoading(true); setError("");
+    try {
+      const contactInfo = buildContactInfo(); // FIX 1
+      const res = await fetch("/api/checkout/plisio", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: discountedCart, email, currency: cryptoCurrency, contactInfo }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Error creando pago crypto.");
+      setCryptoPaymentData({ checkoutUrl: data.checkoutUrl });
+    } catch (err) { setError(err?.message || "Error de conexión con Plisio."); }
+    finally { setLoading(false); }
+  };
 
   const handleSubmit = () => {
     if (total === 0) {
@@ -309,7 +302,6 @@ const handleCrypto = async () => {
     else if (method === "crypto") handleCrypto();
   };
 
-  // Button style: golden for free, blue for paid
   const submitBtnStyle = loading
     ? { background: "rgba(34,211,238,0.3)", boxShadow: "none" }
     : isFreeCart
@@ -374,18 +366,22 @@ const handleCrypto = async () => {
             <span className="text-white/50 text-sm">{c.subtotal}</span>
             <span className="text-white/70 text-sm">${subtotal.toFixed(2)}</span>
           </div>
-          {method === "crypto" && !appliedCoupon && (
+
+          {/* FIX 2: bloque de descuento unificado — muestra siempre el descuento real activo */}
+          {hasDiscount && !couponMethodMismatch && (
             <div className="flex items-center justify-between mb-2">
-              <span className="text-green-400 text-sm flex items-center gap-1.5"><Tag size={13} /> {c.cryptoDiscount}</span>
-              <span className="text-green-400 text-sm font-bold">-${(subtotal * 0.05).toFixed(2)}</span>
-            </div>
-          )}
-          {appliedCoupon && !couponMethodMismatch && couponDiscount > 0 && (
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-green-400 text-sm flex items-center gap-1.5"><Tag size={13} /> Cupón {appliedCoupon.code} ({appliedCoupon.label})</span>
+              <span className="text-green-400 text-sm flex items-center gap-1.5">
+                <Tag size={13} />
+                {appliedCoupon && couponDiscount >= autoCryptoDiscount
+                  ? `Cupón ${appliedCoupon.code} (${appliedCoupon.label})`
+                  : method === "crypto"
+                    ? c.cryptoDiscount
+                    : "Descuento"}
+              </span>
               <span className="text-green-400 text-sm font-bold">-${discountAmount.toFixed(2)}</span>
             </div>
           )}
+
           {couponMethodMismatch && (
             <div className="flex items-center gap-2 mb-2 text-yellow-400/80 text-xs">
               <Tag size={12} /> {c.couponOnly} {appliedCoupon.onlyMethod}
@@ -395,7 +391,8 @@ const handleCrypto = async () => {
           <div className="flex items-center justify-between">
             <span className="text-white font-extrabold text-lg">{c.total}</span>
             <div className="text-right">
-              {finalDiscount > 0 && <p className="text-white/30 text-xs line-through">${subtotal.toFixed(2)}</p>}
+              {/* FIX 3: usa hasDiscount en vez de finalDiscount > 0 */}
+              {hasDiscount && <p className="text-white/30 text-xs line-through">${subtotal.toFixed(2)}</p>}
               <span className={total === 0 ? "text-yellow-400 font-extrabold text-2xl" : "text-white font-extrabold text-2xl"}>
                 {total === 0 ? "FREE" : `$${total.toFixed(2)}`}
               </span>
@@ -428,7 +425,7 @@ const handleCrypto = async () => {
               className="w-full border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-500/50 transition-colors appearance-none"
               style={{
                 background: "rgba(255,255,255,0.05)",
-                color: contactMethod === "" ? "rgba(255,255,255,0.25)" : "white", // 👈 esto
+                color: contactMethod === "" ? "rgba(255,255,255,0.25)" : "white",
               }}
             >
               <option value="" style={{ background: "#0d0f14", color: "rgba(255,255,255,0.25)" }}>
@@ -439,13 +436,11 @@ const handleCrypto = async () => {
               <option value="whatsapp" style={{ background: "#0d0f14", color: "white" }}>WhatsApp</option>
             </select>
 
-            {/* Discord */}
             {contactMethod === "discord" && (
               <div className="mt-3">
                 <label className="text-white/60 text-xs mb-1.5 block">Tu usuario de Discord</label>
                 <input
-                  type="text"
-                  value={discordUser}
+                  type="text" value={discordUser}
                   onChange={(e) => setDiscordUser(e.target.value)}
                   placeholder="ej: usuario#1234 o @usuario"
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
@@ -453,15 +448,13 @@ const handleCrypto = async () => {
               </div>
             )}
 
-            {/* Telegram */}
             {contactMethod === "telegram" && (
               <div className="mt-3">
                 <label className="text-white/60 text-xs mb-1.5 block">Tu @ de Telegram</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-sm select-none">@</span>
                   <input
-                    type="text"
-                    value={telegramUser}
+                    type="text" value={telegramUser}
                     onChange={(e) => setTelegramUser(e.target.value.replace("@", ""))}
                     placeholder="tuusuario"
                     className="w-full bg-white/5 border border-white/10 rounded-xl pl-8 pr-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
@@ -470,7 +463,6 @@ const handleCrypto = async () => {
               </div>
             )}
 
-            {/* WhatsApp */}
             {contactMethod === "whatsapp" && (
               <div className="mt-3 flex flex-col gap-2">
                 <div>
@@ -495,8 +487,7 @@ const handleCrypto = async () => {
                       {whatsappCode}
                     </span>
                     <input
-                      type="tel"
-                      value={whatsappNumber}
+                      type="tel" value={whatsappNumber}
                       onChange={(e) => setWhatsappNumber(e.target.value.replace(/\D/g, ""))}
                       placeholder="987654321"
                       className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 outline-none focus:border-cyan-500/50 transition-colors"
