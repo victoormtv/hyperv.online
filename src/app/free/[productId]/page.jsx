@@ -593,11 +593,11 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <Card className="mb-4">
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
-        <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/GarenaFreeFire-Normal.xapk" label="Free Fire Normal" color="#06b6d4" />
-          <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
-          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
-        </div>
+          <div className="flex flex-wrap gap-2">
+            <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal-OBB53.xapk" label="Free Fire Normal" color="#06b6d4" />
+            <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Max-India-OBB53.xapk" label="Free Fire Max" color="#06b6d4" />
+            <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Max-Tela-OBB53.xapk" label="Free Fire Tela" color="#06b6d4" />
+          </div>
       </Card>
       {/* ZArchiver — igual que bypass-uid */}
       <Card className="mb-4">
