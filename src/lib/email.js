@@ -54,7 +54,9 @@ export async function sendLicenseEmail({
                         <p style="margin:2px 0 0;color:rgba(6,182,212,0.8);font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:600;">Store</p>
                       </div>
                     </div>
-                    <p style="position:relative;margin:14px 0 0;color:rgba(255,255,255,0.45);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;">Confirmación de Compra</p>
+                   <p style="position:relative;margin:14px 0 0;color:rgba(255,255,255,0.45);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;">
+                        ${licenseKey ? "Confirmación de Compra" : productName}
+                    </p>
                   </td>
                 </tr>
 
@@ -182,7 +184,9 @@ export async function sendLicenseEmail({
     const { data, error } = await resend.emails.send({
       from: "HyperV <noreply@hyperv.online>",
       to: [to],
-      subject: `Tu compra de ${productName} - HyperV`,
+      subject: licenseKey
+        ? `Tu compra de ${productName} - HyperV`
+        : `${productName} - HyperV`,
       html,
     });
 
@@ -203,6 +207,7 @@ export async function sendAdminOrderNotification({
   total,
   paymentMethod,
   contactInfo,
+  licenseKey,
 }) {
   const recipients = [process.env.ADMIN_EMAIL, process.env.MY_EMAIL].filter(
     Boolean,
@@ -312,7 +317,9 @@ export async function sendAdminOrderNotification({
     const { data, error } = await resend.emails.send({
       from: "HyperV <noreply@hyperv.online>",
       to: recipients,
-      subject: `Nueva compra: ${productName} - ${orderId}`,
+      subject: licenseKey
+        ? `Nueva compra: ${productName} - ${orderId}`
+        : `Producto gratis activado: ${productName} - ${orderId}`,
       html,
     });
 
