@@ -50,8 +50,8 @@ const PRODUCT_CONFIG = {
 },
 "bypass-uid-memuplay": {
   loaderUrl:            "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
-  videoUrlMemuFreeFire: "https://www.youtube.com/embed/H-KR0aZq_FM",
-  videoUrlMemuBypass:   "https://www.youtube.com/embed/MkqcPCmY8l8",
+  videoUrlMemuFreeFire: "https://www.youtube.com/embed/FJiHW-ikdIM",
+  videoUrlMemuBypass:   "https://www.youtube.com/embed/H-KR0aZq_FM",
   videoUrlBS:           "https://www.youtube.com/embed/hw5R771MMgQ",
 },    
 };
