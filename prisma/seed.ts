@@ -194,7 +194,30 @@ async function main() {
     {
       category: freeFire,
       data: {
-        name: "Bypass UID",
+        name: "Bypass UID Bluestacks",
+        description: "Bypass vinculado a tu cuenta de Free Fire",
+        features: [
+          "Indetectable",
+          "Activacion Rapida",
+          "Sin riesgo de black/ban",
+          "Actualizaciones y soporte incluido",
+        ],
+        isBest: false,
+        status: "UNDETECTED",
+        images: ["/bypass-uid.png"],
+        plans: [
+          { label: "Semanal", price: 9.99 },
+          { label: "14 Días", price: 19.99 },
+          { label: "Mensual", price: 29.99 },
+          { label: "Trimestral", price: 44.99 },
+          { label: "Anual", price: 59.99 },
+        ],
+      },
+    },
+    {
+      category: freeFire,
+      data: {
+        name: "Bypass UID MemuPlay",
         description: "Bypass vinculado a tu cuenta de Free Fire",
         features: [
           "Indetectable",

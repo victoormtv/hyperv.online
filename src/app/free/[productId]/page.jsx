@@ -54,11 +54,9 @@ const PRODUCT_CONFIG = {
     videoUrl: "https://www.youtube.com/embed/TFYhmK790_E",
   },
   "bypass-free": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
-    videoUrlMemuFreeFire: "https://www.youtube.com/embed/2rPK6u12bYg",
-    videoUrlMemuBypass: "https://www.youtube.com/embed/Mkqc_PCmY8l8",
-    videoUrlBS: "https://www.youtube.com/embed/hw5R771MMgQ",
-  },
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Bypass-Gratis.rar",
+    videoUrlMemuFreeFire: "https://www.youtube.com/embed/FJiHW-ikdIM",
+    },
 };
 
 const getProductConfig = (productId) =>
@@ -595,8 +593,6 @@ const BypassFreeContent = ({ section, productName, tx }) => {
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
           <div className="flex flex-wrap gap-2">
             <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal-OBB53.xapk" label="Free Fire Normal" color="#06b6d4" />
-            <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Max-India-OBB53.xapk" label="Free Fire Max" color="#06b6d4" />
-            <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Max-Tela-OBB53.xapk" label="Free Fire Tela" color="#06b6d4" />
           </div>
       </Card>
       {/* ZArchiver — igual que bypass-uid */}
@@ -611,9 +607,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <Card className="mb-4">
         <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
-          <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
-          <DownloadBtn href="https://www.realhostx.com/GarenaMemuPlay9.3.2.2.exe" label="MemuPlay 9.3.2.2" color="#8b5cf6" />
+          <DownloadBtn href="https://www.realhostx.com/Garena/BlueStacks_5.22.130.exe" label="Bluestacks 5.14" color="#8b5cf6" />
         </div>
       </Card>
       {/* Remote support — igual que bypass-uid */}
@@ -641,19 +635,8 @@ const BypassFreeContent = ({ section, productName, tx }) => {
           <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial ${productName}`}
             className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
         </div>
-        <div className="rounded-xl overflow-hidden aspect-video w-full">
-          <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial ${productName}`}
-            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-        </div>
       </Card>
-      {/* Video BlueStacks — igual que bypass-uid */}
-      <Card className="mb-5">
-        <CardTitle icon={Monitor} title={tx.install.videoTitleBS} color={ACCENT} />
-        <div className="rounded-xl overflow-hidden aspect-video w-full">
-          <iframe src={cfg.videoUrlBS} title={`Tutorial ${productName}`}
-            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-        </div>
-      </Card>
+
       {/* Pasos — igual que bypass-uid: usa tx.install.steps */}
       <Card>
         <CardTitle icon={Settings} title={tx.install.stepsTitle} color={ACCENT} />

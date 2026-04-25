@@ -18,7 +18,8 @@ const PRODUCT_ICONS = {
   "panel-only-aimbot":      Target,
   "menu-chams-esp":         Eye,
   "bypass-apk":             Code2,
-  "bypass-uid":             ScanLine,
+  "bypass-uid-bluestacks":  ScanLine,
+  "bypass-uid-memuplay":   ScanLine,
   "panel-android":          Smartphone,
   "aimbot-body-android":    Crosshair,
   "panel-ios":              Smartphone,
@@ -32,7 +33,7 @@ const PRODUCT_ICONS = {
   "discord-tools":          MessageCircle,
 };
 
-const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-esp", "bypass-uid", "bypass-apk"];
+const GROUP1 = ["panel-full", "panel-secure", "panel-only-aimbot", "menu-chams-esp", "bypass-uid-bluestacks", "bypass-uid-memuplay", "bypass-apk"];
 const ACCENT  = "#369876";
 
 const PRODUCT_CONFIG = {
@@ -41,7 +42,18 @@ const PRODUCT_CONFIG = {
   "panel-only-aimbot": { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV (1).exe", videoUrl: "https://www.youtube.com/embed/v5xQizRQsbA" },
   "menu-chams-esp":    { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV (1).exe", videoUrl: "https://www.youtube.com/embed/-Qx6tal1_EY" },
   "bypass-apk":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/Bypass-APK.exe", videoUrl:  "https://www.youtube.com/embed/2rPK6u12bYg", extraContent: null,},
-  "bypass-uid":        { loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar", videoUrlMemuFreeFire:  "https://www.youtube.com/embed/2rPK6u12bYg", videoUrlMemuBypass:  "https://www.youtube.com/embed/MkqcPCmY8l8", videoUrlBS:  "https://www.youtube.com/embed/hw5R771MMgQ",extraContent: null,},
+  "bypass-uid-bluestacks": {
+  loaderUrl:            "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
+  videoUrlMemuFreeFire: "https://www.youtube.com/embed/2rPK6u12bYg",
+  videoUrlMemuBypass:   "https://www.youtube.com/embed/MkqcPCmY8l8",
+  videoUrlBS:           "https://www.youtube.com/embed/hw5R771MMgQ",
+},
+"bypass-uid-memuplay": {
+  loaderUrl:            "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
+  videoUrlMemuFreeFire: "https://www.youtube.com/embed/H-KR0aZq_FM",
+  videoUrlMemuBypass:   "https://www.youtube.com/embed/MkqcPCmY8l8",
+  videoUrlBS:           "https://www.youtube.com/embed/hw5R771MMgQ",
+},    
 };
 
 const getProductConfig = (productId) =>
@@ -55,7 +67,7 @@ const SECTIONS = [
   { id: "common-issues",        group: "TROUBLE" },
 ];
 
-const BYPASS_PRODUCTS = ["bypass-apk", "bypass-uid"];
+const BYPASS_PRODUCTS = ["bypass-apk", "bypass-uid-bluestacks", "bypass-uid-memuplay"];
 
 const EXTRA_ISSUES = [
   {
@@ -88,7 +100,7 @@ function getWarpText(productId) {
   if (productId === "menu-chams-esp" || productId === "menu-chams-bloodstrike") {
     return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el menú.";
   }
-  if (["bypass-apk", "bypass-uid"].includes(productId)) {
+  if (["bypass-apk", "bypass-uid-bluestacks", "bypass-uid-memuplay"].includes(productId)) {
     return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el bypass.";
   }
   return "Después de descargar el WARP, ejecutamos e instalamos, seguido a esto lo activaremos solo para ejecutar el panel.";
@@ -494,7 +506,21 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         </Card>
       )}
 
-      {productId === "bypass-uid" && (
+      {productId === "bypass-uid-bluestacks" && (
+        <Card className="mt-5">
+          <CardTitle icon={Monitor} title="Configuración del Emulador" color={ACCENT} />
+          <WarningBox title="Configuración ADB Requerida" desc="El emulador DEBE estar configurado correctamente con ADB habilitado para que el Bypass funcione." color="#b45309" />
+          <div className="mt-4 flex flex-col gap-3">
+            {["/memu-config-1.png","/memu-config-2.png","/memu-config-3.png","/memu-config-4.png"].map((src, i) => (
+              <div key={i} className="rounded-xl overflow-hidden border border-white/10">
+                <img src={src} alt={`Memu config ${i+1}`} className="w-full h-auto object-contain" />
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {productId === "bypass-uid-memuplay" && (
         <Card className="mt-5">
           <CardTitle icon={Monitor} title="Configuración del Emulador" color={ACCENT} />
           <WarningBox title="Configuración ADB Requerida" desc="El emulador DEBE estar configurado correctamente con ADB habilitado para que el Bypass funcione." color="#b45309" />
@@ -564,12 +590,18 @@ const Group1Content = ({ section, productName, tx, productId }) => {
           <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/MSI-5.12-P64.zip" label="MSI 5.12" color="#8b5cf6" />
         </div>
       </Card>
-      ) : productId === "bypass-uid" ? (
+      ) : productId === "bypass-uid-bluestacks" ? (
         <Card className="mb-4">
           <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
           <div className="flex flex-wrap gap-2">
             <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/Bluestacks 5.14 (1).exe" label="Bluestacks 5.14" color="#8b5cf6" />
             <DownloadBtn href="https://www.realhostx.com/Cloud/tanatozn/BlueStacks_5.22.130.exe" label="Bluestacks 5.22" color="#8b5cf6" />
+          </div>
+        </Card>
+      ) : productId === "bypass-uid-memuplay" ? (
+        <Card className="mb-4">
+          <CardTitle icon={Monitor} title={tx.dl.emuTitle} color="#8b5cf6" />
+          <div className="flex flex-wrap gap-2">
             <DownloadBtn href="https://www.realhostx.com/Garena/MemuPlay_9.3.2.2.exe" label="MemuPlay 9.3.2.2" color="#8b5cf6" />
           </div>
         </Card>
@@ -583,7 +615,17 @@ const Group1Content = ({ section, productName, tx, productId }) => {
         </Card>
       )}
 
-      {productId === "bypass-uid" && (
+      {productId === "bypass-uid-bluestacks" && (
+        <Card className="mb-4">
+          <CardTitle icon={Archive} title={tx.dl.zArchiverTitle} color="#85363dff" />
+          <p className="text-white/50 text-sm mb-3">{tx.dl.zArchiverDesc}</p>
+          <div className="flex flex-wrap gap-2">
+            <DownloadBtn href="https://www.realhostx.com/Garena/ZArchiver.apk" label="ZArchiver" color="#85363dff" />
+          </div>
+        </Card>
+      )}
+
+      {productId === "bypass-uid-memuplay" && (
         <Card className="mb-4">
           <CardTitle icon={Archive} title={tx.dl.zArchiverTitle} color="#85363dff" />
           <p className="text-white/50 text-sm mb-3">{tx.dl.zArchiverDesc}</p>
@@ -611,29 +653,39 @@ const Group1Content = ({ section, productName, tx, productId }) => {
       <div className="flex items-center gap-3 mb-2"><Settings size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.install.subtitle}</p>
 
-      {/* bypass-uid y demás: múltiples videos */}
-      {productId !== "bypass-apk" && (
-        <>
-          <Card className="mb-5">
-            <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
-            <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
-              <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial HyperV ${productName}`}
-                className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-            </div>
-            <div className="rounded-xl overflow-hidden aspect-video w-full">
-              <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial HyperV ${productName}`}
-                className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-            </div>
-          </Card>
-          <Card className="mb-5">
-            <CardTitle icon={Monitor} title={tx.install.videoTitleBS} color={ACCENT} />
-            <div className="rounded-xl overflow-hidden aspect-video w-full">
-              <iframe src={cfg.videoUrlBS} title={`Tutorial HyperV ${productName}`}
-                className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-            </div>
-          </Card>
-        </>
-      )}
+{productId === "bypass-uid-memuplay" && (
+  <Card className="mb-5">
+    <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
+    <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
+      <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial HyperV ${productName}`}
+        className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+    </div>
+    <div className="rounded-xl overflow-hidden aspect-video w-full">
+      <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial HyperV ${productName}`}
+        className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+    </div>
+  </Card>
+)}
+
+{productId === "bypass-uid-bluestacks" && (
+  <Card className="mb-5">
+    <CardTitle icon={Monitor} title={tx.install.videoTitleBS} color={ACCENT} />
+    <div className="rounded-xl overflow-hidden aspect-video w-full">
+      <iframe src={cfg.videoUrlBS} title={`Tutorial HyperV ${productName}`}
+        className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+    </div>
+  </Card>
+)}
+
+{productId === "bypass-apk" && (
+  <Card className="mb-5">
+    <CardTitle icon={Monitor} title={tx.install.videoTitle} color={ACCENT} />
+    <div className="rounded-xl overflow-hidden aspect-video w-full">
+      <iframe src={cfg.videoUrl} title={`Tutorial HyperV ${productName}`}
+        className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+    </div>
+  </Card>
+)}
 
       {/* Panel products: single video */}
       {!BYPASS_PRODUCTS.includes(productId) && (
