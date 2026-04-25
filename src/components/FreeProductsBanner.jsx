@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { Gift, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import CountdownTimer from "@/components/CountdownTimer";
 
 const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
 
@@ -10,7 +11,7 @@ const FreeProductsBanner = ({ products }) => {
   const { t } = useLanguage();
   const fp = t.freeProducts;
 
-  const freeProducts = (products || []).filter(p => {
+  const freeProducts = (products || []).filter((p) => {
     const product = p?.product || p;
     return FREE_PRODUCTS.includes(product?.name);
   });
@@ -21,7 +22,7 @@ const FreeProductsBanner = ({ products }) => {
     <section className="py-12 px-4 md:px-12 lg:px-24">
 
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <div className="inline-flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
           <Gift size={13} /> {fp.badge}
         </div>
@@ -29,17 +30,23 @@ const FreeProductsBanner = ({ products }) => {
           {fp.heading}{" "}
           <span className="text-yellow-400">{fp.headingHighlight}</span>
         </h2>
-        <p className="text-white/40 text-sm">{fp.subtitle}</p>
+        <p className="text-white/40 text-sm mb-6">{fp.subtitle}</p>
+
+        {/* ── COUNTDOWN ── */}
+        <div className="max-w-md mx-auto">
+          <CountdownTimer />
+        </div>
       </div>
 
       {/* Cards */}
-      <div className="flex flex-col sm:flex-row gap-6 max-w-2xl mx-auto justify-center">
+      <div className="flex flex-col sm:flex-row gap-6 max-w-2xl mx-auto justify-center mt-8">
         {freeProducts.map((item, index) => {
-          const product = item?.product || item;
+          const product  = item?.product || item;
           const features = (product?.features || []).slice(0, 3);
 
           return (
-            <div key={product?.id || index}
+            <div
+              key={product?.id || index}
               className="relative flex-1 rounded-2xl bg-[#0d0f0a] border border-yellow-400/40 shadow-[0_0_20px_rgba(251,191,36,0.12)] hover:shadow-[0_0_35px_rgba(251,191,36,0.30)] hover:border-yellow-300 hover:-translate-y-1 transition-all duration-300 overflow-hidden group"
             >
               {/* FREE badge */}
