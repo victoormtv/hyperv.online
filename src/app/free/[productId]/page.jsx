@@ -55,7 +55,7 @@ const PRODUCT_CONFIG = {
   },
   "bypass-free": {
     loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Bypass-Gratis.rar",
-    videoUrlMemuFreeFire: "https://www.youtube.com/embed/FJiHW-ikdIM",
+    videoUrlBSFreeFire: "https://www.youtube.com/embed/FJiHW-ikdIM",
     },
 };
 
@@ -624,7 +624,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <Card className="mb-5">
         <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
         <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
-          <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial ${productName}`}
+          <iframe src={cfg.videoUrlBSFreeFire} title={`Tutorial ${productName}`}
             className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
         </div>
       </Card>
