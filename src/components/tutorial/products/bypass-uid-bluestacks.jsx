@@ -46,11 +46,6 @@ export default function BypassUidBluestacks({ section, productName, tx }) {
             <DownloadBtn href={LINKS.bs522} label="Bluestacks 5.22" color="#8b5cf6" />
           </div>
         </Card>
-        <Card className="mb-4">
-          <CardTitle icon={Archive} title={tx.dl.zArchiverTitle} color="#85363dff" />
-          <p className="text-white/50 text-sm mb-3">{tx.dl.zArchiverDesc}</p>
-          <DownloadBtn href={LINKS.zarchiver} label="ZArchiver" color="#85363dff" />
-        </Card>
       </SectionDownloadBase>
     );
 

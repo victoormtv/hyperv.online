@@ -75,16 +75,12 @@ export const PRODUCT_CONFIG = {
   },
   "bypass-uid-bluestacks": {
     loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
-    videoUrlMemuFreeFire: "https://www.youtube.com/embed/2rPK6u12bYg",
-    videoUrlMemuBypass: "https://www.youtube.com/embed/MkqcPCmY8l8",
-    videoUrlBS: "https://www.youtube.com/embed/hw5R771MMgQ",
+    videoUrlBS: "https://www.youtube.com/embed/FJiHW-ikdIM",
   },
   "bypass-uid-memuplay": {
     loaderUrl:
       "https://www.realhostx.com/Cloud/tanatozn/Bypass HyperV Memu.rar",
-    videoUrlMemuFreeFire: "https://www.youtube.com/embed/FJiHW-ikdIM",
     videoUrlMemuBypass: "https://www.youtube.com/embed/H-KR0aZq_FM",
-    videoUrlBS: "https://www.youtube.com/embed/hw5R771MMgQ",
   },
 };
 

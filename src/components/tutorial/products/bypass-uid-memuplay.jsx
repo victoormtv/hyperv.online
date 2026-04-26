@@ -64,13 +64,6 @@ export default function BypassUidMemuPlay({ section, productName, tx }) {
       <SectionInstallationBase tx={tx}>
         <Card className="mb-5">
           <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
-          {/* Video principal — tutorial completo MEmu Play */}
-          <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
-            <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial HyperV ${productName}`}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen />
-          </div>
           {/* Video secundario — tutorial bypass MEmu */}
           <div className="rounded-xl overflow-hidden aspect-video w-full">
             <iframe src={cfg.videoUrlMemuBypass} title={`Tutorial Bypass ${productName}`}
