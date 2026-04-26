@@ -620,6 +620,15 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <CopyUrl section="installation" />
       <div className="flex items-center gap-3 mb-2"><Settings size={24} style={{ color: ACCENT }} /><h1 className="text-2xl md:text-3xl font-extrabold text-white">{tx.install.title}</h1></div>
       <p className="text-white/40 text-sm mb-6">{tx.install.subtitle}</p>
+      {/* Video MemuPlay — igual que bypass-uid */}
+      <Card className="mb-5">
+        <CardTitle icon={Monitor} title={tx.install.videoTitleMemu} color={ACCENT} />
+        <div className="rounded-xl overflow-hidden aspect-video w-full mb-2">
+          <iframe src={cfg.videoUrlMemuFreeFire} title={`Tutorial ${productName}`}
+            className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+        </div>
+      </Card>
+
       {/* Pasos — igual que bypass-uid: usa tx.install.steps */}
       <Card>
         <CardTitle icon={Settings} title={tx.install.stepsTitle} color={ACCENT} />
