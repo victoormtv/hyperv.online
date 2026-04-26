@@ -169,9 +169,7 @@ async function main() {
         isBest: false,
         status: "UNDETECTED",
         images: ["/bypass-apk.png"],
-        plans: [
-          { label: "Semanal", price: 14.99 }
-        ],
+        plans: [{ label: "Semanal", price: 14.99 }],
       },
     },
     {
@@ -220,7 +218,7 @@ async function main() {
         ],
       },
     },
-        {
+    {
       category: freeProducts,
       data: {
         name: "Panel Free",
@@ -311,7 +309,10 @@ async function main() {
         isBest: true,
         status: "UNDETECTED",
         images: ["/aimbot-proxy.png"],
-        plans: [{ label: "Semanal", price: 24.99 }, { label: "Mensual", price: 54.99 }],
+        plans: [
+          { label: "Semanal", price: 24.99 },
+          { label: "Mensual", price: 54.99 },
+        ],
       },
     },
     {
@@ -547,27 +548,37 @@ async function main() {
     },
   ];
 
-  for (const { category, data } of allProducts) {
+  // AQUÍ ESTÁ EL CAMBIO: Bucle for tradicional usando el index
+  for (let index = 0; index < allProducts.length; index++) {
+    const item = allProducts[index];
+    const { category, data } = item;
+
     const existing = await prisma.product.findFirst({
       where: { name: data.name },
     });
+    
     if (existing) {
       console.log(`⏭️  [${category.name}] ${data.name} ya existe, saltando...`);
       continue;
     }
+    
     const { plans, ...productData } = data;
+    
     const product = await prisma.product.create({
       data: {
         ...productData,
         price: Math.min(...plans.map((p) => p.price)),
         categoryId: category.id,
+        order: index,
       },
     });
+    
     await prisma.plan.createMany({
       data: plans.map((p) => ({ ...p, productId: product.id })),
     });
+    
     console.log(
-      `✅ [${category.name}] ${product.name} — ${plans.length} plan(es)`,
+      `✅ [${category.name}] ${product.name} — ${plans.length} plan(es)`
     );
   }
 
