@@ -18,13 +18,6 @@ export default function BypassUidMemuPlay({ section, productName, tx }) {
     return (
       <SectionRequirementsBase tx={tx} productName={productName}>
         <Card className="mt-5">
-          <CardTitle icon={Gamepad2} title={tx.req.gameTitle} color={ACCENT} />
-          <WarningBox title={tx.req.gameWarning} desc={tx.req.gameDesc} color="#b45309" />
-          <div className="mt-4 rounded-xl overflow-hidden border border-white/10">
-            <img src="/adb.png" alt="ADB configuration guide" className="w-full h-auto object-contain" />
-          </div>
-        </Card>
-        <Card className="mt-5">
           <CardTitle icon={Monitor} title="Configuración del Emulador" color={ACCENT} />
           <WarningBox title="Configuración ADB Requerida"
             desc="El emulador DEBE estar configurado correctamente con ADB habilitado para que el Bypass funcione."

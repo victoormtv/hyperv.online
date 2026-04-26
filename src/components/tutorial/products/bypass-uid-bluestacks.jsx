@@ -24,19 +24,6 @@ export default function BypassUidBluestacks({ section, productName, tx }) {
             <img src="/adb.png" alt="ADB configuration guide" className="w-full h-auto object-contain" />
           </div>
         </Card>
-        <Card className="mt-5">
-          <CardTitle icon={Monitor} title="Configuración del Emulador" color={ACCENT} />
-          <WarningBox title="Configuración ADB Requerida"
-            desc="El emulador DEBE estar configurado correctamente con ADB habilitado para que el Bypass funcione."
-            color="#b45309" />
-          <div className="mt-4 flex flex-col gap-3">
-            {MEMU_IMGS.map((src, i) => (
-              <div key={i} className="rounded-xl overflow-hidden border border-white/10">
-                <img src={src} alt={`Config ${i + 1}`} className="w-full h-auto object-contain" />
-              </div>
-            ))}
-          </div>
-        </Card>
       </SectionRequirementsBase>
     );
 
