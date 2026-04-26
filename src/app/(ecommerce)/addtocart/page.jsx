@@ -39,13 +39,13 @@ const loadPayPalScript = (clientId) =>
   });
 
 const COUPONS = {
-  "HYPERV10": { type: "percent", discount: 0.10, label: "10% OFF",   onlyMethod: null },
-  "FVBRI":    { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
-  "JOSUEX":   { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
-  "MATTIZN":  { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
-  "YAMI":     { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
-  "STRIX":    { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
-  "EMMA":     { type: "fixed",   discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "HYPERV10": { type: "percent", discount: 0.10, label: "10% OFF", onlyMethod: null },
+  "FVBRIX": { type: "fixed", discount: 10.00, label: "$10 OFF", onlyMethod: null },
+  "JOSUEX": { type: "fixed", discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "MATTI": { type: "fixed", discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "YAMI": { type: "fixed", discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "STRIX": { type: "fixed", discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
+  "EMA": { type: "fixed", discount: 0.50, label: "$0.50 OFF", onlyMethod: null },
 };
 
 const CRYPTOS = [
