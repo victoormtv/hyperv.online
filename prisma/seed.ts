@@ -112,23 +112,6 @@ async function main() {
       },
     },
     {
-      category: freeProducts,
-      data: {
-        name: "Panel Free",
-        description: "Versión gratuita del Panel — 3 días de prueba",
-        features: [
-          "Aimbots external",
-          "Chams",
-          "Fix Lag",
-          "Prueba gratuita por 3 días",
-        ],
-        isBest: false,
-        status: "UNDETECTED",
-        images: ["/panel-free.png"],
-        plans: [{ label: "3 Días Gratis", price: 0 }],
-      },
-    },
-    {
       category: freeFire,
       data: {
         name: "Panel Only Aimbot",
@@ -235,6 +218,23 @@ async function main() {
           { label: "Trimestral", price: 44.99 },
           { label: "Anual", price: 59.99 },
         ],
+      },
+    },
+        {
+      category: freeProducts,
+      data: {
+        name: "Panel Free",
+        description: "Versión gratuita del Panel — 3 días de prueba",
+        features: [
+          "Aimbots external",
+          "Chams",
+          "Fix Lag",
+          "Prueba gratuita por 3 días",
+        ],
+        isBest: false,
+        status: "UNDETECTED",
+        images: ["/panel-free.png"],
+        plans: [{ label: "3 Días Gratis", price: 0 }],
       },
     },
     {
