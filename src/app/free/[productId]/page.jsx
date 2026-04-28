@@ -411,8 +411,8 @@ const PanelFreeContent = ({ section, productName, tx, productId, customSteps }) 
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
         <div className="flex flex-wrap gap-2">
-          <DownloadBtn href="https://www.mediafire.com/file/4tzkgmg5j3u1mlh/FreeFire-IndiaV4.xapk/file" label="Free Fire Max" color="#06b6d4" />
-          <DownloadBtn href="https://www.mediafire.com/file/933z282ea48j6dz/FreeFire-TelaV4+(3).xapk/file" label="Free Fire Tela" color="#06b6d4" />
+          <DownloadBtn href="https://www.mediafire.com/file/6ofyx1zjqsz3ynl/FreeFire_Max_OB53.xapk/file" label="Free Fire Max" color="#06b6d4" />
+          <DownloadBtn href="https://www.mediafire.com/file/0m86af9gvowhupf/FreeFire_Tela_OB53.xapk/file" label="Free Fire Tela" color="#06b6d4" />
         </div>
       </Card>
       <Card className="mb-4">
@@ -592,7 +592,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
           <div className="flex flex-wrap gap-2">
-            <DownloadBtn href="https://www.realhostx.com/Garena/FreeFire-Normal-OBB53.xapk" label="Free Fire Normal" color="#06b6d4" />
+            <DownloadBtn href="https://www.mediafire.com/file/k4blea06mv3uzh9/FreeFire_Normal_OB53.xapk/file" label="Free Fire Normal" color="#06b6d4" />
           </div>
       </Card>
       {/* Emuladores — igual que bypass-uid: BS 5.14, 5.22, MemuPlay */}
