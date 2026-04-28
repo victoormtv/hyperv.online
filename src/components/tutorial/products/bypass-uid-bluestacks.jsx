@@ -35,8 +35,6 @@ export default function BypassUidBluestacks({ section, productName, tx }) {
           <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
           <div className="flex flex-wrap gap-2">
             <DownloadBtn href={LINKS.ffNormal} label="Free Fire Normal" color="#06b6d4" />
-            <DownloadBtn href={LINKS.ffMax}    label="Free Fire Max"    color="#06b6d4" />
-            <DownloadBtn href={LINKS.ffTela}   label="Free Fire Tela"   color="#06b6d4" />
           </div>
         </Card>
         <Card className="mb-4">
