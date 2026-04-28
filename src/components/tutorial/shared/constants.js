@@ -94,9 +94,12 @@ export const LINKS = {
   warpBypass:
     "https://www.realhostx.com/Cloud/tanatozn/CloudflareWARP2025.10.186.0.msi",
   discord: "https://discord.com/invite/hypervgg",
-  ffNormal: "https://www.realhostx.com/Garena/FreeFire-Normal-OBB53.xapk",
-  ffMax: "https://www.realhostx.com/Garena/FreeFire-Max-India-OBB53.xapk",
-  ffTela: "https://www.realhostx.com/Garena/FreeFire-Max-Tela-OBB53.xapk",
+  ffNormal:
+    "https://www.mediafire.com/file/k4blea06mv3uzh9/FreeFire_Normal_OB53.xapk/file",
+  ffMax:
+    "https://www.mediafire.com/file/6ofyx1zjqsz3ynl/FreeFire_Max_OB53.xapk/file",
+  ffTela:
+    "https://www.mediafire.com/file/0m86af9gvowhupf/FreeFire_Tela_OB53.xapk/file",
   ffNormalApk:
     "https://1drv.ms/u/c/d5b038515b00d0eb/IQDqHrlc4s17T7_M6gser5-yAZyHI-v0ZF9aE7Su6lO7bMs?e=GDyHKW",
   ffMaxApk:
