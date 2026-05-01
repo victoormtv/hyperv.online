@@ -55,7 +55,7 @@ export const BYPASS_PRODUCTS = [
 export const PRODUCT_CONFIG = {
   "panel-full": {
     loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Consola.exe",
-    videoUrl: "https://www.youtube.com/embed/0wYMqAvmmhU",
+    videoUrl: "https://youtube.com/embed/AA6mwny0gxo",
   },
   "panel-secure": {
     loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Consola.exe",
