@@ -74,7 +74,7 @@ export const PRODUCT_CONFIG = {
     videoUrl: "https://www.youtube.com/embed/2rPK6u12bYg",
   },
   "bypass-uid-bluestacks": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/bypassV7.rar",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Bypass.rar",
     videoUrlBS: "https://www.youtube.com/embed/FJiHW-ikdIM",
   },
   "bypass-uid-memuplay": {
