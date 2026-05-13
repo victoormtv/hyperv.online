@@ -50,7 +50,7 @@ const ACCENT = "#f59e0b";
 
 const PRODUCT_CONFIG = {
   "panel-free": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Consola.exe",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV.exe",
     videoUrl: "https://www.youtube.com/embed/LzGFgoKxVTM",
   },
   "bypass-free": {

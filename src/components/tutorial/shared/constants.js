@@ -54,19 +54,19 @@ export const BYPASS_PRODUCTS = [
 
 export const PRODUCT_CONFIG = {
   "panel-full": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Consola.exe",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV.exe",
     videoUrl: "https://youtube.com/embed/AA6mwny0gxo",
   },
   "panel-secure": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Consola.exe",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV.exe",
     videoUrl: "https://www.youtube.com/embed/LzGFgoKxVTM",
   },
   "panel-only-aimbot": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Consola.exe",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV.exe",
     videoUrl: "https://www.youtube.com/embed/oNebGko0e5A",
   },
   "menu-chams-esp": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Consola.exe",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV.exe",
     videoUrl: "https://www.youtube.com/embed/D_NCesGa0q4",
   },
   "bypass-apk": {
