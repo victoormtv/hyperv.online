@@ -71,9 +71,9 @@ export async function POST(req) {
       results.length === 1
         ? firstResult.licenseKey
         : results
-            .filter((r) => r.licenseKey)
-            .map((r) => `${r.productName}: ${r.licenseKey}`)
-            .join("\n") || null;
+          .filter((r) => r.licenseKey)
+          .map((r) => `${r.productName}: ${r.licenseKey}`)
+          .join("\n") || null;
 
     const total = cart
       .reduce((sum, item) => {
@@ -93,16 +93,19 @@ export async function POST(req) {
 
     console.log("Email cliente result:", emailResult);
 
-    await sendAdminOrderNotification({
-      customerName: email,
-      customerEmail: email,
-      productName: productNames,
-      planLabel: planLabels,
-      orderId: firstResult.orderId,
-      total: `$${total}`,
-      paymentMethod: paymentProvider,
-      contactInfo,
-    });
+    if (licenseKey) {
+      await sendAdminOrderNotification({
+        customerName: email,
+        customerEmail: email,
+        productName: productNames,
+        planLabel: planLabels,
+        orderId: firstResult.orderId,
+        total: `$${total}`,
+        paymentMethod: paymentProvider,
+        contactInfo,
+        licenseKey,
+      });
+    }
 
     return NextResponse.json({
       success: true,
