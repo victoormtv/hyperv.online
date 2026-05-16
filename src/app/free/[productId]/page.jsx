@@ -54,9 +54,9 @@ const PRODUCT_CONFIG = {
     videoUrl: "https://www.youtube.com/embed/LzGFgoKxVTM",
   },
   "bypass-free": {
-    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-Bypass-Gratis.rar",
+    loaderUrl: "https://www.realhostx.com/Cloud/tanatozn/HyperV-UID.rar",
     videoUrlBSFreeFire: "https://www.youtube.com/embed/FJiHW-ikdIM",
-    },
+  },
 };
 
 const getProductConfig = (productId) =>
@@ -591,9 +591,9 @@ const BypassFreeContent = ({ section, productName, tx }) => {
       <Card className="mb-4">
         <CardTitle icon={Gamepad2} title={tx.dl.ffTitle} color="#06b6d4" />
         <p className="text-white/50 text-sm mb-3">{tx.dl.ffDesc}</p>
-          <div className="flex flex-wrap gap-2">
-            <DownloadBtn href="https://www.mediafire.com/file/k4blea06mv3uzh9/FreeFire_Normal_OB53.xapk/file" label="Free Fire Normal" color="#06b6d4" />
-          </div>
+        <div className="flex flex-wrap gap-2">
+          <DownloadBtn href="https://www.mediafire.com/file/k4blea06mv3uzh9/FreeFire_Normal_OB53.xapk/file" label="Free Fire Normal" color="#06b6d4" />
+        </div>
       </Card>
       {/* Emuladores — igual que bypass-uid: BS 5.14, 5.22, MemuPlay */}
       <Card className="mb-4">
@@ -749,13 +749,13 @@ export default function FreePage() {
   const MainContent = () => productId === "bypass-free"
     ? <BypassFreeContent key={`${activeSection}-${locale}`} section={activeSection} productName={productName} tx={tx} />
     : <PanelFreeContent
-        key={`${activeSection}-${locale}`}
-        section={activeSection}
-        productName={productName}
-        tx={tx}
-        productId={productId}
-        customSteps={panelFreeSteps}
-      />;
+      key={`${activeSection}-${locale}`}
+      section={activeSection}
+      productName={productName}
+      tx={tx}
+      productId={productId}
+      customSteps={panelFreeSteps}
+    />;
 
   const NavFooter = () => (
     <div className="px-10 py-6 border-t border-white/10 flex items-center justify-between max-w-3xl mx-auto w-full">
