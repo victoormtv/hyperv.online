@@ -1,4 +1,3 @@
-// lib/email.js
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -17,15 +16,14 @@ export async function sendLicenseEmail({
     "Panel Secure": "https://hyperv.online/tutorial/panel-secure",
     "Panel Only Aimbot": "https://hyperv.online/tutorial/panel-only-aimbot",
     "Menu Chams ESP": "https://hyperv.online/tutorial/menu-chams-esp",
-    "Bypass UID Bluestacks":
-      "https://hyperv.online/tutorial/bypass-uid-bluestacks",
+    "Bypass UID Bluestacks": "https://hyperv.online/tutorial/bypass-uid-bluestacks",
     "Bypass UID Memuplay": "https://hyperv.online/tutorial/bypass-uid-memuplay",
     "Bypass APK": "https://hyperv.online/tutorial/bypass-apk",
     "Panel Free": "https://hyperv.online/free/panel-free",
     "Bypass Free": "https://hyperv.online/free/bypass-free",
   };
-  const tutorialUrl =
-    TUTORIAL_MAP[productName] || "https://hyperv.online/tutorial";
+
+  const tutorialUrl = TUTORIAL_MAP[productName] || "https://hyperv.online/tutorial";
 
   const html = `
     <!DOCTYPE html>
@@ -53,9 +51,8 @@ export async function sendLicenseEmail({
                       <p style="margin:2px 0 0;color:rgba(6,182,212,0.8);font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:600;">Store</p>
                     </div>
                   </div>
-                  <!-- FIX 1: subtítulo del header según si tiene key o no -->
                   <p style="position:relative;margin:14px 0 0;color:rgba(255,255,255,0.45);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;">
-                    ${hasKey ? "Nueva Compra Realizada" : productName}
+                    ${hasKey ? "Producto Comprado" : "Producto Gratis Activado"}
                   </p>
                 </td>
               </tr>
@@ -67,8 +64,12 @@ export async function sendLicenseEmail({
                     <div style="width:40px;height:40px;background:rgba(74,222,128,0.15);border:1.5px solid rgba(74,222,128,0.5);border-radius:50%;margin:0 auto 12px;text-align:center;line-height:40px;">
                       <span style="color:#4ade80;font-size:18px;font-weight:900;">✓</span>
                     </div>
-                    <h2 style="margin:0 0 6px;color:#fff;font-size:20px;font-weight:800;">¡Pago Confirmado!</h2>
-                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Tu pedido fue procesado exitosamente.</p>
+                    <h2 style="margin:0 0 6px;color:#fff;font-size:20px;font-weight:800;">
+                      ${hasKey ? "¡Pago Confirmado!" : "¡Producto Activado!"}
+                    </h2>
+                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">
+                      ${hasKey ? "Tu pedido fue procesado exitosamente." : "Tu producto gratuito fue activado exitosamente."}
+                    </p>
                   </div>
                 </td>
               </tr>
@@ -99,9 +100,8 @@ export async function sendLicenseEmail({
                 </td>
               </tr>
 
-              ${
-                hasKey
-                  ? `
+              ${hasKey
+      ? `
               <!-- License key -->
               <tr>
                 <td style="padding:0 40px 24px;">
@@ -117,7 +117,7 @@ export async function sendLicenseEmail({
                 </td>
               </tr>
               `
-                  : `
+      : `
               <!-- No key -->
               <tr>
                 <td style="padding:0 40px 24px;">
@@ -132,7 +132,7 @@ export async function sendLicenseEmail({
                 </td>
               </tr>
               `
-              }
+    }
 
               <!-- Tutorial button -->
               <tr>
@@ -184,10 +184,9 @@ export async function sendLicenseEmail({
     const { data, error } = await resend.emails.send({
       from: "HyperV <noreply@hyperv.online>",
       to: [to],
-      // FIX 1: subject diferenciado
       subject: hasKey
         ? `Nueva compra realizada: ${productName} - HyperV`
-        : `${productName} - HyperV`,
+        : `${productName} activado - HyperV`,
       html,
     });
 
@@ -210,9 +209,7 @@ export async function sendAdminOrderNotification({
   contactInfo,
   licenseKey,
 }) {
-  const recipients = [process.env.ADMIN_EMAIL, process.env.MY_EMAIL].filter(
-    Boolean,
-  );
+  const recipients = [process.env.ADMIN_EMAIL, process.env.MY_EMAIL].filter(Boolean);
 
   if (!recipients.length) {
     return { success: false, error: "No hay correos configurados" };
@@ -220,10 +217,10 @@ export async function sendAdminOrderNotification({
 
   const contactLabel = contactInfo?.method
     ? {
-        discord: `Discord: ${contactInfo.discord || "—"}`,
-        telegram: `Telegram: ${contactInfo.telegram || "—"}`,
-        whatsapp: `WhatsApp: ${contactInfo.whatsapp || "—"}`,
-      }[contactInfo.method] || "—"
+      discord: `Discord: ${contactInfo.discord || "—"}`,
+      telegram: `Telegram: ${contactInfo.telegram || "—"}`,
+      whatsapp: `WhatsApp: ${contactInfo.whatsapp || "—"}`,
+    }[contactInfo.method] || "—"
     : null;
 
   const contactRow = contactLabel
@@ -237,7 +234,6 @@ export async function sendAdminOrderNotification({
   `
     : "";
 
-  // FIX 2: fila de licencia para el admin
   const licenseRow = licenseKey
     ? `
     <tr>
@@ -338,9 +334,7 @@ export async function sendAdminOrderNotification({
     const { data, error } = await resend.emails.send({
       from: "HyperV <noreply@hyperv.online>",
       to: recipients,
-      subject: licenseKey
-        ? `Nueva compra: ${productName} - ${orderId}`
-        : `Producto gratis activado: ${productName} - ${orderId}`,
+      subject: `Nueva compra: ${productName} - ${orderId}`,
       html,
     });
 

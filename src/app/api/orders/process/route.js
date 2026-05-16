@@ -21,7 +21,12 @@ export async function POST(req) {
       const quantity = item.quantity || 1;
       const productId = item.product?.id;
 
-      const keyResult = await generateKeyAuthLicense(productName, planLabel);
+      let keyResult = { key: null };
+      try {
+        keyResult = await generateKeyAuthLicense(productName, planLabel);
+      } catch (keyErr) {
+        console.error("KeyAuth error (non-fatal):", keyErr.message);
+      }
 
       let orderId = existingOrderId || `ORD-${Date.now()}`;
 
