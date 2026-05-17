@@ -11,7 +11,6 @@ const LEVEL_MAP = {
 const EXPIRY_MAP = {
   "24 Horas": 1,
   "1 Día": 1,
-  "3 Días Gratis": 3,
   Semanal: 7,
   "14 Días": 14,
   "15 Días": 15,
