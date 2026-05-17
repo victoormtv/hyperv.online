@@ -3,6 +3,8 @@ import prisma from "@/utils/connection";
 import { generateKeyAuthLicense } from "@/lib/keyauth";
 import { sendLicenseEmail, sendAdminOrderNotification } from "@/lib/email";
 
+const FREE_PRODUCTS = ["Panel Free", "Bypass Free"];
+
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -21,7 +23,8 @@ export async function POST(req) {
       const quantity = item.quantity || 1;
       const productId = item.product?.id;
 
-      let keyResult = { key: null };
+      let keyResult = { success: true, key: null };
+
       try {
         keyResult = await generateKeyAuthLicense(productName, planLabel);
       } catch (keyErr) {
@@ -63,9 +66,16 @@ export async function POST(req) {
         orderId,
         productName,
         planLabel,
-        licenseKey: keyResult.key || null,
-        hasKey: !!keyResult.key,
+        licenseKey: keyResult?.key || null,
+        hasKey: !!keyResult?.key,
       });
+    }
+
+    if (!results.length) {
+      return NextResponse.json(
+        { error: "No se pudo procesar ningún producto" },
+        { status: 500 }
+      );
     }
 
     const firstResult = results[0];
@@ -76,9 +86,9 @@ export async function POST(req) {
       results.length === 1
         ? firstResult.licenseKey
         : results
-          .filter((r) => r.licenseKey)
-          .map((r) => `${r.productName}: ${r.licenseKey}`)
-          .join("\n") || null;
+            .filter((r) => r.licenseKey)
+            .map((r) => `${r.productName}: ${r.licenseKey}`)
+            .join("\n") || null;
 
     const total = cart
       .reduce((sum, item) => {
@@ -98,8 +108,12 @@ export async function POST(req) {
 
     console.log("Email cliente result:", emailResult);
 
-    if (licenseKey) {
-      await sendAdminOrderNotification({
+    const hasFreeOnlyProducts = results.every((r) =>
+      FREE_PRODUCTS.includes(r.productName)
+    );
+
+    if (!hasFreeOnlyProducts) {
+      const adminEmailResult = await sendAdminOrderNotification({
         customerName: email,
         customerEmail: email,
         productName: productNames,
@@ -110,6 +124,8 @@ export async function POST(req) {
         contactInfo,
         licenseKey,
       });
+
+      console.log("Email admin result:", adminEmailResult);
     }
 
     return NextResponse.json({
@@ -117,6 +133,7 @@ export async function POST(req) {
       orderId: firstResult.orderId,
       products: results,
       email,
+      emailResult,
     });
   } catch (error) {
     console.error("Process order ERROR:", error);
