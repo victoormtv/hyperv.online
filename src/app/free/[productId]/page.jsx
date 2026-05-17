@@ -573,6 +573,7 @@ const BypassFreeContent = ({ section, productName, tx }) => {
           ))}
         </div>
       </Card>
+
     </>
   );
 
