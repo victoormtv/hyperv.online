@@ -57,7 +57,7 @@ const translations = {
         badge: "Status: Undetected",
         heading: "Dominate every lobby",
         subheading: "HyperV",
-        text: "Discover premium products with fast delivery, constant updates and dedicated support. Quality you can trust.",
+        text: "Discover premium undetected panels with fast delivery, constant updates and dedicated support. Quality you can trust.",
         cta: "Buy Now",
         ctaSecondary: "Join Discord",
       },
@@ -400,12 +400,12 @@ const translations = {
 
     credibilityBadge: "HyperV Standard",
     credibilityHeadingLine1: "Buy with more confidence,",
-    credibilityHeadingLine2: "enter with more peace of mind.",
+    credibilityHeadingLine2: "play with security.",
     credibilitySubtitle:
       "HyperV combines speed, support, and a cleaner experience so every purchase feels serious, stable, and well handled.",
 
     credibilityItem1Title: "Reliable security",
-    credibilityItem1Desc: "Protected payments and access delivered with professionalism.",
+    credibilityItem1Desc: "Safe panels and access delivered with professionalism.",
 
     credibilityItem2Title: "Fast delivery",
     credibilityItem2Desc: "Agile processes so you can get started without waiting longer than needed.",
@@ -413,7 +413,7 @@ const translations = {
     credibilityItem3Title: "Active support",
     credibilityItem3Desc: "Constant assistance through HyperV’s main support channels.",
 
-    credibilityItem4Title: "Simple purchase",
+    credibilityItem4Title: "Safe purchase",
     credibilityItem4Desc: "A clear, direct experience without unnecessary friction.",
 
     credibilityBottom1: "Secure payments",
@@ -477,7 +477,7 @@ const translations = {
         badge: "Status: Indetectable",
         heading: "Domina todo el lobby",
         subheading: "HyperV",
-        text: "Descubre productos premium con entrega rápida, actualizaciones constantes y soporte dedicado. Calidad en la que puedes confiar.",
+        text: "Descubre paneles indetectables con entrega rápida, actualizaciones constantes y soporte dedicado. Calidad en la que puedes confiar.",
         cta: "Compra Ahora",
         ctaSecondary: "Únete en Discord",
       },
@@ -825,12 +825,12 @@ const translations = {
 
   credibilityBadge: "HyperV Standard",
   credibilityHeadingLine1: "Compra con más confianza,",
-  credibilityHeadingLine2: "entra con más tranquilidad.",
+  credibilityHeadingLine2: "juega con seguridad.",
   credibilitySubtitle:
     "HyperV combina rapidez, soporte y una experiencia más limpia para que cada compra se sienta seria, estable y bien cuidada.",
 
   credibilityItem1Title: "Seguridad confiable",
-  credibilityItem1Desc: "Pagos protegidos y acceso entregado con seriedad.",
+  credibilityItem1Desc: "Paneles seguros y acceso entregado con seriedad.",
 
   credibilityItem2Title: "Entrega rápida",
   credibilityItem2Desc: "Procesos ágiles para que empieces sin esperar de más.",
@@ -838,7 +838,7 @@ const translations = {
   credibilityItem3Title: "Soporte activo",
   credibilityItem3Desc: "Atención constante por los canales principales de HyperV.",
 
-  credibilityItem4Title: "Compra sencilla",
+  credibilityItem4Title: "Compra segura",
   credibilityItem4Desc: "Experiencia clara, directa y sin fricción innecesaria.",
 
   credibilityBottom1: "Pagos seguros",

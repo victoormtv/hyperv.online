@@ -25,7 +25,7 @@ const CredibilityBand = () => {
             title: getText("credibilityItem1Title", "Seguridad confiable"),
             desc: getText(
                 "credibilityItem1Desc",
-                "Pagos protegidos y acceso entregado con seriedad."
+                "Paneles seguros y acceso entregado con seriedad."
             ),
         },
         {
@@ -46,7 +46,7 @@ const CredibilityBand = () => {
         },
         {
             icon: CreditCard,
-            title: getText("credibilityItem4Title", "Compra sencilla"),
+            title: getText("credibilityItem4Title", "Compra segura"),
             desc: getText(
                 "credibilityItem4Desc",
                 "Experiencia clara, directa y sin fricción innecesaria."
@@ -92,14 +92,14 @@ const CredibilityBand = () => {
                             <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl">
                                 {getText("credibilityHeadingLine1", "Compra con más confianza,")}
                                 <span className="block text-cyan-400">
-                                    {getText("credibilityHeadingLine2", "entra con más tranquilidad.")}
+                                    {getText("credibilityHeadingLine2", "juega con seguridad.")}
                                 </span>
                             </h2>
 
                             <p className="mt-4 max-w-xl text-sm leading-7 text-white/65 sm:text-base">
                                 {getText(
                                     "credibilitySubtitle",
-                                    "HyperV combina rapidez, soporte y una experiencia más limpia para que cada compra se sienta seria, estable y bien cuidada."
+                                    "HyperV combina rapidez, soporte y una experiencia más limpia para que cada compra se sienta seria, estable y bien cuidada. Todos nuestros paneles son 100% indetectables a Anticheat's y nuestros ."
                                 )}
                             </p>
                         </div>
