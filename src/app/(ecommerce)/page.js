@@ -3,6 +3,8 @@ import Feedbacks from "@/components/Feedbacks";
 import Fashsales from "@/components/Fashsales";
 import FreeProductsBanner from "@/components/FreeProductsBanner";
 import Footer from "@/components/Footer";
+import HyperVendedores from "@/components/ui/HyperVendedores";
+import CredibilityBand from "@/components/ui/CredibilityBand";
 import { Separator } from "@/components/ui/separator";
 import prisma from "@/utils/connection";
 
@@ -36,12 +38,15 @@ export default async function Home() {
     <div className="">
       <Carousels />
       <div className="px-[10%]">
+        <CredibilityBand />
         <Fashsales
           title="Nuestros Productos"
           heading="Explora Nuestros Productos"
           products={popularProducts}
         />
         <FreeProductsBanner products={freeProducts} />
+        <Separator className="my-4" />
+        <HyperVendedores />
         <Separator className="my-4" />
         <Feedbacks />
       </div>

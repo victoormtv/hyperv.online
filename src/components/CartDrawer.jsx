@@ -9,9 +9,9 @@ import { useLanguage } from "@/context/LanguageContext";
 
 // Mismos cupones que en checkout.tsx
 const COUPONS = {
-  "CRYPTO20":  { discount: 0.05, label: "5% OFF",  onlyMethod: "crypto" },
-  "HYPERV10":  { discount: 0.10, label: "10% OFF", onlyMethod: null     },
-  "DISCORD15": { discount: 0.15, label: "15% OFF", onlyMethod: null     },
+  "CRYPTO20": { discount: 0.05, label: "5% OFF", onlyMethod: "crypto" },
+  "HYPERV10": { discount: 0.10, label: "10% OFF", onlyMethod: null },
+  "DISCORD15": { discount: 0.15, label: "15% OFF", onlyMethod: null },
 };
 
 const CartDrawer = () => {
@@ -20,14 +20,14 @@ const CartDrawer = () => {
   const { t } = useLanguage();
   const c = t.cart;
 
-  const [mounted,        setMounted]        = useState(false);
-  const [drawerVisible,  setDrawerVisible]  = useState(false);
-  const [drawerClosing,  setDrawerClosing]  = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [drawerClosing, setDrawerClosing] = useState(false);
 
   // ── Cupón ─────────────────────────────────────────
-  const [couponInput,   setCouponInput]   = useState("");
+  const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [couponError,   setCouponError]   = useState("");
+  const [couponError, setCouponError] = useState("");
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -252,7 +252,7 @@ const CartDrawer = () => {
                 if (s) { s.style.transform = "translateX(-100%) skewX(-20deg)"; s.style.opacity = "0"; }
               }}
             >
-              <span className="shimmer" style={{ position:"absolute", top:0, left:"-60%", width:"50%", height:"100%", background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)", transform:"translateX(-100%) skewX(-20deg)", opacity:0, transition:"transform 0.9s ease, opacity 0.1s ease", pointerEvents:"none" }} />
+              <span className="shimmer" style={{ position: "absolute", top: 0, left: "-60%", width: "50%", height: "100%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)", transform: "translateX(-100%) skewX(-20deg)", opacity: 0, transition: "transform 0.9s ease, opacity 0.1s ease", pointerEvents: "none" }} />
               {c.proceedToCheckout}
             </button>
           </Link>
