@@ -99,7 +99,7 @@ const CredibilityBand = () => {
                             <p className="mt-4 max-w-xl text-sm leading-7 text-white/65 sm:text-base">
                                 {getText(
                                     "credibilitySubtitle",
-                                    "HyperV combina rapidez, soporte y una experiencia más limpia para que cada compra se sienta seria, estable y bien cuidada. Todos nuestros paneles son 100% indetectables a Anticheat's y nuestros ."
+                                    "HyperV combina rapidez, soporte y una experiencia más limpia para que cada compra se sienta seria, estable y bien cuidada. Todos nuestros paneles son 100% indetectables a Anticheat's."
                                 )}
                             </p>
                         </div>
