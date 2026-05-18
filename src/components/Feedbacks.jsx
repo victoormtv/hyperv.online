@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const DiscordIcon = () => (
@@ -48,22 +48,16 @@ const ReviewCard = ({ review }) => (
   </div>
 );
 
-// ─── Fila de marquee reutilizable ───────────────────────────────────────────
+// ✅ Las clases de animación son ESTÁTICAS, el control es por `style`
 const MarqueeRow = ({ items, direction = "left", isPaused }) => {
-  // Duplicamos los items para lograr el loop sin saltos
   const doubled = [...items, ...items];
 
   return (
     <div className="overflow-hidden relative py-2">
       <div
-        className={`flex w-max ${direction === "left"
-            ? isPaused ? "[animation-play-state:paused] animate-marquee-left" : "animate-marquee-left"
-            : isPaused ? "[animation-play-state:paused] animate-marquee-right" : "animate-marquee-right"
-          }`}
-        style={{
-          // Pausa la animación según el estado
-          animationPlayState: isPaused ? "paused" : "running",
-        }}
+        // ✅ Clases SIEMPRE presentes en el HTML — Tailwind las detecta en el build
+        className={direction === "left" ? "flex w-max animate-marquee-left" : "flex w-max animate-marquee-right"}
+        style={{ animationPlayState: isPaused ? "paused" : "running" }}
       >
         {doubled.map((review, i) => (
           <ReviewCard key={i} review={review} />
@@ -87,20 +81,14 @@ const Feedbacks = () => {
       .catch((e) => console.error("Error cargando reviews:", e));
   }, []);
 
-  // Dividimos los reviews en dos filas
   const half = Math.ceil(reviews.length / 2);
-  const row1 = reviews.slice(0, half);
-  const row2 = reviews.slice(half);
-
-  // Si solo hay pocos reviews, duplicamos para que ambas filas tengan contenido
-  const safeRow1 = row1.length > 0 ? row1 : reviews;
-  const safeRow2 = row2.length > 0 ? row2 : [...reviews].reverse();
+  const safeRow1 = reviews.slice(0, half).length > 0 ? reviews.slice(0, half) : reviews;
+  const safeRow2 = reviews.slice(half).length > 0 ? reviews.slice(half) : [...reviews].reverse();
 
   if (reviews.length === 0) return null;
 
   return (
     <section className="py-20 mt-10">
-      {/* Encabezado */}
       <div className="text-center mb-12 px-4">
         <div className="inline-flex items-center gap-2 bg-[#5865F2]/15 border border-[#5865F2]/30 text-[#5865F2] text-xs font-semibold px-4 py-1.5 rounded-full mb-5">
           <DiscordIcon /> {t.feedbacksBadge}
@@ -109,27 +97,21 @@ const Feedbacks = () => {
         <p className="text-white/40 text-sm mt-2">{t.feedbacksSubtitle}</p>
       </div>
 
-      {/* Contenedor de ambas filas */}
       <div
         className="relative"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        {/* Fade izquierda */}
         <div
           className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to right, rgba(3,4,5,0.95), transparent)" }}
         />
-        {/* Fade derecha */}
         <div
           className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
           style={{ background: "linear-gradient(to left, rgba(3,4,5,0.95), transparent)" }}
         />
 
-        {/* Fila 1: mueve hacia la izquierda */}
         <MarqueeRow items={safeRow1} direction="left" isPaused={isPaused} />
-
-        {/* Fila 2: mueve hacia la derecha */}
         <MarqueeRow items={safeRow2} direction="right" isPaused={isPaused} />
       </div>
     </section>

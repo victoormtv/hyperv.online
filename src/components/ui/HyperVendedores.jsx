@@ -89,7 +89,7 @@ const sellers = [
         discordUsername: "@josuex_16",
         featured: false,
     },
-    {
+    /*{
         id: 7,
         name: "Em444",
         role: "Seller",
@@ -121,7 +121,7 @@ const sellers = [
         discordApp: "discord://-/users/866888448036044832",
         discordUsername: "@yamisita_",
         featured: false,
-    },
+    }*/
 ];
 
 const HyperVendedores = () => {
