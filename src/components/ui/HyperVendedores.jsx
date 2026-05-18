@@ -90,6 +90,17 @@ const sellers = [
         discordUsername: "@josuex_16",
         featured: false,
     },
+    {
+        id: 7,
+        name: "Em444",
+        roleKey: "Seller",
+        image: "/ema.jpeg",
+        whatsapp: "https://wa.me/51943515472",
+        discordProfile: "https://discord.com/users/646194799036203028",
+        discordApp: "discord://-/users/646194799036203028",
+        discordUsername: "@xem444x",
+        featured: false,
+    },
 ];
 
 const HyperVendedores = () => {
@@ -118,11 +129,12 @@ const HyperVendedores = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                {sellers.map((seller) => (
+                {sellers.map((seller, index) => (
                     <article
                         key={seller.id}
                         className={[
                             "relative rounded-xl flex flex-col transition-all duration-300 group bg-[#07080b] hover:-translate-y-1 overflow-hidden",
+                            index === sellers.length - 1 ? "xl:col-start-2" : "",
                             seller.featured
                                 ? "border border-[#fbbf24]/50 shadow-[0_0_8px_rgba(251,191,36,0.08)] hover:shadow-[0_0_20px_rgba(251,191,36,0.30)] hover:border-yellow-300"
                                 : "border border-cyan-500/20 shadow-[0_0_8px_rgba(34,211,238,0.06)] hover:shadow-[0_0_20px_rgba(34,211,238,0.22)] hover:border-cyan-400/60",
