@@ -208,11 +208,11 @@
     flex-wrap: nowrap;
     width: max-content;
     will-change: transform;
-    animation: feedback-scroll-left 18s linear infinite;
+    animation: feedback-scroll-left 36s linear infinite;
   }
 
   .feedback-marquee-track.reverse {
-    animation: feedback-scroll-right 18s linear infinite;
+    animation: feedback-scroll-right 36s linear infinite;
   }
 
   .feedback-marquee-group {
