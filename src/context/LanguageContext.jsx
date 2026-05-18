@@ -385,6 +385,41 @@ const translations = {
       genericSubtitle: "Your payment was processed correctly. Join our Discord and claim your free key.",
       genericDiscord: "Go to Discord",
     },
+    staffBadge: "Our Staff",
+    staffHeading: "Sales Team",
+    staffSubtitle: "Contact HyperV's official representatives",
+    staffOnline: "ONLINE",
+    staffCompany: "COMPANY",
+    staffWhatsapp: "WhatsApp",
+    staffViewProfile: "View profile",
+    staffOpenDiscord: "Open in Discord",
+    staffOfficialWhatsapp: "Official WhatsApp",
+    staffOwner: "Owner",
+    staffWebDeveloper: "Web Developer",
+    staffSeller: "Seller",
+
+    credibilityBadge: "HyperV Standard",
+    credibilityHeadingLine1: "Buy with more confidence,",
+    credibilityHeadingLine2: "enter with more peace of mind.",
+    credibilitySubtitle:
+      "HyperV combines speed, support, and a cleaner experience so every purchase feels serious, stable, and well handled.",
+
+    credibilityItem1Title: "Reliable security",
+    credibilityItem1Desc: "Protected payments and access delivered with professionalism.",
+
+    credibilityItem2Title: "Fast delivery",
+    credibilityItem2Desc: "Agile processes so you can get started without waiting longer than needed.",
+
+    credibilityItem3Title: "Active support",
+    credibilityItem3Desc: "Constant assistance through HyperV’s main support channels.",
+
+    credibilityItem4Title: "Simple purchase",
+    credibilityItem4Desc: "A clear, direct experience without unnecessary friction.",
+
+    credibilityBottom1: "Secure payments",
+    credibilityBottom2: "24/7 support",
+    credibilityBottom3: "Instant delivery",
+    credibilityBottom4: "Constant updates",
   },
 
   es: {
@@ -775,6 +810,41 @@ const translations = {
       genericDiscord: "Ir al Discord",
     },
   },
+  staffBadge: "Nuestro Staff",
+  staffHeading: "Equipo de Vendedores",
+  staffSubtitle: "Contacta con los representantes oficiales de HyperV",
+  staffOnline: "ONLINE",
+  staffCompany: "EMPRESA",
+  staffWhatsapp: "WhatsApp",
+  staffViewProfile: "Ver perfil",
+  staffOpenDiscord: "Abrir en Discord",
+  staffOfficialWhatsapp: "WhatsApp Oficial",
+  staffOwner: "Owner",
+  staffWebDeveloper: "Desarrollador Web",
+  staffSeller: "Vendedor",
+
+  credibilityBadge: "HyperV Standard",
+  credibilityHeadingLine1: "Compra con más confianza,",
+  credibilityHeadingLine2: "entra con más tranquilidad.",
+  credibilitySubtitle:
+    "HyperV combina rapidez, soporte y una experiencia más limpia para que cada compra se sienta seria, estable y bien cuidada.",
+
+  credibilityItem1Title: "Seguridad confiable",
+  credibilityItem1Desc: "Pagos protegidos y acceso entregado con seriedad.",
+
+  credibilityItem2Title: "Entrega rápida",
+  credibilityItem2Desc: "Procesos ágiles para que empieces sin esperar de más.",
+
+  credibilityItem3Title: "Soporte activo",
+  credibilityItem3Desc: "Atención constante por los canales principales de HyperV.",
+
+  credibilityItem4Title: "Compra sencilla",
+  credibilityItem4Desc: "Experiencia clara, directa y sin fricción innecesaria.",
+
+  credibilityBottom1: "Pagos seguros",
+  credibilityBottom2: "Soporte 24/7",
+  credibilityBottom3: "Entrega inmediata",
+  credibilityBottom4: "Actualizaciones constantes",
 };
 
 const LanguageContext = createContext(null);

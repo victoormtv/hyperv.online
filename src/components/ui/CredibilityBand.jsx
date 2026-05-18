@@ -1,47 +1,78 @@
 "use client";
 
 import React from "react";
+import { useLanguage } from "@/context/LanguageContext";
 import {
     Users,
     TrendingUp,
     Shield,
     CreditCard,
     Zap,
-    BarChart2,
     DollarSign,
 } from "lucide-react";
 
-const items = [
-    {
-        icon: Shield,
-        title: "Seguridad confiable",
-        desc: "Pagos protegidos y acceso entregado con seriedad.",
-    },
-    {
-        icon: Zap,
-        title: "Entrega rápida",
-        desc: "Procesos ágiles para que empieces sin esperar de más.",
-    },
-    {
-        icon: Users,
-        title: "Soporte activo",
-        desc: "Atención constante por los canales principales de HyperV.",
-    },
-    {
-        icon: CreditCard,
-        title: "Compra sencilla",
-        desc: "Experiencia clara, directa y sin fricción innecesaria.",
-    },
-];
-
-const bottomItems = [
-    { label: "Pagos seguros", icon: DollarSign },
-    { label: "Soporte 24/7", icon: Users },
-    { label: "Entrega inmediata", icon: Zap },
-    { label: "Actualizaciones constantes", icon: TrendingUp },
-];
-
 const CredibilityBand = () => {
+    const { t } = useLanguage();
+
+    const getText = (key, fallback = "") => {
+        const value = t?.[key];
+        return typeof value === "string" && value.trim() ? value : fallback;
+    };
+
+    const items = [
+        {
+            icon: Shield,
+            title: getText("credibilityItem1Title", "Seguridad confiable"),
+            desc: getText(
+                "credibilityItem1Desc",
+                "Pagos protegidos y acceso entregado con seriedad."
+            ),
+        },
+        {
+            icon: Zap,
+            title: getText("credibilityItem2Title", "Entrega rápida"),
+            desc: getText(
+                "credibilityItem2Desc",
+                "Procesos ágiles para que empieces sin esperar de más."
+            ),
+        },
+        {
+            icon: Users,
+            title: getText("credibilityItem3Title", "Soporte activo"),
+            desc: getText(
+                "credibilityItem3Desc",
+                "Atención constante por los canales principales de HyperV."
+            ),
+        },
+        {
+            icon: CreditCard,
+            title: getText("credibilityItem4Title", "Compra sencilla"),
+            desc: getText(
+                "credibilityItem4Desc",
+                "Experiencia clara, directa y sin fricción innecesaria."
+            ),
+        },
+    ];
+
+    const bottomItems = [
+        {
+            label: getText("credibilityBottom1", "Pagos seguros"),
+            icon: DollarSign,
+        },
+        {
+            label: getText("credibilityBottom2", "Soporte 24/7"),
+            icon: Users,
+        },
+        {
+            label: getText("credibilityBottom3", "Entrega inmediata"),
+            icon: Zap,
+        },
+        {
+            label: getText("credibilityBottom4", "Actualizaciones constantes"),
+            icon: TrendingUp,
+        },
+    ];
+
     return (
         <section className="relative w-full py-12 md:py-16">
             <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] backdrop-blur-sm">
@@ -55,17 +86,21 @@ const CredibilityBand = () => {
                         <div className="max-w-2xl">
                             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-300/90">
                                 <Zap className="h-3.5 w-3.5" />
-                                HyperV Standard
+                                {getText("credibilityBadge", "HyperV Standard")}
                             </div>
 
                             <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl">
-                                Compra con más confianza,
-                                <span className="block text-cyan-400">entra con más tranquilidad.</span>
+                                {getText("credibilityHeadingLine1", "Compra con más confianza,")}
+                                <span className="block text-cyan-400">
+                                    {getText("credibilityHeadingLine2", "entra con más tranquilidad.")}
+                                </span>
                             </h2>
 
                             <p className="mt-4 max-w-xl text-sm leading-7 text-white/65 sm:text-base">
-                                HyperV combina rapidez, soporte y una experiencia más limpia para que
-                                cada compra se sienta seria, estable y bien cuidada.
+                                {getText(
+                                    "credibilitySubtitle",
+                                    "HyperV combina rapidez, soporte y una experiencia más limpia para que cada compra se sienta seria, estable y bien cuidada."
+                                )}
                             </p>
                         </div>
 

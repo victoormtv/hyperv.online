@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const WhatsAppIcon = ({ className = "w-4 h-4" }) => (
     <svg
@@ -27,7 +28,7 @@ const sellers = [
     {
         id: 1,
         name: "HyperV",
-        role: "WhatsApp Oficial",
+        roleKey: "WhatsApp OficiaL",
         image: "/hyperv.png",
         whatsapp: "https://wa.me/51938431125",
         discordProfile: "https://discord.gg/k3AgjMPGHB",
@@ -37,7 +38,7 @@ const sellers = [
     {
         id: 2,
         name: "Tanato",
-        role: "Owner",
+        roleKey: "staffOwner",
         image: "/tanato.png",
         whatsapp: "https://wa.me/51960546093",
         discordProfile: "https://discord.com/users/1117934669002965014",
@@ -48,7 +49,7 @@ const sellers = [
     {
         id: 3,
         name: "Strix",
-        role: "Web Developer",
+        roleKey: "staffWebDeveloper",
         image: "/strix.jpg",
         whatsapp: "https://wa.me/51987898909",
         discordProfile: "https://discord.com/users/1288338421772849275",
@@ -59,7 +60,7 @@ const sellers = [
     {
         id: 4,
         name: "fvbriix",
-        role: "Seller",
+        roleKey: "staffSeller",
         image: "/fvbrix.jpeg",
         whatsapp: "https://wa.me/51907376433",
         discordProfile: "https://discord.com/users/749738427150499930",
@@ -70,7 +71,7 @@ const sellers = [
     {
         id: 5,
         name: "mattyzn",
-        role: "Seller",
+        roleKey: "staffSeller",
         image: "/mattyzn.jpeg",
         whatsapp: "https://wa.me/51935626515",
         discordProfile: "https://discord.com/users/1260582155709583433",
@@ -81,7 +82,7 @@ const sellers = [
     {
         id: 6,
         name: "josuex_17",
-        role: "Seller",
+        roleKey: "staffSeller",
         image: "/josuex.jpeg",
         whatsapp: "https://wa.me/51901249348",
         discordProfile: "https://discord.com/users/919384973717418054",
@@ -89,53 +90,30 @@ const sellers = [
         discordUsername: "@josuex_16",
         featured: false,
     },
-    /*{
-        id: 7,
-        name: "Em444",
-        role: "Seller",
-        image: "/emanuel.jpeg",
-        whatsapp: "https://wa.me/51943515472",
-        discordProfile: "https://discord.com/users/646194799036203028",
-        discordApp: "discord://-/users/646194799036203028",
-        discordUsername: "@xem444x",
-        featured: false,
-    },
-    {
-        id: 8,
-        name: "Baiky",
-        role: "Seller",
-        image: "/baiky.jpeg",
-        whatsapp: "https://wa.me/51903496999",
-        discordProfile: "https://discord.com/users/962882091547258950",
-        discordApp: "discord://-/users/962882091547258950",
-        discordUsername: "@baiky.panelist",
-        featured: false,
-    },
-    {
-        id: 9,
-        name: "Yamisita",
-        role: "Seller",
-        image: "/yamisita.jpeg",
-        whatsapp: "https://wa.me/50254858908",
-        discordProfile: "https://discord.com/users/866888448036044832",
-        discordApp: "discord://-/users/866888448036044832",
-        discordUsername: "@yamisita_",
-        featured: false,
-    }*/
 ];
 
 const HyperVendedores = () => {
+    const { t, locale } = useLanguage();
+
+    const getText = (key, fallback = "") => {
+        const value = t?.[key];
+        return typeof value === "string" && value.trim() ? value : fallback;
+    };
+
     return (
         <section className="py-16 mt-10 px-4 md:px-12 lg:px-24">
             <div className="text-center mb-10">
                 <p className="text-sm text-white/50 uppercase tracking-widest mb-1">
-                    Nuestro Staff
+                    {getText("staffBadge", "Nuestro Staff")}
                 </p>
                 <h2 className="text-3xl md:text-4xl font-bold text-white">
-                    Equipo de Vendedores
+                    {getText("staffHeading", "Equipo de Vendedores")}
                 </h2>
                 <p className="text-white/40 text-sm mt-2">
-                    Contacta con los representantes oficiales de HyperV
+                    {getText(
+                        "staffSubtitle",
+                        "Contacta con los representantes oficiales de HyperV"
+                    )}
                 </p>
             </div>
 
@@ -152,7 +130,7 @@ const HyperVendedores = () => {
                     >
                         {seller.featured && (
                             <div className="absolute top-3 right-3 z-10 bg-yellow-400 text-black text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-                                EMPRESA
+                                {getText("staffCompany", "EMPRESA")}
                             </div>
                         )}
 
@@ -167,7 +145,7 @@ const HyperVendedores = () => {
                             <div className="absolute top-3 left-3">
                                 <span className="flex items-center gap-1 bg-green-500/20 border border-green-500/40 text-green-400 text-[10px] font-semibold px-2 py-0.5 rounded-full">
                                     <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                    ONLINE
+                                    {getText("staffOnline", "ONLINE")}
                                 </span>
                             </div>
                         </div>
@@ -186,7 +164,7 @@ const HyperVendedores = () => {
                                 </h3>
 
                                 <p className="text-white/40 text-[11px] uppercase tracking-[0.25em] mt-2">
-                                    {seller.role}
+                                    {getText(seller.roleKey, seller.roleKey)}
                                 </p>
 
                                 {seller.discordUsername && (
@@ -209,7 +187,7 @@ const HyperVendedores = () => {
                                     ].join(" ")}
                                 >
                                     <WhatsAppIcon className="w-4 h-4" />
-                                    WhatsApp
+                                    {getText("staffWhatsapp", "WhatsApp")}
                                 </a>
 
                                 <a
@@ -219,7 +197,7 @@ const HyperVendedores = () => {
                                     className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-white/10 text-white/75 text-xs font-bold hover:border-cyan-500/40 hover:text-white transition-all duration-200"
                                 >
                                     <DiscordIcon className="w-4 h-4" />
-                                    Ver perfil
+                                    {getText("staffViewProfile", "Ver perfil")}
                                 </a>
 
                                 <a
@@ -227,7 +205,7 @@ const HyperVendedores = () => {
                                     className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-white/10 text-white/60 text-xs font-bold hover:border-yellow-400/40 hover:text-white transition-all duration-200"
                                 >
                                     <DiscordIcon className="w-4 h-4" />
-                                    Abrir en Discord
+                                    {getText("staffOpenDiscord", "Abrir en Discord")}
                                 </a>
                             </div>
                         </div>
