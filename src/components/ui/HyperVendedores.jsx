@@ -28,7 +28,7 @@ const sellers = [
     {
         id: 1,
         name: "HyperV",
-        roleKey: "WhatsApp OficiaL",
+        roleKey: "WhatsApp Oficial",
         image: "/hyperv.png",
         whatsapp: "https://wa.me/51938431125",
         discordProfile: "https://discord.gg/k3AgjMPGHB",
@@ -38,7 +38,7 @@ const sellers = [
     {
         id: 2,
         name: "Tanato",
-        roleKey: "staffOwner",
+        roleKey: "Owner",
         image: "/tanato.png",
         whatsapp: "https://wa.me/51960546093",
         discordProfile: "https://discord.com/users/1117934669002965014",
@@ -49,7 +49,7 @@ const sellers = [
     {
         id: 3,
         name: "Strix",
-        roleKey: "staffWebDeveloper",
+        roleKey: "Web Developer",
         image: "/strix.jpg",
         whatsapp: "https://wa.me/51987898909",
         discordProfile: "https://discord.com/users/1288338421772849275",
@@ -60,7 +60,7 @@ const sellers = [
     {
         id: 4,
         name: "fvbriix",
-        roleKey: "staffSeller",
+        roleKey: "Seller",
         image: "/fvbrix.jpeg",
         whatsapp: "https://wa.me/51907376433",
         discordProfile: "https://discord.com/users/749738427150499930",
@@ -71,7 +71,7 @@ const sellers = [
     {
         id: 5,
         name: "mattyzn",
-        roleKey: "staffSeller",
+        roleKey: "Seller",
         image: "/mattyzn.jpeg",
         whatsapp: "https://wa.me/51935626515",
         discordProfile: "https://discord.com/users/1260582155709583433",
@@ -82,7 +82,7 @@ const sellers = [
     {
         id: 6,
         name: "josuex_17",
-        roleKey: "staffSeller",
+        roleKey: "Seller",
         image: "/josuex.jpeg",
         whatsapp: "https://wa.me/51901249348",
         discordProfile: "https://discord.com/users/919384973717418054",
