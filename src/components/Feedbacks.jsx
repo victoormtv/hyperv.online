@@ -14,12 +14,14 @@ const getInitials = (name) => name.slice(0, 2).toUpperCase();
 const getAvatarColor = (name) => {
   const colors = ["#5865F2", "#57F287", "#FEE75C", "#EB459E", "#ED4245", "#00b0f4"];
   let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
   return colors[Math.abs(hash) % colors.length];
 };
 
 const ReviewCard = ({ review }) => (
-  <div className="flex-shrink-0 w-[320px] mx-3 bg-[#111216] border border-white/8 rounded-2xl p-5 flex flex-col gap-3 select-none">
+  <div className="feedback-card-fixed mx-3 bg-[#111216] border border-white/8 rounded-2xl p-5 flex flex-col gap-3 select-none">
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div
@@ -47,24 +49,36 @@ const ReviewCard = ({ review }) => (
 
     {review.image && (
       <div className="rounded-lg overflow-hidden mt-1">
-        <img src={review.image} alt="review attachment" className="w-full max-h-40 object-cover" />
+        <img
+          src={review.image}
+          alt="review attachment"
+          className="w-full max-h-40 object-cover"
+        />
       </div>
     )}
   </div>
 );
 
 const MarqueeRow = ({ items, reverse = false, paused = false }) => {
-  const doubled = [...items, ...items];
+  const safeItems = items.length ? items : [];
 
   return (
     <div className="feedback-marquee">
       <div
-        className={`feedback-track ${reverse ? "feedback-track-reverse" : ""}`}
+        className={`feedback-marquee-track ${reverse ? "reverse" : ""}`}
         style={{ animationPlayState: paused ? "paused" : "running" }}
       >
-        {doubled.map((review, i) => (
-          <ReviewCard key={`${review.username}-${i}`} review={review} />
-        ))}
+        <div className="feedback-marquee-group">
+          {safeItems.map((review, i) => (
+            <ReviewCard key={`first-${review.username}-${i}`} review={review} />
+          ))}
+        </div>
+
+        <div className="feedback-marquee-group" aria-hidden="true">
+          {safeItems.map((review, i) => (
+            <ReviewCard key={`second-${review.username}-${i}`} review={review} />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -84,11 +98,11 @@ const Feedbacks = () => {
       .catch((e) => console.error("Error cargando reviews:", e));
   }, []);
 
+  if (reviews.length === 0) return null;
+
   const half = Math.ceil(reviews.length / 2);
   const row1 = reviews.slice(0, half);
   const row2 = reviews.slice(half);
-
-  if (reviews.length === 0) return null;
 
   return (
     <section className="py-20 mt-10">
