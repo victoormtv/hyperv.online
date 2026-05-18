@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { Zap } from "lucide-react";
 
 const DiscordIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-[#5865F2]">
@@ -27,6 +28,7 @@ const ReviewCard = ({ review }) => (
         >
           {getInitials(review.username)}
         </div>
+
         <div>
           <div className="flex items-center gap-1.5">
             <span className="text-white font-semibold text-sm">{review.username}</span>
@@ -35,11 +37,14 @@ const ReviewCard = ({ review }) => (
           <p className="text-white/35 text-[11px]">{review.date}</p>
         </div>
       </div>
+
       <svg width="24" height="18" viewBox="0 0 24 18" fill="none" className="text-white/10">
         <path d="M0 18V11.4C0 8.26667 0.633333 5.66667 1.9 3.6C3.16667 1.53333 5.16667 0.133333 7.9 0L8.5 1.8C6.9 2.2 5.66667 3.03333 4.8 4.3C3.93333 5.56667 3.53333 7 3.6 8.6H7.2V18H0ZM13.2 18V11.4C13.2 8.26667 13.8333 5.66667 15.1 3.6C16.3667 1.53333 18.3667 0.133333 21.1 0L21.7 1.8C20.1 2.2 18.8667 3.03333 18 4.3C17.1333 5.56667 16.7333 7 16.8 8.6H20.4V18H13.2Z" fill="currentColor" />
       </svg>
     </div>
+
     <p className="text-white/70 text-sm leading-relaxed">{review.message}</p>
+
     {review.image && (
       <div className="rounded-lg overflow-hidden mt-1">
         <img src={review.image} alt="review attachment" className="w-full max-h-40 object-cover" />
@@ -48,19 +53,17 @@ const ReviewCard = ({ review }) => (
   </div>
 );
 
-// ✅ Las clases de animación son ESTÁTICAS, el control es por `style`
-const MarqueeRow = ({ items, direction = "left", isPaused }) => {
+const MarqueeRow = ({ items, reverse = false, paused = false }) => {
   const doubled = [...items, ...items];
 
   return (
-    <div className="overflow-hidden relative py-2">
+    <div className="feedback-marquee">
       <div
-        // ✅ Clases SIEMPRE presentes en el HTML — Tailwind las detecta en el build
-        className={direction === "left" ? "flex w-max animate-marquee-left" : "flex w-max animate-marquee-right"}
-        style={{ animationPlayState: isPaused ? "paused" : "running" }}
+        className={`feedback-track ${reverse ? "feedback-track-reverse" : ""}`}
+        style={{ animationPlayState: paused ? "paused" : "running" }}
       >
         {doubled.map((review, i) => (
-          <ReviewCard key={i} review={review} />
+          <ReviewCard key={`${review.username}-${i}`} review={review} />
         ))}
       </div>
     </div>
@@ -70,7 +73,7 @@ const MarqueeRow = ({ items, direction = "left", isPaused }) => {
 const Feedbacks = () => {
   const { t } = useLanguage();
   const [reviews, setReviews] = useState([]);
-  const [isPaused, setIsPaused] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     fetch("/api/reviews")
@@ -82,8 +85,8 @@ const Feedbacks = () => {
   }, []);
 
   const half = Math.ceil(reviews.length / 2);
-  const safeRow1 = reviews.slice(0, half).length > 0 ? reviews.slice(0, half) : reviews;
-  const safeRow2 = reviews.slice(half).length > 0 ? reviews.slice(half) : [...reviews].reverse();
+  const row1 = reviews.slice(0, half);
+  const row2 = reviews.slice(half);
 
   if (reviews.length === 0) return null;
 
@@ -91,16 +94,23 @@ const Feedbacks = () => {
     <section className="py-20 mt-10">
       <div className="text-center mb-12 px-4">
         <div className="inline-flex items-center gap-2 bg-[#5865F2]/15 border border-[#5865F2]/30 text-[#5865F2] text-xs font-semibold px-4 py-1.5 rounded-full mb-5">
-          <DiscordIcon /> {t.feedbacksBadge}
+          <Zap className="h-3.5 w-3.5" />
+          {t.feedbacksBadge}
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold text-white">{t.feedbacksHeading}</h2>
-        <p className="text-white/40 text-sm mt-2">{t.feedbacksSubtitle}</p>
+
+        <h2 className="text-3xl md:text-4xl font-bold text-white">
+          {t.feedbacksHeading}
+        </h2>
+
+        <p className="text-white/40 text-sm mt-2">
+          {t.feedbacksSubtitle}
+        </p>
       </div>
 
       <div
         className="relative"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
       >
         <div
           className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
@@ -111,8 +121,8 @@ const Feedbacks = () => {
           style={{ background: "linear-gradient(to left, rgba(3,4,5,0.95), transparent)" }}
         />
 
-        <MarqueeRow items={safeRow1} direction="left" isPaused={isPaused} />
-        <MarqueeRow items={safeRow2} direction="right" isPaused={isPaused} />
+        <MarqueeRow items={row1.length ? row1 : reviews} paused={paused} />
+        <MarqueeRow items={row2.length ? row2 : [...reviews].reverse()} reverse paused={paused} />
       </div>
     </section>
   );

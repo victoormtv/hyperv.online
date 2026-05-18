@@ -6,7 +6,6 @@ import {
     TrendingUp,
     Shield,
     CreditCard,
-    Sparkles,
     Zap,
     BarChart2,
     DollarSign,
@@ -55,7 +54,7 @@ const CredibilityBand = () => {
                     <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
                         <div className="max-w-2xl">
                             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-300/90">
-                                <Sparkles className="h-3.5 w-3.5" />
+                                <Zap className="h-3.5 w-3.5" />
                                 HyperV Standard
                             </div>
 
