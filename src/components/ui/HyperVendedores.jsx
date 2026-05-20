@@ -40,7 +40,7 @@ const sellers = [
         name: "Tanato",
         roleKey: "Owner",
         image: "/tanato.png",
-        whatsapp: "https://wa.me/51960546093",
+        whatsapp: "https://wa.me/51938431125",
         discordProfile: "https://discord.com/users/1117934669002965014",
         discordApp: "discord://-/users/1117934669002965014",
         discordUsername: "@tanatoboss",
