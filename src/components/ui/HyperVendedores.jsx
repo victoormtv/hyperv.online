@@ -101,6 +101,17 @@ const sellers = [
         discordUsername: "@xem444x",
         featured: false,
     },
+    {
+        id: 8,
+        name: "Mya",
+        roleKey: "Seller",
+        image: "/mya.jpeg",
+        whatsapp: "https://wa.me/51924063213",
+        discordProfile: "https://discord.com/users/1503584377588809749",
+        discordApp: "discord://-/users/1503584377588809749",
+        discordUsername: "@myayat",
+        featured: false,
+    },
 ];
 
 const HyperVendedores = () => {
